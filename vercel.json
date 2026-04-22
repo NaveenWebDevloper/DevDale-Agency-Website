@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "buildCommand": "pnpm run build:client",
+  "buildCommand": "pnpm build:client",
   "installCommand": "pnpm install --no-frozen-lockfile",
-  "outputDirectory": "dist",
+  "outputDirectory": "vercel-output",
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/index.ts" },
     { "source": "/(.*)", "destination": "/index.html" }
