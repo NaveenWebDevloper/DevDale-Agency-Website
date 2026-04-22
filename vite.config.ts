@@ -20,7 +20,7 @@ export default defineConfig({
   },
   root: path.resolve(__dirname),
   build: {
-    outDir: "vercel-output",
+    outDir: "dist",
     emptyOutDir: true,
   },
 });
