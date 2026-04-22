@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "framework": "vite",
   "rewrites": [
     {
       "source": "/api/(.*)",
@@ -13,5 +12,5 @@
   ],
   "installCommand": "pnpm install",
   "buildCommand": "pnpm run build:client",
-  "outputDirectory": "dist/spa"
+  "outputDirectory": "dist"
 }
