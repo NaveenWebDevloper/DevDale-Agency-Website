@@ -1,8 +1,7 @@
 {
   "version": 2,
-  "buildCommand": "pnpm run build:client -- --outDir dist",
+  "framework": "vite",
   "installCommand": "pnpm install --no-frozen-lockfile",
-  "outputDirectory": "dist",
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/index.ts" },
     { "source": "/(.*)", "destination": "/index.html" }
