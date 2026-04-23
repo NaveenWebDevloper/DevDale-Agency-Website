@@ -5,6 +5,7 @@ services:
     plan: free
     buildCommand: pnpm install && pnpm run build
     startCommand: pnpm start
+    healthCheckPath: /api/ping
     envVars:
       - key: NODE_VERSION
         value: 20.0.0

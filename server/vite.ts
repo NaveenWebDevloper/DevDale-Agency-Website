@@ -35,7 +35,8 @@ export async function setupVite(app: Express, server: Server) {
 }
 
 export function serveStatic(app: Express) {
-  const distPath = path.resolve(__dirname, "..");
+  const distPath = path.resolve(__dirname, "..", "client");
+  log(`Serving static files from: ${distPath}`);
   if (!fs.existsSync(distPath)) {
     throw new Error(`Could not find a build: ${distPath}. Build the project first.`);
   }

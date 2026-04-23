@@ -1,8 +1,14 @@
 import express, { type Request, Response, NextFunction } from "express";
+import fs from "fs";
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 dotenv.config();
 
@@ -52,10 +58,14 @@ app.use((req, res, next) => {
   // importantly only setup vite in development and after
   // setting up all other routes so the vite resource express middleware
   // doesn't catch requests for allowed API routes
-  if (app.get("env") === "development") {
-    await setupVite(app, server);
-  } else {
+  // Check if we are in production - either via environment variable 
+  // or if we're running from the bundled output where source files are missing
+  const isProduction = process.env.NODE_ENV === "production" || !fs.existsSync(path.resolve(__dirname, "..", "client", "main.tsx"));
+
+  if (isProduction) {
     serveStatic(app);
+  } else {
+    await setupVite(app, server);
   }
 
   // Serve the app on port defined in .env or default to 5000

@@ -8,19 +8,19 @@ const __dirname = dirname(__filename);
 
 export default defineConfig({
   plugins: [react()],
-  server: {
-    host: "0.0.0.0",
-    port: 8080,
-  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "client"),
       "@shared": path.resolve(__dirname, "shared"),
     },
   },
-  root: path.resolve(__dirname),
   build: {
-    outDir: "dist",
+    outDir: "dist/client",
     emptyOutDir: true,
+    rollupOptions: {
+      input: {
+        app: "index.html",
+      },
+    },
   },
 });

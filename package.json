@@ -1,16 +1,16 @@
 {
-  "name": "fusion-starter",
+  "name": "devdale-agency",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "tsx server/index.ts",
-    "build": "npm run build:client && npm run build:server",
-    "build:client": "vite build index.html --outDir dist",
+    "build": "pnpm run build:client && pnpm run build:server",
+    "build:client": "vite build --root . --config vite.config.ts",
     "build:server": "vite build --config vite.config.server.ts",
     "start": "node dist/server/index.js",
     "test": "vitest --run",
-    "format.fix": "prettier --write .",
-    "typecheck": "tsc"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@types/mongoose": "^5.11.97",

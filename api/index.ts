@@ -1,5 +1,5 @@
 import express from "express";
-import { registerRoutes } from "../server/routes";
+import { setupRoutes } from "../server/routes";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
@@ -31,12 +31,14 @@ const connectDB = async () => {
 
 // Middleware to ensure DB connection
 app.use(async (req, res, next) => {
-  await connectDB();
+  if (req.path.startsWith("/api")) {
+    await connectDB();
+  }
   next();
 });
 
 // Register routes (API handlers)
-registerRoutes(app);
+setupRoutes(app);
 
 // Export the app for Vercel
 export default app;
