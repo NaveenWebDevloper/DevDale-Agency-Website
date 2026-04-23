@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsx server/index.ts",
     "build": "pnpm run build:client && pnpm run build:server",
-    "build:client": "vite build --root . --config vite.config.ts",
+    "build:client": "vite build --config vite.config.ts",
     "build:server": "vite build --config vite.config.server.ts",
     "start": "node dist/server/index.js",
     "test": "vitest --run",
