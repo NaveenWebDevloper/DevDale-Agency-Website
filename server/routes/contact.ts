@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import express from "express";
 import { Resend } from "resend";
 import Lead from "../models/Lead";
 import dotenv from "dotenv";
@@ -7,7 +7,8 @@ dotenv.config();
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export const handleSubmitForm = async (req: Request, res: Response) => {
+export const handleSubmitForm = async (req: express.Request, res: express.Response) => {
+
   try {
     console.log("Incoming Lead Data:", req.body);
     const { name, email, company, message } = req.body;
