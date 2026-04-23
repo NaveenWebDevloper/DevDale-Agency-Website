@@ -36,14 +36,7 @@ app.use((req, res, next) => {
 });
 
 (async () => {
-  // Database: Agency Leads & Infrastructure
-  const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017/devdale_agency";
-  try {
-    await mongoose.connect(MONGO_URI);
-    log("Infrastructure connected: MongoDB Protocol established");
-  } catch (err) {
-    log(`Infrastructure error: ${err}`);
-  }
+  log("Starting server initialization...");
 
   const server = await registerRoutes(app);
 
@@ -55,11 +48,7 @@ app.use((req, res, next) => {
     throw err;
   });
 
-  // importantly only setup vite in development and after
-  // setting up all other routes so the vite resource express middleware
-  // doesn't catch requests for allowed API routes
-  // Check if we are in production - either via environment variable 
-  // or if we're running from the bundled output where source files are missing
+  // Check if we are in production
   const isProduction = process.env.NODE_ENV === "production" || !fs.existsSync(path.resolve(__dirname, "..", "client", "main.tsx"));
 
   if (isProduction) {
@@ -68,7 +57,6 @@ app.use((req, res, next) => {
     await setupVite(app, server);
   }
 
-  // Serve the app on port defined in .env or default to 5000
   const port = Number(process.env.PORT) || 5000;
   server.listen({
     port,
@@ -76,4 +64,11 @@ app.use((req, res, next) => {
   }, () => {
     log(`serving on port ${port}`);
   });
+
+  // Database: Connect in background so it doesn't block startup
+  const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017/devdale_agency";
+  log("Connecting to infrastructure...");
+  mongoose.connect(MONGO_URI, { serverSelectionTimeoutMS: 5000 })
+    .then(() => log("Infrastructure connected: MongoDB Protocol established"))
+    .catch(err => log(`Infrastructure error: ${err}`));
 })();
