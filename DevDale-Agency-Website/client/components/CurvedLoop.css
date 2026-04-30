@@ -1,0 +1,52 @@
+/* ── CurvedLoop — compact banner version ─────────────────────────── */
+.curved-loop-jacket {
+  width: 100%;
+  display: block;
+  overflow: visible;  /* allow sparkles + SVG glow to bleed slightly */
+  position: relative;
+}
+
+.curved-loop-svg {
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  width: 100%;
+  overflow: visible;
+  display: block;
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  aspect-ratio: 100 / 12;
+}
+
+/* ── Colour variants ─────────────────────────────────────────────── */
+.curved-text-white {
+  font-size: 3rem;
+}
+
+.curved-text-black {
+  font-size: 3rem;
+}
+
+/* ── Tablet ──────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .curved-loop-svg {
+    aspect-ratio: 100 / 22;
+  }
+  .curved-text-white,
+  .curved-text-black {
+    font-size: 4rem;
+  }
+}
+
+/* ── Mobile ──────────────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .curved-loop-svg {
+    aspect-ratio: 100 / 32;
+  }
+  .curved-text-white,
+  .curved-text-black {
+    font-size: 5rem;
+  }
+}
