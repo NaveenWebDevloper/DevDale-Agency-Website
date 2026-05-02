@@ -1,0 +1,80 @@
+.start-project-form-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.step-card {
+  @apply glass rounded-2xl shadow-xl p-6 md:p-10 border border-white/20 dark:border-white/10;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.progress-container {
+  margin-bottom: 2rem;
+}
+
+.step-indicator {
+  @apply text-sm font-medium text-muted-foreground mb-2 block;
+}
+
+.form-step-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.form-step-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.form-step-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.form-step-exit-active {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.field-group {
+  margin-bottom: 1.5rem;
+}
+
+.field-label {
+  @apply block text-sm font-semibold mb-2;
+}
+
+.error-message {
+  @apply text-destructive text-xs mt-1;
+}
+
+.btn-group {
+  @apply flex justify-between mt-auto pt-8;
+}
+
+.multi-input-group {
+  @apply flex flex-col gap-2;
+}
+
+.success-message {
+  @apply flex flex-col items-center justify-center text-center p-10;
+}
+
+.success-icon {
+  @apply text-green-500 w-16 h-16 mb-4;
+}
+
+/* Custom styles for animations */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out forwards;
+}
