@@ -63,7 +63,7 @@ export default function Footer() {
                 <span className="text-lg md:text-2xl font-bold tracking-tight uppercase">Get in touch</span>
                 <div className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-white text-black group-hover:bg-black group-hover:text-white transition-colors flex-shrink-0">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                    <path d="M5 12h14M12 5l7 7-7 7" />
                   </svg>
                 </div>
               </button>
@@ -80,7 +80,14 @@ export default function Footer() {
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 md:gap-12 mb-12 md:mb-32"
         >
           <motion.div variants={itemVariants} className="col-span-1 sm:col-span-2 md:col-span-1">
-            <Link to="/" className="text-2xl md:text-3xl font-bold tracking-tighter mb-4 md:mb-8 block">DevDale.</Link>
+            <Link to="/" className="flex items-center gap-1 mb-6 md:mb-10 group opacity-80 hover:opacity-100 transition-opacity">
+              <img
+                src="/devdale_logo.svg"
+                alt="DevDale Logo"
+                className="w-12 h-12 md:w-16 md:h-16 object-contain invert brightness-[1.5] mix-blend-screen"
+              />
+              <span className="text-2xl md:text-3xl font-bold tracking-tighter">DevDale<span className="text-white/30">.</span></span>
+            </Link>
             <p className="text-sm md:text-lg text-white/40 font-medium leading-relaxed mb-6 md:mb-10">
               A premium engineering lab building next-gen digital experiences.
             </p>
