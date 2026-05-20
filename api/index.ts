@@ -83,12 +83,20 @@ export default async function handler(req: any, res: any) {
 
   // ── DB Status (for debugging env vars) ─────────────────────────────────────
   if (url.startsWith("/api/db-status")) {
+    let connectError: string | null = null;
+    try {
+      await connectDB();
+    } catch (err: any) {
+      connectError = err.message || String(err);
+    }
+
     return jsonRes(res, 200, {
       mongoUri:   process.env.MONGO_URI   ? "SET" : "MISSING",
       resendKey:  process.env.RESEND_API_KEY ? "SET" : "MISSING",
       fromEmail:  process.env.FROM_EMAIL  || "NOT SET",
       adminEmail: process.env.ADMIN_EMAIL || "NOT SET",
       dbState:    ["disconnected","connected","connecting","disconnecting"][mongoose.connection.readyState],
+      connectError,
     });
   }
 
