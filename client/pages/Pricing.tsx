@@ -28,12 +28,13 @@ const AnimatedIcon = ({ children }: { children: React.ReactNode }) => (
 
 const webPlans = [
   {
-    id: "starter",
+    id: "static-web",
     tier: "01",
-    name: "Launchpad",
-    tagline: "For early-stage startups & MVPs",
-    price: 4499,
-    originalPrice: 8999,
+    name: "Static Web",
+    tagline: "Pixel-perfect static sites, fast & SEO-ready",
+    price: 15000,
+    priceLabel: "₹15,000",
+    negotiable: "Negotiable · Last ₹11,000",
     period: "project",
     icon: (
       <AnimatedIcon>
@@ -44,22 +45,21 @@ const webPlans = [
       </AnimatedIcon>
     ),
     features: [
-      "Custom Landing Architecture",
-      "Mobile-First Fluid Layouts",
-      "Up to 5 Core Interface Modules",
-      "Headless CMS Protocol",
-      "Post-Launch Support Cycle",
+      "Custom Landing Page Design",
+      "Mobile-First Responsive Layouts",
+      "Up to 5 Core Sections",
+      "Basic SEO & Performance Setup",
+      "Post-Launch Support",
     ],
-    cta: "Initiate Launchpad",
-    link: "#contact",
+    cta: "Start Static Build",
   },
   {
-    id: "growth",
+    id: "fullstack-basic",
     tier: "02",
-    name: "Growth",
-    tagline: "For scaling companies",
-    price: 5999,
-    originalPrice: 11999,
+    name: "Full Stack · Basic",
+    tagline: "Solid frontend + essential backend",
+    price: 20000,
+    priceLabel: "₹20,000 – ₹30,000",
     period: "project",
     badge: "Most Popular",
     icon: (
@@ -71,75 +71,177 @@ const webPlans = [
       </AnimatedIcon>
     ),
     features: [
-      "Full Product Architecture",
-      "Advanced Motion Engineering",
-      "Up to 15 Specialized Modules",
-      "Enterprise CMS Integration",
-      "API & Transactional Logic",
+      "Custom Frontend UI",
+      "Basic Backend & Database",
+      "REST API Integration",
+      "Authentication & Admin Panel",
+      "Deployment & Handover",
     ],
-    cta: "Scale with Growth",
-    link: "#contact",
+    cta: "Build with Basic",
   },
   {
-    id: "enterprise",
+    id: "fullstack-medium",
     tier: "03",
-    name: "Enterprise",
-    tagline: "Fully custom systems",
-    price: null,
-    period: null,
+    name: "Full Stack · Medium",
+    tagline: "Premium frontend + capable backend",
+    price: 40000,
+    priceLabel: "₹40,000 – ₹50,000",
+    period: "project",
     icon: (
       <AnimatedIcon>
         <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 stroke-current stroke-2">
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+          <path d="M12 2L2 7l10 5 10-5-10-5z" />
+          <path d="M2 17l10 5 10-5" />
+          <path d="M2 12l10 5 10-5" />
         </svg>
       </AnimatedIcon>
     ),
     features: [
-      "Global Infrastructure Setup",
-      "Dedicated Engineering Squad",
-      "Custom Design Ecosystem",
-      "Unlimited Interface Modules",
-      "Strategic Solution Architecture",
+      "Premium Frontend with Animations",
+      "Scalable Backend Architecture",
+      "Advanced Database Design",
+      "Third-Party API Integrations",
+      "Deployment & Performance Audit",
     ],
-    cta: "Establish Oracle",
-    link: "#contact",
+    cta: "Level Up to Medium",
+  },
+  {
+    id: "fullstack-premium",
+    tier: "04",
+    name: "Full Stack · Premium",
+    tagline: "Top-tier frontend + enterprise backend",
+    price: null,
+    priceLabel: "₹70,000+",
+    period: "project",
+    icon: (
+      <AnimatedIcon>
+        <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 stroke-current stroke-2">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+        </svg>
+      </AnimatedIcon>
+    ),
+    features: [
+      "World-Class Premium Frontend",
+      "Enterprise-Grade Backend",
+      "Microservices / Cloud Architecture",
+      "Full DevOps & CI/CD Pipeline",
+      "Ongoing Strategy Consultation",
+    ],
+    cta: "Go Premium",
+  },
+  {
+    id: "maintenance-fs",
+    tier: "05",
+    name: "Full Stack Maintenance",
+    tagline: "Keep your product sharp & running",
+    price: null,
+    priceLabel: "₹5,000 / mo (Basic)",
+    subLabel: "Advanced · Custom Quote",
+    period: "monthly",
+    icon: (
+      <AnimatedIcon>
+        <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 stroke-current stroke-2">
+          <circle cx="12" cy="12" r="3" />
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14" />
+        </svg>
+      </AnimatedIcon>
+    ),
+    features: [
+      "Bug Fixes & Patch Updates",
+      "Security & Dependency Updates",
+      "Uptime Monitoring",
+      "Monthly Performance Reports",
+      "Advanced Plans: Custom Scope",
+    ],
+    cta: "Activate Maintenance",
+  },
+  {
+    id: "seo-maintenance",
+    tier: "06",
+    name: "SEO Maintenance",
+    tagline: "Stay ranked. Stay relevant.",
+    price: null,
+    priceLabel: "₹5,000 / mo (Basic)",
+    subLabel: "Advanced · Custom Quote",
+    period: "monthly",
+    icon: (
+      <AnimatedIcon>
+        <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 stroke-current stroke-2">
+          <circle cx="11" cy="11" r="8" />
+          <path d="M21 21l-4.35-4.35" />
+        </svg>
+      </AnimatedIcon>
+    ),
+    features: [
+      "On-Page SEO Optimisation",
+      "Monthly Keyword Tracking",
+      "Backlink Monitoring",
+      "Content & Meta Updates",
+      "Advanced: Full Strategy + Audit",
+    ],
+    cta: "Boost SEO",
+  },
+  {
+    id: "logo-design",
+    tier: "07",
+    name: "Logo Designing",
+    tagline: "A mark that defines your brand",
+    price: null,
+    priceLabel: "₹6,000 – ₹7,000",
+    period: "project",
+    icon: (
+      <AnimatedIcon>
+        <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 stroke-current stroke-2">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+        </svg>
+      </AnimatedIcon>
+    ),
+    features: [
+      "3 Unique Concepts",
+      "Unlimited Revisions",
+      "All File Formats (SVG, PNG, PDF)",
+      "Brand Colour Palette",
+      "Full Copyright Ownership",
+    ],
+    cta: "Design My Logo",
   },
 ];
 
 const mobilePlans = [
   {
-    id: "app-starter",
+    id: "android-basic",
     tier: "M1",
-    name: "iOS App",
-    tagline: "High-performance Apple ecosystems",
-    price: 9999,
-    originalPrice: 19999,
+    name: "Android · Basic",
+    tagline: "Native Android for a broad audience",
+    price: null,
+    priceLabel: "₹40,000 – ₹60,000",
     period: "project",
     accent: "bg-white text-black",
     icon: (
       <AnimatedIcon>
         <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 stroke-current stroke-2">
-          <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
-          <path d="M12 18h.01" />
+          <path d="M6 2L2 6l4 4M18 2l4 4-4 4" />
+          <rect x="5" y="10" width="14" height="12" rx="2" />
+          <path d="M12 14h.01" />
         </svg>
       </AnimatedIcon>
     ),
     features: [
-      "Native Swift / SwiftUI Core",
-      "Human Interface Principle Sync",
-      "Optimized Apple Hardware API",
-      "iCloud Ecosystem Protocol",
-      "App Store Deployment Audit",
+      "Native Kotlin / Jetpack Stack",
+      "Material Design 3 UI",
+      "Google Play Deployment",
+      "Essential API Integrations",
+      "Post-Launch Support",
     ],
-    cta: "Initiate iOS",
+    cta: "Build Android Basic",
   },
   {
-    id: "app-pro",
+    id: "android-advanced",
     tier: "M2",
-    name: "Android App",
-    tagline: "Global reach, native power",
-    price: 14999,
-    originalPrice: 29999,
+    name: "Android · Advanced",
+    tagline: "Feature-rich, enterprise-grade Android",
+    price: null,
+    priceLabel: "₹70,000 – ₹90,000",
     period: "project",
     badge: "Most Popular",
     accent: "bg-black text-white",
@@ -152,21 +254,48 @@ const mobilePlans = [
       </AnimatedIcon>
     ),
     features: [
-      "Native Kotlin / Jetpack Core",
-      "Material Design 3 Architecture",
-      "Global Device Compatibility",
-      "Google Ecosystem Integration",
-      "Play Store Certification Audit",
+      "Complex UI with Animations",
+      "Real-Time & Offline Support",
+      "Advanced Backend Integration",
+      "Push Notifications & Analytics",
+      "Full Store Optimisation",
     ],
-    cta: "Initiate Android",
+    cta: "Build Android Advanced",
   },
   {
-    id: "app-elite",
+    id: "ios-basic",
     tier: "M3",
+    name: "iOS App · Basic",
+    tagline: "High-performance Apple ecosystem entry",
+    price: null,
+    priceLabel: "₹90,000+",
+    subLabel: "Maintenance · Custom Quote",
+    period: "project",
+    accent: "bg-white text-black",
+    icon: (
+      <AnimatedIcon>
+        <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 stroke-current stroke-2">
+          <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
+          <path d="M12 18h.01" />
+        </svg>
+      </AnimatedIcon>
+    ),
+    features: [
+      "Native Swift / SwiftUI Core",
+      "Human Interface Guidelines",
+      "iCloud & Apple API Integration",
+      "App Store Deployment & Review",
+      "iOS Maintenance: Custom Quote",
+    ],
+    cta: "Build iOS App",
+  },
+  {
+    id: "cross-platform",
+    tier: "M4",
     name: "Cross-Platform",
-    tagline: "One codebase, total dominance",
-    price: 19999,
-    originalPrice: 39999,
+    tagline: "One codebase. iOS + Android. Total reach.",
+    price: null,
+    priceLabel: "₹1,00,000+",
     period: "project",
     accent: "bg-white text-black",
     icon: (
@@ -180,13 +309,12 @@ const mobilePlans = [
     ),
     features: [
       "React Native / Flutter Stack",
-      "Universal Logic Integration",
-      "Native-Bridge Performance",
-      "Unified Multi-Store Sync",
-      "Scalable Enterprise Core",
+      "Shared Logic, Native Performance",
+      "iOS + Android Simultaneous Build",
+      "Unified Store Deployment",
+      "Scalable Enterprise Architecture",
     ],
-    cta: "Initiate Universal",
-    link: "#contact",
+    cta: "Go Cross-Platform",
   },
 ];
 
@@ -329,20 +457,22 @@ function PlanCard({ plan }: { plan: any }) {
       </div>
 
       <div className="py-6 border-y border-current/10 flex flex-col gap-3 relative z-[2]">
-        {plan.price ? (
-          <div className="flex flex-col">
-            <div className="flex items-center gap-4 mb-1">
-               <span className="text-red-500 line-through text-xs font-bold decoration-1 opacity-60">₹{plan.originalPrice.toLocaleString()}</span>
-                <div className="px-2.5 py-1 bg-emerald-500/10 text-emerald-500 text-[9px] font-black uppercase tracking-widest rounded-md border border-emerald-500/20">
-                  Save 50%
-                </div>
+        {plan.priceLabel ? (
+          <div className="flex flex-col gap-2">
+            <div className="flex items-baseline gap-2 flex-wrap">
+              <span className={cn("text-2xl md:text-3xl font-black tracking-tighter transition-all leading-none", isPopular ? "text-emerald-500" : "text-current")}>
+                {plan.priceLabel}
+              </span>
+              {plan.period && (
+                <span className="text-[9px] font-black uppercase opacity-20">/ {plan.period}</span>
+              )}
             </div>
-            <div className="flex items-baseline gap-2">
-               <span className={cn("text-3xl md:text-4xl font-black tracking-tighter transition-all", isPopular ? "text-emerald-500" : "text-current")}>
-                 ₹{plan.price.toLocaleString()}
-               </span>
-               <span className="text-xs font-black uppercase opacity-20">/ {plan.period}</span>
-            </div>
+            {plan.negotiable && (
+              <span className="text-[9px] font-black uppercase tracking-widest text-emerald-500 opacity-80">{plan.negotiable}</span>
+            )}
+            {plan.subLabel && (
+              <span className="text-[9px] font-black uppercase tracking-widest opacity-40">{plan.subLabel}</span>
+            )}
           </div>
         ) : (
           <span className="text-3xl md:text-4xl font-black tracking-tighter uppercase italic">Call Unit</span>

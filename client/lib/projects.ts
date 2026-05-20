@@ -82,6 +82,37 @@ export const projects: Project[] = [
     results: "Pilot testing showed a 30% reduction in seasonal surplus and a measurable increase in farmer profitability through better market integration.",
     services: ["Full Stack Development", "Data Analytics", "Agri-Business Consulting"],
   },
+  {
+    id: "vgs-global",
+    title: "VGS Global",
+    category: "Ed-Tech",
+    description: "India's trusted study abroad consultancy — guiding students to UK, USA, Canada, Australia & beyond with a 98% visa success rate.",
+    image: "/projects/vgsglobal.png",
+    fullTitle: "Beyond Boundaries, Beyond Limits: The VGS Global Story",
+    heroImage: "/projects/vgsglobal.png",
+    url: "https://vgs-consultancy.vercel.app/",
+    client: {
+      name: "VGS Global Team",
+      role: "Founder, VGS Global",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=VGS",
+    },
+    about: "VGS Global is India's premier study abroad consultancy, empowering students to achieve their international education dreams. With deep expertise across UK, USA, Canada, Ireland, Australia, Germany, France, and New Zealand, VGS Global provides end-to-end guidance — from course selection and university shortlisting to visa documentation and pre-departure support.",
+    hq: "India",
+    industry: "International Education / Study Abroad Consultancy",
+    companySize: "11–50 employees",
+    challenge: "Students aspiring to study abroad face a complex maze of university applications, documentation requirements, visa regulations, and financial planning — often leading to costly mistakes, rejections, and wasted opportunities without expert guidance.",
+    approach: "We built a premium, conversion-focused web platform that showcases VGS Global's expertise across Study, Work, and Visit visa categories. The site features an animated loading experience, destination-specific landing pages, a success stories section, and an intuitive consultation booking flow — all wrapped in a bold, modern UI that builds instant trust.",
+    features: [
+      "Study, Work & Visit Visa Guidance",
+      "University Shortlisting & Application Support",
+      "98% Visa Approval Success Rate",
+      "Scholarship & Education Loan Assistance",
+      "8 Destination Countries Covered",
+      "500+ Partner Institutes Globally",
+    ],
+    results: "VGS Global achieved a 98% visa success rate across thousands of student applications, established partnerships with 500+ international institutes, and built a reputation as India's most trusted study abroad expert.",
+    services: ["Web Design & Development", "Brand Strategy", "Conversion Optimisation", "SEO"],
+  },
 ];
 
 
