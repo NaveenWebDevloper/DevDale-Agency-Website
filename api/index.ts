@@ -1,4 +1,5 @@
 import express from "express";
+import serverless from "serverless-http";
 import { setupRoutes } from "../server/routes";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
@@ -13,51 +14,54 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Initialize MongoDB inside the serverless function
-const MONGO_URI = process.env.MONGO_URI;
-
+// --- DB Connection (cached for warm Lambda / Vercel serverless) ---
 let isConnected = false;
 
 const connectDB = async () => {
   if (isConnected && mongoose.connection.readyState === 1) return;
-  
+
+  const MONGO_URI = process.env.MONGO_URI;
   if (!MONGO_URI) {
-    console.error("MONGO_URI is missing in environment variables");
-    return;
+    console.error("[DB] MONGO_URI environment variable is NOT set on Vercel!");
+    throw new Error("MONGO_URI is not configured in environment variables.");
   }
 
   try {
-    const opts = {
-      bufferCommands: false,
-    };
-    await mongoose.connect(MONGO_URI, opts);
+    await mongoose.connect(MONGO_URI, { bufferCommands: false });
     isConnected = true;
-    console.log("Connected to MongoDB via Serverless Function");
-  } catch (err) {
-    console.error("MongoDB connection error:", err);
+    console.log("[DB] Connected to MongoDB via Serverless Function");
+  } catch (err: any) {
+    console.error("[DB] MongoDB connection error:", err.message);
+    throw err; // Re-throw so the route handler returns 500 with context
   }
 };
 
-// Middleware to ensure DB connection
+// Ensure DB is connected before any /api route is handled
 app.use(async (req, res, next) => {
-  if (req.path.startsWith("/api")) {
+  try {
     await connectDB();
+    next();
+  } catch (err: any) {
+    console.error("[Middleware] DB connection failed:", err.message);
+    res.status(500).json({
+      message: "Database connection failed. Please try again later.",
+      error: err.message,
+    });
   }
-  next();
 });
 
-// Register routes (API handlers)
+// Register all API routes
 setupRoutes(app);
 
-// Global Error Handler
+// Global Error Handler — always surface the error message for debugging
 app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
-  console.error("API Error:", err);
-  res.status(500).json({ 
-    message: "Internal Server Error",
-    error: process.env.NODE_ENV === "development" ? err.message : undefined 
+  console.error("[Global Error]", err);
+  res.status(err.status || 500).json({
+    message: err.message || "Internal Server Error",
+    error: err.message,
+    stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
   });
 });
 
-// Export the app for Vercel
-export default app;
-
+// Export as Vercel serverless handler
+export default serverless(app);
