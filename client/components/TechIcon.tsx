@@ -6,6 +6,7 @@ interface TechIconProps {
   type: "code" | "cloud" | "strategy" | "growth" | "speed" | "security" | "innovation" | "scale" | "payments";
   className?: string;
   color?: boolean;
+  style?: React.CSSProperties;
 }
 
 const colorMap = {
@@ -32,7 +33,7 @@ const glowMap = {
   payments: "drop-shadow-[0_0_8px_rgba(139,92,246,0.5)]",
 };
 
-export const TechIcon = ({ type, className, color = false }: TechIconProps) => {
+export const TechIcon = ({ type, className, color = false, style }: TechIconProps) => {
   const draw: Variants = {
     hidden: { pathLength: 0, opacity: 0 },
     visible: (i: number) => {
@@ -116,6 +117,7 @@ export const TechIcon = ({ type, className, color = false }: TechIconProps) => {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.1 }}
+      style={style}
     >
       {icons[type]}
     </motion.div>
