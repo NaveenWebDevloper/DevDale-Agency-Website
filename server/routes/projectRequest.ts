@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import { Resend } from "resend";
 import Lead from "../models/Lead"; // Reusing Lead model for simplicity, or we could create a new ProjectRequest model
 import dotenv from "dotenv";
@@ -7,7 +7,7 @@ dotenv.config();
 
 const resend = new Resend(process.env.RESEND_API_KEY || "re_mock_123");
 
-export const handleProjectRequest = async (req: express.Request, res: express.Response) => {
+export const handleProjectRequest = async (req: Request, res: Response) => {
   try {
     console.log("Incoming Project Request Data:", req.body);
     const data = req.body;

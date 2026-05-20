@@ -1,11 +1,11 @@
-import { Express, Request, Response } from "express";
+import { Application, Request, Response } from "express";
 import { createServer, type Server } from "http";
 import { handleSubmitForm } from "./routes/contact";
 import { handleProjectRequest } from "./routes/projectRequest";
 
 import mongoose from "mongoose";
 
-export function setupRoutes(app: Express) {
+export function setupRoutes(app: Application) {
   // Health Check
   app.get("/api/ping", (_req: Request, res: Response) => {
     res.json({ message: "pong" });
@@ -27,7 +27,7 @@ export function setupRoutes(app: Express) {
 }
 
 
-export async function registerRoutes(app: Express): Promise<Server> {
+export async function registerRoutes(app: Application): Promise<Server> {
   setupRoutes(app);
   
   const httpServer = createServer(app);
