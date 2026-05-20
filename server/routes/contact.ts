@@ -115,8 +115,11 @@ export const handleSubmitForm = async (req: express.Request, res: express.Respon
     }
 
     return res.status(200).json({ message: "Form submitted successfully!" });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Database Error:", error);
-    return res.status(500).json({ message: "Internal server error. Please try again later." });
+    return res.status(500).json({ 
+      message: "Internal server error. Please try again later.",
+      error: error?.message || String(error)
+    });
   }
 };

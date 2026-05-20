@@ -72,8 +72,11 @@ export const handleProjectRequest = async (req: express.Request, res: express.Re
     }
 
     return res.status(200).json({ message: "Project request submitted successfully!" });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Project Request Error:", error);
-    return res.status(500).json({ message: "Internal server error." });
+    return res.status(500).json({ 
+      message: "Internal server error.",
+      error: error?.message || String(error)
+    });
   }
 };

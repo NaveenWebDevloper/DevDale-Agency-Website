@@ -3,10 +3,22 @@ import { createServer, type Server } from "http";
 import { handleSubmitForm } from "./routes/contact";
 import { handleProjectRequest } from "./routes/projectRequest";
 
+import mongoose from "mongoose";
+
 export function setupRoutes(app: Express) {
   // Health Check
   app.get("/api/ping", (_req: Request, res: Response) => {
     res.json({ message: "pong" });
+  });
+
+  // Database Diagnostic Check
+  app.get("/api/db-status", (_req: Request, res: Response) => {
+    const states = ["disconnected", "connected", "connecting", "disconnecting"];
+    res.json({
+      status: states[mongoose.connection.readyState],
+      readyState: mongoose.connection.readyState,
+      dbName: mongoose.connection.name
+    });
   });
 
   // Agency Core: Form Handling

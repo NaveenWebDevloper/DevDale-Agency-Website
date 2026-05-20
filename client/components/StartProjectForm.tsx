@@ -90,7 +90,7 @@ export default function StartProjectForm() {
     watch,
     setValue,
     formState: { errors, isValid },
-  } = useForm<FormData>({
+  } = useForm<any>({
     resolver: zodResolver(formSchema),
     mode: "onChange",
     defaultValues: {
@@ -185,7 +185,7 @@ export default function StartProjectForm() {
     }
   };
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: any) => {
     setIsSubmitting(true);
     setError(null);
     try {
@@ -195,7 +195,11 @@ export default function StartProjectForm() {
         body: JSON.stringify(data),
       });
 
-      if (!response.ok) throw new Error("Submission failed. Please try again.");
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        const detailedError = errorData.error ? `${errorData.message} (Detail: ${errorData.error})` : (errorData.message || "Submission failed. Please try again.");
+        throw new Error(detailedError);
+      }
 
       setIsSuccess(true);
       localStorage.removeItem("devdale_project_form");

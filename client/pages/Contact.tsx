@@ -195,8 +195,9 @@ const Contact = () => {
           description: "Mission control has received your vision. Expect a transmission within 24h.",
         });
       } else {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Protocol Failure");
+        const errorData = await response.json().catch(() => ({}));
+        const detailedError = errorData.error ? `${errorData.message} (Detail: ${errorData.error})` : (errorData.message || "Protocol Failure");
+        throw new Error(detailedError);
       }
     } catch (error: any) {
       toast({
