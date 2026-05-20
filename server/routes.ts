@@ -1,6 +1,7 @@
 import { Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
 import { handleSubmitForm } from "./routes/contact";
+import { handleProjectRequest } from "./routes/projectRequest";
 
 export function setupRoutes(app: Express) {
   // Health Check
@@ -10,6 +11,7 @@ export function setupRoutes(app: Express) {
 
   // Agency Core: Form Handling
   app.post("/api/submit-form", handleSubmitForm);
+  app.post("/api/project-request", handleProjectRequest);
 }
 
 
