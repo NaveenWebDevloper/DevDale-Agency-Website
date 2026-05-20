@@ -6,14 +6,33 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { SmoothScroll } from "../components/SmoothScroll";
 import { cn } from "../lib/utils";
+import { useState, useEffect } from "react";
+import PageSkeletonLoader from "../components/PageSkeletonLoader";
 
 export default function Projects() {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [showSkeleton, setShowSkeleton] = useState(true);
+
+  useEffect(() => {
+    const skeletonTimer = setTimeout(() => setShowSkeleton(false), 600);
+    const loadTimer = setTimeout(() => setIsLoaded(true), 700);
+
+    return () => {
+      clearTimeout(skeletonTimer);
+      clearTimeout(loadTimer);
+    };
+  }, []);
+
   const categories = Array.from(new Set(projects.map(p => p.category)));
+
+  if (showSkeleton) {
+    return <PageSkeletonLoader type="projects" />;
+  }
 
   return (
     <SmoothScroll>
       <div className="min-h-screen bg-white font-sans selection:bg-black selection:text-white overflow-hidden">
-        <Navbar isLoaded={true} />
+        <Navbar isLoaded={isLoaded} />
         
         <main className="pt-32 lg:pt-40">
           {/* Hero Header - Inspired by Detail View */}

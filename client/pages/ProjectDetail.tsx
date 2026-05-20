@@ -9,10 +9,27 @@ import { SmoothScroll } from "../components/SmoothScroll";
 import NotFound from "./NotFound";
 import { cn } from "../lib/utils";
 import { Button } from "../components/ui/button";
+import { useState, useEffect } from "react";
+import PageSkeletonLoader from "../components/PageSkeletonLoader";
 
 export default function ProjectDetail() {
   const { id } = useParams<{ id: string }>();
   const project = projects.find((p) => p.id === id);
+
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [showSkeleton, setShowSkeleton] = useState(true);
+
+  useEffect(() => {
+    setShowSkeleton(true);
+    setIsLoaded(false);
+    const skeletonTimer = setTimeout(() => setShowSkeleton(false), 600);
+    const loadTimer = setTimeout(() => setIsLoaded(true), 700);
+
+    return () => {
+      clearTimeout(skeletonTimer);
+      clearTimeout(loadTimer);
+    };
+  }, [id]);
 
   if (!project) {
     return <NotFound />;
@@ -20,10 +37,14 @@ export default function ProjectDetail() {
 
   const relatedProjects = projects.filter(p => p.id !== id);
 
+  if (showSkeleton) {
+    return <PageSkeletonLoader type="detail" />;
+  }
+
   return (
     <SmoothScroll>
       <div className="min-h-screen bg-white font-sans selection:bg-black selection:text-white max-w-[100vw] [overflow-x:clip]">
-        <Navbar isLoaded={true} />
+        <Navbar isLoaded={isLoaded} />
 
         <main className="pt-24 lg:pt-32">
           {/* Conversational Hero Section */}

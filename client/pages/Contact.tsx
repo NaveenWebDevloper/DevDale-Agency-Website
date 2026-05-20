@@ -6,6 +6,7 @@ import Footer from "../components/Footer";
 import { SmoothScroll } from "../components/SmoothScroll";
 import { useToast } from "@/hooks/use-toast";
 import confetti from "canvas-confetti";
+import PageSkeletonLoader from "../components/PageSkeletonLoader";
 
 const Background = memo(() => (
   <div className="absolute inset-0 z-0 pointer-events-none [contain:paint]">
@@ -130,12 +131,23 @@ ContactForm.displayName = "ContactForm";
 const Contact = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSkeleton, setShowSkeleton] = useState(true);
   const { toast } = useToast();
 
   useEffect(() => {
-    setIsLoaded(true);
     window.scrollTo(0, 0);
+    const skeletonTimer = setTimeout(() => setShowSkeleton(false), 600);
+    const loadTimer = setTimeout(() => setIsLoaded(true), 700);
+
+    return () => {
+      clearTimeout(skeletonTimer);
+      clearTimeout(loadTimer);
+    };
   }, []);
+
+  if (showSkeleton) {
+    return <PageSkeletonLoader type="contact" />;
+  }
 
   const fireCelebration = () => {
     const duration = 5 * 1000;
@@ -210,7 +222,7 @@ const Contact = () => {
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] as any } },
   };
 
   return (

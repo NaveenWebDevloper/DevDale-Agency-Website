@@ -10,6 +10,7 @@ import { PricingOfferModal } from "../components/PricingOfferModal";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import PageSkeletonLoader from "../components/PageSkeletonLoader";
 
 
 // ─── Data ───────────────────────────────────────────────────────────────────
@@ -514,12 +515,23 @@ export default function Pricing() {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [showSkeleton, setShowSkeleton] = useState(true);
 
   useEffect(() => {
-    setIsLoaded(true);
-    const timer = setTimeout(() => setIsModalOpen(true), 3000);
-    return () => clearTimeout(timer);
+    const skeletonTimer = setTimeout(() => setShowSkeleton(false), 600);
+    const loadTimer = setTimeout(() => {
+      setIsLoaded(true);
+      setTimeout(() => setIsModalOpen(true), 3000);
+    }, 700);
+
+    return () => {
+      clearTimeout(skeletonTimer);
+    };
   }, []);
+
+  if (showSkeleton) {
+    return <PageSkeletonLoader type="pricing" />;
+  }
 
   return (
     <SmoothScroll>

@@ -15,6 +15,7 @@ import { ArrowUpRight, ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
 import Lenis from "lenis";
 import CurvedLoop from "../components/CurvedLoop";
+import PageSkeletonLoader from "../components/PageSkeletonLoader";
 
 /* ══════════════════════════════════════════════
    LENIS SMOOTH SCROLL HOOK
@@ -203,8 +204,23 @@ const values = [
 ══════════════════════════════════════════════ */
 export default function About() {
   const [loaded, setLoaded] = useState(false);
-  useEffect(() => { const t = setTimeout(() => setLoaded(true), 100); return () => clearTimeout(t); }, []);
+  const [showSkeleton, setShowSkeleton] = useState(true);
+
+  useEffect(() => {
+    const skeletonTimer = setTimeout(() => setShowSkeleton(false), 600);
+    const loadTimer = setTimeout(() => setLoaded(true), 700);
+
+    return () => {
+      clearTimeout(skeletonTimer);
+      clearTimeout(loadTimer);
+    };
+  }, []);
+
   useLenis();
+
+  if (showSkeleton) {
+    return <PageSkeletonLoader type="about" />;
+  }
 
   return (
     <div className="bg-white min-h-screen max-w-[100vw] overflow-x-hidden">
