@@ -2,7 +2,6 @@ import { useEffect } from "react";
 
 const GA4_ID = import.meta.env.VITE_GA4_ID;
 const GTM_ID = import.meta.env.VITE_GTM_ID;
-const CLARITY_ID = import.meta.env.VITE_CLARITY_ID;
 
 export default function AnalyticsTags() {
   useEffect(() => {
@@ -24,12 +23,6 @@ export default function AnalyticsTags() {
       document.head.appendChild(inline);
     }
 
-    if (CLARITY_ID && !document.querySelector(`script[data-clarity="${CLARITY_ID}"]`)) {
-      const script = document.createElement("script");
-      script.dataset.clarity = CLARITY_ID;
-      script.textContent = `(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","${CLARITY_ID}");`;
-      document.head.appendChild(script);
-    }
   }, []);
 
   return null;

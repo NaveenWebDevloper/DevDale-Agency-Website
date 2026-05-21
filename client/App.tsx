@@ -6,6 +6,7 @@ import PageSkeletonLoader from "./components/PageSkeletonLoader";
 import SEO from "./components/SEO";
 import ConversionLayer from "./components/ConversionLayer";
 import AnalyticsTags from "./components/AnalyticsTags";
+import ClarityTracker from "./components/ClarityTracker";
 
 // Dynamic page imports
 const Index = lazy(() => import("./pages/Index"));
@@ -38,6 +39,7 @@ function App() {
       <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <SEO />
         <AnalyticsTags />
+        <ClarityTracker />
         <ScrollToTop />
         <Suspense fallback={<PageSkeletonLoader />}>
           <Routes>

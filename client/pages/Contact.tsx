@@ -7,6 +7,7 @@ import { SmoothScroll } from "../components/SmoothScroll";
 import { useToast } from "@/hooks/use-toast";
 import confetti from "canvas-confetti";
 import PageSkeletonLoader from "../components/PageSkeletonLoader";
+import { trackClarityEvent } from "@/analytics/clarity";
 
 const Background = memo(() => (
   <div className="absolute inset-0 z-0 pointer-events-none [contain:paint]">
@@ -188,6 +189,8 @@ const Contact = () => {
       });
 
       if (response.ok) {
+        trackClarityEvent("contact_submit");
+        trackClarityEvent("lead_generated");
         fireCelebration();
         toast({
           variant: "success",

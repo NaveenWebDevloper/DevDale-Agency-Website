@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { CalendarDays, FileSearch, MessageCircle } from "lucide-react";
 import { CALENDLY_URL, WHATSAPP_URL } from "@/lib/seo";
+import { trackClarityEvent } from "@/analytics/clarity";
 
 declare global {
   interface Window {
@@ -13,6 +14,7 @@ declare global {
 function track(event: string, params: Record<string, unknown> = {}) {
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push({ event, ...params });
+  trackClarityEvent(event);
   window.dispatchEvent(new CustomEvent("thedevdale:event", { detail: { event, ...params } }));
 }
 
@@ -52,7 +54,10 @@ export default function ConversionLayer() {
           href={CALENDLY_URL}
           target="_blank"
           rel="noreferrer"
-          onClick={() => track("calendly_click", { path: location.pathname })}
+          onClick={() => {
+            track("calendly_click", { path: location.pathname });
+            track("consultation_booked", { path: location.pathname });
+          }}
           className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-black/5 text-black transition-colors hover:bg-black hover:text-white"
           aria-label="Book a strategy call"
         >
