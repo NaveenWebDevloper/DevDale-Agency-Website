@@ -1,18 +1,35 @@
 "use client";
 
-import { useEffect, useRef } from 'react';
-import Lenis from 'lenis';
+import { useEffect, useRef } from "react";
+import Lenis from "lenis";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+gsap.registerPlugin(ScrollTrigger);
+
+/**
+ * SmoothScroll — Lenis + GSAP Unified Ticker
+ *
+ * PERF FIX: The previous implementation ran Lenis on its own requestAnimationFrame
+ * loop while GSAP ran another — two separate rAF chains competing to read layout
+ * caused 280ms of forced reflow (Lighthouse: gsap-DNxS7Hap.js col 54320).
+ *
+ * Solution: GSAP's ticker becomes the single rAF driver for the whole app.
+ * - Lenis.raf() is called inside gsap.ticker so there is only ONE rAF loop.
+ * - ScrollTrigger.update() is called on every Lenis scroll event so both
+ *   systems share the same scroll position — no layout thrashing.
+ * - gsap.ticker.lagSmoothing(0) prevents GSAP from skipping frames after
+ *   tab visibility changes, which would cause jank on return.
+ */
 export const SmoothScroll = ({ children }: { children: React.ReactNode }) => {
   const lenisRef = useRef<Lenis | null>(null);
-  const rafIdRef = useRef<number | null>(null);
 
   useEffect(() => {
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: 'vertical',
-      gestureOrientation: 'vertical',
+      orientation: "vertical",
+      gestureOrientation: "vertical",
       smoothWheel: true,
       wheelMultiplier: 1,
       touchMultiplier: 2,
@@ -20,21 +37,26 @@ export const SmoothScroll = ({ children }: { children: React.ReactNode }) => {
 
     lenisRef.current = lenis;
 
-    function raf(time: number) {
-      lenis.raf(time);
-      rafIdRef.current = requestAnimationFrame(raf);
-    }
+    // Sync ScrollTrigger with Lenis virtual scroll position
+    lenis.on("scroll", ScrollTrigger.update);
 
-    rafIdRef.current = requestAnimationFrame(raf);
+    // Drive Lenis from GSAP's ticker — one unified rAF loop
+    const tickerCallback = (time: number) => {
+      lenis.raf(time * 1000);
+    };
+
+    gsap.ticker.add(tickerCallback);
+
+    // Prevent GSAP from skipping frames after tab switch (avoids jank on return)
+    gsap.ticker.lagSmoothing(0);
 
     return () => {
-      if (rafIdRef.current) {
-        cancelAnimationFrame(rafIdRef.current);
-      }
+      gsap.ticker.remove(tickerCallback);
       lenis.destroy();
     };
   }, []);
 
   return <>{children}</>;
 };
+
 

@@ -1,13 +1,11 @@
 import React, { useEffect, useState, lazy, Suspense } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { ArrowRight, Play, DollarSign } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 const CurvedLoop = lazy(() => import("./CurvedLoop"));
 import { Typewriter } from "./ui/Typewriter";
 
 const Hero = ({ isLoaded }: { isLoaded?: boolean }) => {
-  const navigate = useNavigate();
-
   const headlineText = "Building Digital Experiences That Drive Real Growth";
   const words = headlineText.split(" ");
 
@@ -34,22 +32,6 @@ const Hero = ({ isLoaded }: { isLoaded?: boolean }) => {
     },
   };
 
-  const subheadlineVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.8,
-        delay: 1.2,
-        ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
-      },
-    },
-  };
-
-  const handleCTAClick = () => {
-    navigate("/contact");
-  };
 
   return (
     <section id="hero" className="relative min-h-screen flex flex-col items-center justify-center pt-20 px-6 overflow-hidden">
@@ -75,7 +57,7 @@ const Hero = ({ isLoaded }: { isLoaded?: boolean }) => {
 
       <div className="container relative z-20 flex flex-col items-center text-center">
         {/* 3. Editorial Headline with Integrated Logos */}
-        <motion.div
+        <m.div
           variants={containerVariants}
           initial="hidden"
           animate={isLoaded ? "visible" : "hidden"}
@@ -84,18 +66,20 @@ const Hero = ({ isLoaded }: { isLoaded?: boolean }) => {
           {/* Line 1: Building Digital Experiences That */}
           <div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-3">
             {words.slice(0, 4).map((word, i) => (
-              <motion.span
+              <m.span
                 key={i}
                 variants={wordVariants}
                 className="text-3xl sm:text-5xl lg:text-6xl xl:text-[5.5rem] font-black tracking-[-0.01em] flex items-center h-fit text-black"
               >
                 <div className="inline-flex items-center text-balance">
                   {word === "Experiences" ? (
-                    <span>
+                    // A11Y FIX: aria-label ensures screen readers say "Experiences"
+                    // instead of spelling out each letter with its animation wrapper
+                    <span aria-label="Experiences">
                       {word.split("").map((char, index) => (
-                        <span key={index} className="relative inline-block">
+                        <span key={index} className="relative inline-block" aria-hidden="true">
                           {(char === "x" || char === "X") ? (
-                            <motion.span
+                            <m.span
                               animate={{
                                 backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
                                 rotateY: [0, 10, -10, 0],
@@ -114,7 +98,7 @@ const Hero = ({ isLoaded }: { isLoaded?: boolean }) => {
                               }}
                             >
                               {char}
-                            </motion.span>
+                            </m.span>
                           ) : (
                             char
                           )}
@@ -129,8 +113,8 @@ const Hero = ({ isLoaded }: { isLoaded?: boolean }) => {
                   {word === "Building" && (
                     <div className="inline-flex items-center gap-4 mx-6 md:mx-8">
                       {/* Figma Logo SVG */}
-                      <span className="inline-flex items-center justify-center p-1">
-                        <svg width="40" height="60" viewBox="0 0 38 57" fill="none" className="h-[0.52em] w-auto overflow-visible transition-transform duration-500 hover:scale-110">
+                      <span className="inline-flex items-center justify-center p-1" aria-label="Figma">
+                        <svg width="40" height="60" viewBox="0 0 38 57" fill="none" aria-hidden="true" className="h-[0.52em] w-auto overflow-visible transition-transform duration-500 hover:scale-110">
                           <path d="M0 9.5C0 6.98044 1.00089 4.56408 2.78249 2.78249C4.56408 1.00089 6.98044 0 9.5 0H19V19H9.5C6.98044 19 4.56408 17.9991 2.78249 16.2175C1.00089 14.4359 0 12.0196 0 9.5Z" fill="#F24E1E" />
                           <path d="M19 0H28.5C31.0196 0 33.4359 1.00089 35.2175 2.78249C36.9991 4.56408 38 6.98044 38 9.5C38 12.0196 36.9991 14.4359 35.2175 16.2175C33.4359 17.9991 31.0196 19 28.5 19H19V0Z" fill="#FF7262" />
                           <path d="M0 28.5C0 25.9804 1.00089 23.5641 2.78249 21.7825C4.56408 20.0009 6.98044 19 9.5 19H19V38H9.5C6.98044 38 4.56408 36.9991 2.78249 35.2115C1.00089 33.4359 0 31.0196 0 28.5Z" fill="#A259FF" />
@@ -141,7 +125,7 @@ const Hero = ({ isLoaded }: { isLoaded?: boolean }) => {
 
                       {/* Claude Official Logo Image */}
                       <span className="inline-flex items-center justify-center">
-                        <motion.img
+                        <m.img
                           src="/claude-icon-logo.webp"
                           alt="Claude Logo"
                           width="51"
@@ -153,24 +137,24 @@ const Hero = ({ isLoaded }: { isLoaded?: boolean }) => {
                     </div>
                   )}
                 </div>
-              </motion.span>
+              </m.span>
             ))}
           </div>
 
           {/* Line 2: That Drive Real Growth */}
           <div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-3">
             {words.slice(4).map((word, i) => (
-              <motion.span
+              <m.span
                 key={i}
                 variants={wordVariants}
                 className={`text-3xl sm:text-5xl lg:text-6xl xl:text-[5.5rem] font-black tracking-[-0.01em] flex items-center h-fit ${word === "Growth" ? "text-gray-200" : "text-black"
                   }`}
               >
                 {word}
-              </motion.span>
+              </m.span>
             ))}
           </div>
-        </motion.div>
+        </m.div>
 
         {/* 4. Subheadline with Looping Typewriter Effect */}
         <div className="max-w-2xl mx-auto text-lg md:text-xl text-gray-400 font-medium leading-relaxed mb-10 min-h-[3.5em] text-center">
@@ -199,33 +183,30 @@ const Hero = ({ isLoaded }: { isLoaded?: boolean }) => {
           )}
         </div>
 
-        {/* 6. CTA Buttons with Correct Spacing */}
-        <motion.div
+        {/* 6. CTA Buttons — using Link for proper semantics (keyboard, screen reader, right-click) */}
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.8, delay: 1.4 }}
           className="flex flex-col sm:flex-row items-center gap-6 z-30"
         >
-          <motion.button
-            whileHover={{ scale: 1.05, y: -2 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handleCTAClick}
-            className="group px-10 py-4 bg-black text-white rounded-full text-base font-bold transition-all shadow-xl hover:shadow-2xl hover:bg-zinc-800 flex items-center gap-3"
+          {/* A11Y FIX: was <button onClick={navigate('/contact')}> — now a proper <Link> */}
+          <Link
+            to="/contact"
+            className="group px-10 py-4 bg-black text-white rounded-full text-base font-bold transition-all shadow-xl hover:shadow-2xl hover:bg-zinc-800 flex items-center gap-3 hover:scale-105 hover:-translate-y-0.5 active:scale-95"
           >
             Start Building
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-          </motion.button>
+          </Link>
 
-          <motion.button
-            whileHover={{ scale: 1.05, y: -2 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => navigate("/pricing")}
-            className="flex items-center gap-3 px-10 py-4 bg-white text-black border border-gray-100 rounded-full text-base font-bold hover:bg-gray-50 transition-all shadow-lg"
+          <Link
+            to="/pricing"
+            className="flex items-center gap-3 px-10 py-4 bg-white text-black border border-gray-100 rounded-full text-base font-bold hover:bg-gray-50 transition-all shadow-lg hover:scale-105 hover:-translate-y-0.5 active:scale-95"
           >
             <DollarSign className="w-4 h-4 text-emerald-500" />
             Request for Pricing
-          </motion.button>
-        </motion.div>
+          </Link>
+        </m.div>
       </div>
 
       {/* 7. Scrolling Text (Marquee) at Bottom */}
@@ -240,15 +221,16 @@ const Hero = ({ isLoaded }: { isLoaded?: boolean }) => {
       </div>
 
       {/* 8. Scroll Down Indicator */}
-      <motion.div
+      <m.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2.5, duration: 1 }}
         className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3"
       >
-        <span className="text-[10px] uppercase tracking-[0.4em] text-gray-300 font-bold">Discover</span>
+        {/* A11Y FIX: was text-gray-300 (fails 4.5:1 contrast on white) → text-gray-500 */}
+        <span className="text-[10px] uppercase tracking-[0.4em] text-gray-500 font-bold">Discover</span>
         <div className="w-[1px] h-10 bg-gradient-to-b from-gray-200 to-transparent" />
-      </motion.div>
+      </m.div>
     </section>
   );
 };

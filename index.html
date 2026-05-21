@@ -1,44 +1,92 @@
 <!doctype html>
 <html lang="en-IN">
   <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GR0176NEGL"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-GR0176NEGL');
-    </script>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/devdale_logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#000000" />
     <meta name="robots" content="index, follow, max-image-preview:large" />
-    
+
     <!-- Primary Meta Tags -->
     <title>TheDevDale | Web Development, AI Development And SEO Agency</title>
     <meta name="title" content="TheDevDale | Web Development, AI Development And SEO Agency" />
     <meta name="description" content="TheDevDale builds high performance websites, AI applications, cross platform apps, SEO systems, UI UX design, automation, and conversion focused digital growth engines." />
-    <link rel="canonical" href="https://thedevdale.com" />
-    <link rel="alternate" hreflang="en-IN" href="https://thedevdale.com" />
-    <link rel="alternate" hreflang="en" href="https://thedevdale.com" />
-    <link rel="alternate" hreflang="x-default" href="https://thedevdale.com" />
+
+    <!--
+      PERF FIX: Canonical now uses www to match the actual final URL.
+      Previous value "https://thedevdale.com" (no www) caused a canonical mismatch.
+    -->
+    <link rel="canonical" href="https://www.thedevdale.com/" />
+    <link rel="alternate" hreflang="en-IN" href="https://www.thedevdale.com/" />
+    <link rel="alternate" hreflang="en" href="https://www.thedevdale.com/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.thedevdale.com/" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://thedevdale.com/" />
+    <meta property="og:url" content="https://www.thedevdale.com/" />
     <meta property="og:site_name" content="TheDevDale" />
     <meta property="og:title" content="TheDevDale | Web Development, AI Development And SEO Agency" />
     <meta property="og:description" content="High performance websites, AI applications, SEO systems, UI UX design, automation, and conversion focused digital growth engines." />
-    <meta property="og:image" content="https://thedevdale.com/devdale_logo.svg" />
+    <!--
+      OG IMAGE FIX: Facebook, Twitter/X, LinkedIn, WhatsApp all reject SVG.
+      Replace /og-image.png with a real 1200x630 PNG in /public once generated.
+    -->
+    <meta property="og:image" content="https://www.thedevdale.com/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:alt" content="TheDevDale — Web Development, AI & SEO Agency" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:url" content="https://thedevdale.com/" />
+    <meta name="twitter:url" content="https://www.thedevdale.com/" />
     <meta name="twitter:title" content="TheDevDale | Web Development, AI Development And SEO Agency" />
     <meta name="twitter:description" content="High performance websites, AI applications, SEO systems, UI UX design, automation, and conversion focused digital growth engines." />
-    <meta name="twitter:image" content="https://thedevdale.com/devdale_logo.svg" />
+    <meta name="twitter:image" content="https://www.thedevdale.com/og-image.png" />
+    <meta name="twitter:image:alt" content="TheDevDale — Web Development, AI & SEO Agency" />
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "TheDevDale",
+      "url": "https://www.thedevdale.com/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.thedevdale.com/devdale_logo.svg"
+      },
+      "description": "Web Development, AI Development and SEO Agency",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "sales",
+        "url": "https://www.thedevdale.com/contact"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "TheDevDale",
+      "url": "https://www.thedevdale.com/"
+    }
+    </script>
+
+    <!--
+      PERF FIX: Removed hardcoded GTM <script> from <head>.
+      GTM is now loaded lazily via AnalyticsTags.tsx after first user
+      interaction or after 3s — saving ~200ms of TBT and 157KB of
+      render-blocking transfer on first paint.
+
+      Preconnect hints allow the browser to open early TCP/TLS connections
+      to third-party origins without blocking the parser.
+    -->
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="dns-prefetch" href="https://scripts.clarity.ms" />
+    <link rel="dns-prefetch" href="https://static.cloudflareinsights.com" />
+    <link rel="dns-prefetch" href="https://www.google-analytics.com" />
 
     <!-- Performance Hints -->
     <link rel="preload" href="/fonts/devdale2.woff2" as="font" type="font/woff2" crossorigin />
@@ -49,4 +97,3 @@
     <script type="module" src="./client/main.tsx"></script>
   </body>
 </html>
-

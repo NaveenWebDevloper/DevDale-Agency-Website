@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Navbar from "../components/Navbar";
 import Preloader from "../components/Preloader";
 import Hero from "../components/Hero";
@@ -19,21 +19,34 @@ export default function Index() {
   return (
     <SmoothScroll>
       <div className="w-full max-w-[100vw] overflow-x-hidden bg-white relative">
+        {/* Preloader sits on top as a visual overlay — content is always in DOM */}
         <Preloader onComplete={() => setIsLoaded(true)} />
-        <div className="noise" />
-        <Navbar isLoaded={isLoaded} />
-        <main>
-          <Hero isLoaded={isLoaded} />
-          <Challenges isLoaded={isLoaded} />
-          <WhyChoose isLoaded={isLoaded} />
-          <Solutions />
-          <Portfolio isLoaded={isLoaded} />
-          <HowToGetStarted />
-          <ClientFeedback />
-          <Comparison />
-          <FAQ />
-        </main>
-        <Footer />
+
+        {/*
+          CLS FIX: Content is always rendered in the DOM so the browser
+          never has to shift elements into existence after the preloader exits.
+          We use visibility:hidden (not display:none) so layout is preserved
+          and no reflow occurs on reveal — only a paint operation.
+        */}
+        <div
+          style={{ visibility: isLoaded ? "visible" : "hidden" }}
+          aria-hidden={!isLoaded}
+        >
+          <div className="noise" />
+          <Navbar isLoaded={isLoaded} />
+          <main>
+            <Hero isLoaded={isLoaded} />
+            <Challenges isLoaded={isLoaded} />
+            <WhyChoose isLoaded={isLoaded} />
+            <Solutions />
+            <Portfolio isLoaded={isLoaded} />
+            <HowToGetStarted />
+            <ClientFeedback />
+            <Comparison />
+            <FAQ />
+          </main>
+          <Footer />
+        </div>
       </div>
     </SmoothScroll>
   );
