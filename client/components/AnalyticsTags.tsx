@@ -13,7 +13,7 @@ export default function AnalyticsTags() {
       document.head.appendChild(script);
     }
 
-    if (GA4_ID && !document.querySelector(`script[src*="${GA4_ID}"]`)) {
+    if (GA4_ID && !document.querySelector(`script[src*="googletagmanager.com/gtag/js"]`)) {
       const script = document.createElement("script");
       script.async = true;
       script.src = `https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`;
