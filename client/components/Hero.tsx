@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Play, DollarSign } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import CurvedLoop from "./CurvedLoop";
+const CurvedLoop = lazy(() => import("./CurvedLoop"));
 import { Typewriter } from "./ui/Typewriter";
 
 const Hero = ({ isLoaded }: { isLoaded?: boolean }) => {
@@ -142,8 +142,11 @@ const Hero = ({ isLoaded }: { isLoaded?: boolean }) => {
                       {/* Claude Official Logo Image */}
                       <span className="inline-flex items-center justify-center">
                         <motion.img
-                          src="/claude-icon-logo.png"
+                          src="/claude-icon-logo.webp"
                           alt="Claude Logo"
+                          width="51"
+                          height="51"
+                          loading="lazy"
                           className="h-[0.58em] w-auto transition-transform duration-500 hover:scale-110 object-contain"
                         />
                       </span>
@@ -227,11 +230,13 @@ const Hero = ({ isLoaded }: { isLoaded?: boolean }) => {
 
       {/* 7. Scrolling Text (Marquee) at Bottom */}
       <div className="absolute bottom-0 left-0 w-full z-10 pointer-events-none">
-        <CurvedLoop
-          marqueeText="STRATEGY • DESIGN • DEVELOPMENT • AI INTEGRATION • SCALE • PERFORMANCE • "
-          speed={1.5}
-          className="text-gray-100/50 text-5xl font-black uppercase tracking-tighter"
-        />
+        <Suspense fallback={null}>
+          <CurvedLoop
+            marqueeText="STRATEGY • DESIGN • DEVELOPMENT • AI INTEGRATION • SCALE • PERFORMANCE • "
+            speed={1.5}
+            className="text-gray-100/50 text-5xl font-black uppercase tracking-tighter"
+          />
+        </Suspense>
       </div>
 
       {/* 8. Scroll Down Indicator */}

@@ -31,8 +31,11 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (!id.includes("node_modules")) return undefined;
-          if (/[\\/]node_modules[\\/](\.pnpm[\\/])?(react|react-dom|react-router-dom)[\\/]/.test(id)) return "react";
-          if (/[\\/]node_modules[\\/](\.pnpm[\\/])?(framer-motion|gsap)[\\/]/.test(id)) return "animation";
+          if (/[\\/]node_modules[\\/](\.pnpm[\\/])?react[\\/]/.test(id)) return "react";
+          if (/[\\/]node_modules[\\/](\.pnpm[\\/])?react-dom[\\/]/.test(id)) return "react-dom";
+          if (/[\\/]node_modules[\\/](\.pnpm[\\/])?framer-motion[\\/]/.test(id)) return "framer-motion";
+          if (/[\\/]node_modules[\\/](\.pnpm[\\/])?react-router-dom[\\/]/.test(id)) return "react-router-dom";
+          if (/[\\/]node_modules[\\/](\.pnpm[\\/])?gsap[\\/]/.test(id)) return "gsap";
           if (/[\\/]node_modules[\\/](\.pnpm[\\/])?(three|@react-three)[\\/]/.test(id)) return "three";
           if (/[\\/]node_modules[\\/](\.pnpm[\\/])?@vercel[\\/](analytics|speed-insights)[\\/]/.test(id)) return "analytics";
           return "vendor";

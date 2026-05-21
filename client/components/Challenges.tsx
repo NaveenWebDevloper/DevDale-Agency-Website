@@ -184,7 +184,7 @@ export default function Challenges({ isLoaded }: ChallengesProps) {
                         <div className="w-1 h-1 rounded-full bg-black/20" />
                         <div className="w-8 h-1 rounded-full bg-black/10" />
                      </div>
-                     <span className="text-[10px] font-black tracking-widest uppercase opacity-20">Reveal Solution</span>
+                     <span className="text-[10px] font-black tracking-widest uppercase opacity-60">Reveal Solution</span>
                    </motion.div>
 
                    {/* Solution Reveal */}

@@ -14,7 +14,8 @@ import Footer from "../components/Footer";
 import { ArrowUpRight, ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
 import Lenis from "lenis";
-import CurvedLoop from "../components/CurvedLoop";
+import { lazy, Suspense } from "react";
+const CurvedLoop = lazy(() => import("../components/CurvedLoop"));
 import PageSkeletonLoader from "../components/PageSkeletonLoader";
 
 /* ══════════════════════════════════════════════
@@ -473,15 +474,17 @@ function ManifestoSection() {
   return (
     <section className="relative py-20 md:py-40 bg-white overflow-hidden border-t border-black/5">
 
-      <CurvedLoop
-        marqueeText="Engineering Excellence ✦ Built Different ✦ Code is Craft ✦ Founding Clients Open ✦ Zero Compromises ✦ Launch Ready ✦"
-        speed={1.6}
-        curveAmount={200}
-        direction="left"
-        interactive
-        className="curved-text-black"
-        wrapperClassName=""
-      />
+      <Suspense fallback={null}>
+        <CurvedLoop
+          marqueeText="Engineering Excellence ✦ Built Different ✦ Code is Craft ✦ Founding Clients Open ✦ Zero Compromises ✦ Launch Ready ✦"
+          speed={1.6}
+          curveAmount={200}
+          direction="left"
+          interactive
+          className="curved-text-black"
+          wrapperClassName=""
+        />
+      </Suspense>
 
 
       <div className="max-w-[1400px] mx-auto px-6 md:px-20 pt-8 md:pt-16">

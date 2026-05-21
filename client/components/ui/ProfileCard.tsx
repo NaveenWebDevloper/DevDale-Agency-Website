@@ -62,6 +62,7 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
 }) => {
   const wrapRef = useRef<HTMLDivElement>(null);
   const shellRef = useRef<HTMLDivElement>(null);
+  const rectRef = useRef<DOMRect | null>(null);
 
   const enterTimerRef = useRef<number | null>(null);
   const leaveRafRef = useRef<number | null>(null);
@@ -179,7 +180,10 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
   }, [enableTilt]);
 
   const getOffsets = (evt: PointerEvent, el: HTMLElement) => {
-    const rect = el.getBoundingClientRect();
+    if (!rectRef.current) {
+      rectRef.current = el.getBoundingClientRect();
+    }
+    const rect = rectRef.current;
     return { x: evt.clientX - rect.left, y: evt.clientY - rect.top };
   };
 
@@ -212,6 +216,7 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
   );
 
   const handlePointerLeave = useCallback(() => {
+    rectRef.current = null;
     const shell = shellRef.current;
     if (!shell || !tiltEngine) return;
 

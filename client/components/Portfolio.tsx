@@ -84,6 +84,7 @@ export default function Portfolio({ isLoaded = true }: PortfolioProps) {
 function ProjectCard({ project }: { project: any }) {
   const [hovered, setHovered] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
+  const rectRef = useRef<DOMRect | null>(null);
 
   // Mouse-tracking tilt
   const rawX = useMotionValue(0);
@@ -94,13 +95,17 @@ function ProjectCard({ project }: { project: any }) {
   const rotateX = useTransform(springY, [-0.5, 0.5], ["4deg", "-4deg"]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = cardRef.current?.getBoundingClientRect();
-    if (!rect) return;
+    if (!cardRef.current) return;
+    if (!rectRef.current) {
+      rectRef.current = cardRef.current.getBoundingClientRect();
+    }
+    const rect = rectRef.current;
     rawX.set((e.clientX - rect.left) / rect.width - 0.5);
     rawY.set((e.clientY - rect.top) / rect.height - 0.5);
   };
 
   const handleMouseLeave = () => {
+    rectRef.current = null;
     rawX.set(0);
     rawY.set(0);
     setHovered(false);

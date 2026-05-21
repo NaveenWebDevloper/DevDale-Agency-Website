@@ -21,9 +21,14 @@ export function LiquidGlassButton({ children, className, onClick, isDark = false
   const springX = useSpring(mouseX, { stiffness: 150, damping: 15 });
   const springY = useSpring(mouseY, { stiffness: 150, damping: 15 });
 
+  const rectRef = useRef<DOMRect | null>(null);
+
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!buttonRef.current) return;
-    const rect = buttonRef.current.getBoundingClientRect();
+    if (!rectRef.current) {
+      rectRef.current = buttonRef.current.getBoundingClientRect();
+    }
+    const rect = rectRef.current;
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     mouseX.set(x);
@@ -35,7 +40,10 @@ export function LiquidGlassButton({ children, className, onClick, isDark = false
       ref={buttonRef}
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseLeave={() => {
+        rectRef.current = null;
+        setIsHovered(false);
+      }}
       onClick={onClick}
       whileTap={{ scale: 0.96, rotate: 0.5 }}
       whileHover={{ y: -2 }}

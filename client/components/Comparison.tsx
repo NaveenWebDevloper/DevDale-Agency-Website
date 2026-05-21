@@ -96,7 +96,7 @@ export default function Comparison() {
             The Edge
           </motion.span>
           <h2 className="text-5xl md:text-8xl font-bold tracking-tighter text-balance mb-8">
-            Why settle for <span className="text-gray-400">ordinary</span>?
+            Why settle for <span className="text-gray-600">ordinary</span>?
           </h2>
           <p className="text-2xl text-gray-500 font-medium leading-relaxed">
             Compare our service with traditional alternatives and see the DevDale advantage.

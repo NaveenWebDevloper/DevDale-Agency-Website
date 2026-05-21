@@ -101,6 +101,7 @@ export default function ClientFeedback() {
                <div className="flex items-center gap-6">
                   <button 
                     onClick={prev}
+                    aria-label="Previous testimonial"
                     className="w-14 h-14 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-white hover:text-black transition-all group active:scale-95"
                   >
                     <MoveLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
@@ -118,6 +119,7 @@ export default function ClientFeedback() {
                   </div>
                   <button 
                     onClick={next}
+                    aria-label="Next testimonial"
                     className="w-14 h-14 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-white hover:text-black transition-all group active:scale-95"
                   >
                     <MoveRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />

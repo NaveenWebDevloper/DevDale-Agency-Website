@@ -60,6 +60,7 @@ const advantages: Advantage[] = [
 function TiltCard({ item }: { item: Advantage }) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
+  const rectRef = useRef<DOMRect | null>(null);
 
   const mouseXSpring = useSpring(x, { stiffness: 150, damping: 20 });
   const mouseYSpring = useSpring(y, { stiffness: 150, damping: 20 });
@@ -68,7 +69,11 @@ function TiltCard({ item }: { item: Advantage }) {
   const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-7deg", "7deg"]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
+    if (!rectRef.current) {
+      rectRef.current = e.currentTarget.getBoundingClientRect();
+    }
+    const rect = rectRef.current;
+    if (!rect) return;
     const width = rect.width;
     const height = rect.height;
     const mouseX = e.clientX - rect.left;
@@ -80,6 +85,7 @@ function TiltCard({ item }: { item: Advantage }) {
   };
 
   const handleMouseLeave = () => {
+    rectRef.current = null;
     x.set(0);
     y.set(0);
   };
@@ -193,7 +199,7 @@ export default function WhyChoose({ isLoaded = true }: WhyChooseProps) {
             transition={{ duration: 0.8, delay: 0.1 }}
             className="text-6xl md:text-[8rem] font-bold tracking-tighter leading-[0.9] mb-10"
           >
-            Why <span className="text-gray-200">partner</span> <br /> with us.
+            Why <span className="text-gray-400">partner</span> <br /> with us.
           </motion.h2>
 
           <motion.p

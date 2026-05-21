@@ -78,9 +78,9 @@ export default function Preloader({ onComplete }: PreloaderProps) {
           </div>
 
           {/* Central Content */}
-          <div className="relative z-10 flex flex-col items-center">
+          <div className="relative z-10 flex flex-col items-center min-h-[200px]">
             {/* Animated Word Sequence */}
-            <div className="h-20 flex items-center justify-center overflow-hidden mb-8">
+            <div className="h-20 min-h-[80px] flex items-center justify-center overflow-hidden mb-8">
               <AnimatePresence mode="wait">
                 <motion.span
                   key={words[index]}

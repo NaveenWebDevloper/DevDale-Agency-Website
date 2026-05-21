@@ -42,6 +42,7 @@ export function PricingOfferModal({ isOpen, onClose, onConfirm }: PricingOfferMo
             {/* Close Button */}
             <button
               onClick={onClose}
+              aria-label="Close modal"
               className="absolute top-4 right-4 md:top-6 md:right-6 z-50 p-2 md:p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
             >
               <X className="w-5 h-5 md:w-6 md:h-6" />

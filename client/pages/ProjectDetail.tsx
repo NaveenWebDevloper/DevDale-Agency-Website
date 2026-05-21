@@ -78,11 +78,24 @@ export default function ProjectDetail() {
 
                    {/* Quick Actions Row */}
                    <div className="flex items-center gap-2 flex-wrap pt-4">
-                      {[Link2, ArrowLeft, MoveRight, Twitter, Linkedin, MessageSquare, Facebook, Instagram].map((Icon, i) => (
-                        <button key={i} className={cn(
-                           "w-9 h-9 rounded-xl border border-black/5 flex items-center justify-center transition-all flex-shrink-0",
-                           i === 0 ? "bg-black text-white" : "hover:bg-black/5"
-                        )}>
+                      {[
+                        { Icon: Link2, label: "Copy project link" },
+                        { Icon: ArrowLeft, label: "Go back" },
+                        { Icon: MoveRight, label: "Next item" },
+                        { Icon: Twitter, label: "Share on Twitter" },
+                        { Icon: Linkedin, label: "Share on LinkedIn" },
+                        { Icon: MessageSquare, label: "Comment on project" },
+                        { Icon: Facebook, label: "Share on Facebook" },
+                        { Icon: Instagram, label: "Share on Instagram" }
+                      ].map(({ Icon, label }, i) => (
+                        <button 
+                           key={i} 
+                           aria-label={label}
+                           className={cn(
+                              "w-9 h-9 rounded-xl border border-black/5 flex items-center justify-center transition-all flex-shrink-0",
+                              i === 0 ? "bg-black text-white" : "hover:bg-black/5"
+                           )}
+                        >
                            <Icon className="w-3.5 h-3.5" />
                         </button>
                       ))}
@@ -112,7 +125,7 @@ export default function ProjectDetail() {
                      <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-black/20 mb-8">About</h3>
                      <div className="flex items-center gap-3 mb-4 group">
                         <h4 className="text-3xl font-black tracking-tighter uppercase">{project.title}</h4>
-                        <a href={project.url} target="_blank" rel="noopener noreferrer" className="opacity-20 group-hover:opacity-100 transition-opacity">
+                        <a href={project.url} target="_blank" rel="noopener noreferrer" aria-label="Visit project website" className="opacity-20 group-hover:opacity-100 transition-opacity">
                            <Link2 className="w-5 h-5" />
                         </a>
                      </div>
@@ -173,7 +186,7 @@ export default function ProjectDetail() {
                         “ {project.fullTitle || `India's 1st ${project.category} Suite Brought to Life by DevDale`} ”
                      </p>
                      <div className="pt-8 space-y-12">
-                        <h1 className="text-4xl font-black tracking-tighter uppercase">The Challenge</h1>
+                        <h2 className="text-4xl font-black tracking-tighter uppercase">The Challenge</h2>
                         <p className="text-xl font-medium leading-relaxed text-black/70">
                            {project.challenge}
                         </p>
@@ -236,8 +249,19 @@ export default function ProjectDetail() {
 
                   <div className="space-y-6">
                      <div className="flex flex-wrap gap-4">
-                        {[Link2, ArrowLeft, Twitter, Linkedin, Facebook, Instagram].map((Icon, i) => (
-                           <button key={i} className="w-10 h-10 rounded-xl border border-black/5 flex items-center justify-center hover:bg-black hover:text-white transition-all shadow-sm">
+                        {[
+                           { Icon: Link2, label: "Copy project link" },
+                           { Icon: ArrowLeft, label: "Go back" },
+                           { Icon: Twitter, label: "Share on Twitter" },
+                           { Icon: Linkedin, label: "Share on LinkedIn" },
+                           { Icon: Facebook, label: "Share on Facebook" },
+                           { Icon: Instagram, label: "Share on Instagram" }
+                        ].map(({ Icon, label }, i) => (
+                           <button 
+                              key={i} 
+                              aria-label={label}
+                              className="w-10 h-10 rounded-xl border border-black/5 flex items-center justify-center hover:bg-black hover:text-white transition-all shadow-sm"
+                           >
                               <Icon className="w-4 h-4" />
                            </button>
                         ))}

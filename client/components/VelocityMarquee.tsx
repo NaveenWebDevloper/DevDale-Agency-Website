@@ -41,8 +41,22 @@ function VelocityMarqueeRow({
   const letterSpacing = useTransform(smoothVelocity, [-3000, 0, 3000], ["0.1em", "0em", "0.1em"]);
   const springSpacing = useSpring(letterSpacing as any, { damping: 50, stiffness: 400 });
 
+  const [contentW, setContentW] = useState(0);
+
+  useEffect(() => {
+    if (innerRef.current) {
+      setContentW(innerRef.current.offsetWidth);
+    }
+    const handleResize = () => {
+      if (innerRef.current) {
+        setContentW(innerRef.current.offsetWidth);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [items]);
+
   useAnimationFrame((_, delta) => {
-    const contentW = innerRef.current?.offsetWidth || 0;
     if (!contentW) return;
     const boost = Math.min(Math.abs(smoothVelocity.get()) * 0.05, 150);
     const direction = reverse ? 1 : -1;
@@ -115,11 +129,20 @@ export function VelocityMarqueeBanner({
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
+  const rectRef = useRef<DOMRect | null>(null);
+
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
+    if (!rectRef.current) {
+      rectRef.current = containerRef.current.getBoundingClientRect();
+    }
+    const rect = rectRef.current;
     mouseX.set(e.clientX - rect.left);
     mouseY.set(e.clientY - rect.top);
+  };
+
+  const handleMouseLeave = () => {
+    rectRef.current = null;
   };
 
   const accentColor = isDark ? "#ffffff" : "#000000";
@@ -133,6 +156,7 @@ export function VelocityMarqueeBanner({
     <div 
       ref={containerRef}
       onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
       className={`relative ${bgClass} py-8 md:py-12 overflow-hidden select-none group/marquee ${className}`}
     >
       {/* Magnetic Cursor Glow Effect */}

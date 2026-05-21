@@ -19,22 +19,30 @@ const navItems = [
 /* ── Magnetic button helper ──────────────────────────────────────── */
 const MagneticBtn = forwardRef<
   HTMLButtonElement,
-  { children: React.ReactNode; onClick: () => void; className?: string }
->(function MagneticBtn({ children, onClick, className }, forwardedRef) {
+  { children: React.ReactNode; onClick: () => void; className?: string; "aria-label"?: string }
+>(function MagneticBtn({ children, onClick, className, "aria-label": ariaLabel }, forwardedRef) {
   const innerRef = useRef<HTMLButtonElement>(null);
   const ref = (forwardedRef as React.RefObject<HTMLButtonElement>) ?? innerRef;
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const sx = useSpring(x, { stiffness: 300, damping: 20 });
   const sy = useSpring(y, { stiffness: 300, damping: 20 });
+  const rectRef = useRef<DOMRect | null>(null);
 
   const handleMove = (e: React.MouseEvent) => {
-    const rect = ref.current?.getBoundingClientRect();
+    if (!rectRef.current && ref.current) {
+      rectRef.current = ref.current.getBoundingClientRect();
+    }
+    const rect = rectRef.current;
     if (!rect) return;
     x.set((e.clientX - rect.left - rect.width / 2) * 0.3);
     y.set((e.clientY - rect.top - rect.height / 2) * 0.3);
   };
-  const reset = () => { x.set(0); y.set(0); };
+  const reset = () => {
+    rectRef.current = null;
+    x.set(0);
+    y.set(0);
+  };
 
   return (
     <motion.button
@@ -44,6 +52,7 @@ const MagneticBtn = forwardRef<
       onMouseLeave={reset}
       onClick={onClick}
       className={className}
+      aria-label={ariaLabel}
     >
       {children}
     </motion.button>
@@ -207,6 +216,7 @@ export default function Navbar({ isLoaded }: NavbarProps) {
               ref={triggerRef}
               onClick={() => setIsMenuOpen((v) => !v)}
               className="md:hidden relative z-[110] w-10 h-10 flex flex-col items-center justify-center gap-1.5 focus:outline-none rounded-full bg-black/5"
+              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
             >
               <motion.span
                 className="block w-5 h-0.5 bg-black origin-center"

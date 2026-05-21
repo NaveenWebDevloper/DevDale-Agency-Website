@@ -91,14 +91,20 @@ const CurvedLoop = ({
     return () => cancelAnimationFrame(frame);
   }, [spacing, speed, ready]);
 
+  const rectRef = useRef<DOMRect | null>(null);
+
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
+    if (!rectRef.current) {
+      rectRef.current = containerRef.current.getBoundingClientRect();
+    }
+    const rect = rectRef.current;
     mouseX.set((e.clientX - rect.left) / rect.width);
     mouseY.set((e.clientY - rect.top) / rect.height);
   };
 
   const handleMouseLeave = () => {
+    rectRef.current = null;
     mouseX.set(0.5);
     mouseY.set(0.5);
   };
