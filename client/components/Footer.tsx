@@ -83,10 +83,10 @@ export default function Footer() {
             <Link to="/" className="flex items-center gap-1 mb-6 md:mb-10 group opacity-80 hover:opacity-100 transition-opacity">
               <img
                 src="/devdale_logo.svg"
-                alt="DevDale Logo"
+                alt="TheDevDale Logo"
                 className="w-12 h-12 md:w-16 md:h-16 object-contain invert brightness-[1.5] mix-blend-screen"
               />
-              <span className="text-2xl md:text-3xl font-bold tracking-tighter">DevDale<span className="text-white/30">.</span></span>
+              <span className="text-2xl md:text-3xl font-bold tracking-tighter">TheDevDale<span className="text-white/30">.</span></span>
             </Link>
             <p className="text-sm md:text-lg text-white/40 font-medium leading-relaxed mb-6 md:mb-10">
               A premium engineering lab building next-gen digital experiences.
@@ -122,7 +122,7 @@ export default function Footer() {
             <div className="space-y-5 md:space-y-8">
               <div>
                 <span className="text-xs font-bold tracking-widest uppercase text-white/40 block mb-2">Inquiries</span>
-                <a href="mailto:hello@devdale.com" className="text-base md:text-2xl lg:text-4xl font-bold tracking-tighter hover:text-white/60 transition-colors break-all leading-tight block">hello@devdale.com</a>
+                <a href="mailto:hello@thedevdale.com" className="text-base md:text-2xl lg:text-4xl font-bold tracking-tighter hover:text-white/60 transition-colors break-all leading-tight block">hello@thedevdale.com</a>
               </div>
               <div>
                 <span className="text-xs font-bold tracking-widest uppercase text-white/40 block mb-2">Phone</span>
@@ -133,7 +133,7 @@ export default function Footer() {
         </motion.div>
 
         <div className="pt-8 md:pt-16 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 md:gap-8 text-white/20">
-          <p className="text-xs md:text-sm font-bold tracking-tight text-center md:text-left">© 2024 DEVDALE. ALL RIGHTS RESERVED.</p>
+          <p className="text-xs md:text-sm font-bold tracking-tight text-center md:text-left">© 2026 THEDEVDALE. ALL RIGHTS RESERVED.</p>
           <div className="flex gap-6 md:gap-12 text-[10px] md:text-xs font-bold tracking-widest uppercase">
             <Link to="/legal" className="hover:text-white transition-colors cursor-pointer">Privacy Policy</Link>
             <Link to="/legal" className="hover:text-white transition-colors cursor-pointer">Terms of Service</Link>

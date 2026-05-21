@@ -287,7 +287,7 @@ export default function ProjectDetail() {
                    <div className="space-y-12">
                       <div className="space-y-4">
                          <div className="text-3xl font-black tracking-tighter">+91 70756 31155</div>
-                         <div className="text-3xl font-black tracking-tighter lowercase hover:underline cursor-pointer">hello@devdale.com</div>
+                         <div className="text-3xl font-black tracking-tighter lowercase hover:underline cursor-pointer">hello@thedevdale.com</div>
                       </div>
                       <div className="flex gap-8">
                          <a href="#" className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity">

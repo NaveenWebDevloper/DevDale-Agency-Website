@@ -168,8 +168,8 @@ export default function Navbar({ isLoaded }: NavbarProps) {
               onClick={() => setIsMenuOpen(false)}
               className="font-bold text-xl tracking-tighter group flex items-center gap-1 z-10"
             >
-              <img src="/devdale_logo.svg" alt="DevDale Logo" className="w-12 h-12 object-contain" />
-              <span>DevDale</span>
+              <img src="/devdale_logo.svg" alt="TheDevDale Logo" className="w-12 h-12 object-contain" />
+              <span>TheDevDale</span>
               <div className="w-1 h-1 rounded-full bg-black group-hover:scale-150 transition-transform duration-500" />
             </Link>
 

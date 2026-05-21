@@ -264,7 +264,7 @@ const Contact = () => {
                     </div>
                     <div>
                       <div className="text-[9px] font-black uppercase tracking-widest text-black/20">Email Us</div>
-                      <div className="text-lg font-bold">hello@devdale.com</div>
+                      <div className="text-lg font-bold">hello@thedevdale.com</div>
                     </div>
                   </motion.div>
 
