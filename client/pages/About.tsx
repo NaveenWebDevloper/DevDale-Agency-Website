@@ -347,8 +347,8 @@ function HeroSection() {
 
             {/* Member 1 — Backend — middle left */}
             <FounderCard
-              src="/founder.png"
-              name="Dale"
+              src="/NaveenImage.jpg"
+              name="Naveen"
               role="Founder & Backend Engineer"
               className="absolute top-10 left-0 w-[160px] md:w-[220px] z-30"
               rotate={-5}
@@ -358,8 +358,8 @@ function HeroSection() {
 
             {/* Member 2 — Frontend — top right */}
             <FounderCard
-              src="/cofounder.png"
-              name="Vicky"
+              src="/srikanthImage.jpeg"
+              name="Srikanth"
               role="Co-Founder & Frontend"
               className="absolute top-24 right-0 w-[160px] md:w-[220px] z-20"
               rotate={4}
@@ -369,8 +369,8 @@ function HeroSection() {
 
             {/* Member 3 — Designer — bottom center */}
             <FounderCard
-              src="/designer.png"
-              name="Sarah"
+              src="/karthikImage.png"
+              name="Karthik"
               role="Co-Founder & Lead Designer"
               className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[160px] md:w-[220px] z-30"
               rotate={-2}
