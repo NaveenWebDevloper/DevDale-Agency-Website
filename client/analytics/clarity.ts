@@ -3,6 +3,16 @@ import Clarity from "@microsoft/clarity";
 const projectId = import.meta.env.VITE_CLARITY_ID;
 
 /**
+ * isClarityReady — checks that Clarity has actually been loaded and
+ * window.clarity is a callable function. Ad blockers (uBlock, Brave, etc.)
+ * block the Clarity script with ERR_BLOCKED_BY_CLIENT, leaving window.clarity
+ * undefined. Without this guard every Clarity.event() call throws a TypeError
+ * that propagates up and crashes the React render tree → blank white screen.
+ */
+const isClarityReady = (): boolean =>
+  typeof window !== "undefined" && typeof window.clarity === "function";
+
+/**
  * initializeClarity — Deferred Clarity Init
  *
  * PERF FIX: Clarity's session recorder caused 128ms of forced reflow when
@@ -18,8 +28,18 @@ export const initializeClarity = () => {
   }
 
   const init = () => {
-    Clarity.init(projectId);
-    Clarity.consentV2();
+    try {
+      Clarity.init(projectId);
+      // Only call consentV2 if Clarity was successfully initialised
+      if (isClarityReady()) {
+        Clarity.consentV2();
+      }
+    } catch (err) {
+      // Clarity blocked or unavailable — fail silently so the app still renders
+      if (import.meta.env.DEV) {
+        console.warn("Clarity init failed (likely blocked by ad-blocker):", err);
+      }
+    }
   };
 
   // Defer to idle time — runs after all critical work is done
@@ -36,6 +56,15 @@ export const trackClarityEvent = (eventName: string) => {
     return;
   }
 
-  Clarity.event(eventName);
+  // Guard: skip silently if Clarity was blocked or not yet initialised
+  if (!isClarityReady()) return;
+
+  try {
+    Clarity.event(eventName);
+  } catch (err) {
+    if (import.meta.env.DEV) {
+      console.warn("Clarity.event() failed:", err);
+    }
+  }
 };
 
