@@ -13,6 +13,7 @@ const About = lazy(() => import("./pages/About"));
 const Pricing = lazy(() => import("./pages/Pricing"));
 const Projects = lazy(() => import("./pages/Projects"));
 const ProjectDetail = lazy(() => import("./pages/ProjectDetail"));
+const Work = lazy(() => import("./pages/Work"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Legal = lazy(() => import("./pages/Legal"));
 const SeoLandingPage = lazy(() => import("./pages/SeoLandingPage"));
@@ -102,6 +103,7 @@ function App() {
                 <Route path="/services/:slug" element={<SeoLandingPage />} />
                 <Route path="/location/:city" element={<SeoLandingPage />} />
                 <Route path="/industries/:slug" element={<SeoLandingPage />} />
+                <Route path="/work" element={<Work />} />
                 <Route path="/work/:id" element={<ProjectDetail />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/legal" element={<Legal />} />

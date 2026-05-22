@@ -34,7 +34,7 @@ export const projects: Project[] = [
     heroImage: "/projects/patentsplanet.png",
     url: "https://patentsplanet.com/",
     client: {
-      name: "Aditya Singh",
+      name: "Kishore V",
       role: "CEO, Patents Planet",
       avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Aditya",
     },
@@ -63,7 +63,7 @@ export const projects: Project[] = [
     heroImage: "/projects/cropplanning.png",
     url: "https://demand-based-crop-planning-system-3zqb.onrender.com/",
     client: {
-      name: "Karan Verma",
+      name: "Naveen Vadla",
       role: "Agri-Tech Strategist",
       avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Karan",
     },
@@ -92,7 +92,7 @@ export const projects: Project[] = [
     heroImage: "/projects/vgsglobal.png",
     url: "https://vgs-consultancy.vercel.app/",
     client: {
-      name: "VGS Global Team",
+      name: "Vinitha Medisetti",
       role: "Founder, VGS Global",
       avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=VGS",
     },

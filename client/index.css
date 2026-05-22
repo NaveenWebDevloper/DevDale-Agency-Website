@@ -103,14 +103,14 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     scroll-behavior: auto !important;
-    overflow-x: hidden;
+    overflow-x: clip;
     max-width: 100%;
   }
 
   body {
     @apply bg-background text-foreground selection:bg-black selection:text-white;
     font-family: 'DevDale2', 'Inter', sans-serif;
-    overflow-x: hidden;
+    overflow-x: clip;
     max-width: 100%;
     text-rendering: optimizeLegibility;
   }

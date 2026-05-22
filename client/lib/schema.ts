@@ -9,6 +9,9 @@ import {
   SEOPage,
   SITE_URL,
   WHATSAPP_URL,
+  LINKEDIN_URL,
+  INSTAGRAM_URL,
+  TWITTER_URL,
 } from "./seo";
 
 const baseOrganization = {
@@ -19,7 +22,7 @@ const baseOrganization = {
   logo: DEFAULT_IMAGE,
   email: CONTACT_EMAIL,
   telephone: CONTACT_PHONE,
-  sameAs: ["https://www.linkedin.com/company/thedevdale", "https://github.com/thedevdale"],
+  sameAs: [LINKEDIN_URL, INSTAGRAM_URL, TWITTER_URL],
   contactPoint: [
     {
       "@type": "ContactPoint",

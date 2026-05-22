@@ -163,46 +163,54 @@ export default function Navbar({ isLoaded }: NavbarProps) {
         animate={isLoaded ? { y: 0, opacity: 1 } : { y: -100, opacity: 0 }}
         transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
       >
-        <div className="max-w-5xl mx-auto px-4 md:px-6 pt-4 w-full">
-          <div
-            className={`flex items-center justify-between h-14 md:h-16 px-4 md:px-8 rounded-full border transition-all duration-500 pointer-events-auto overflow-hidden ${
-              scrolled || isMenuOpen
-                ? "bg-white/80 backdrop-blur-xl border-black/5 shadow-[0_8px_30px_rgb(0,0,0,0.06)]"
-                : "bg-white/20 backdrop-blur-md border-black/5"
-            }`}
-          >
-            {/* Logo */}
-            <Link
-              to="/"
-              onClick={() => setIsMenuOpen(false)}
-              className="font-bold text-xl tracking-tighter group flex items-center gap-1 z-10"
-            >
-              <img src="/devdale_logo.svg" alt="TheDevDale Logo" className="w-12 h-12 object-contain" />
-              <span>TheDevDale</span>
-              <div className="w-1 h-1 rounded-full bg-black group-hover:scale-150 transition-transform duration-500" />
-            </Link>
-
-            {/* Desktop nav links */}
-            <div className="hidden md:flex items-center gap-2">
-              {navItems.map((item) => (
-                <Link
-                  key={item.label}
-                  to={item.path}
-                  onClick={(e) => {
-                    if (item.anchor && (window.location.pathname === "/" || item.path === "#contact")) {
-                      e.preventDefault();
-                      document.getElementById(item.anchor)?.scrollIntoView({ behavior: "smooth" });
-                    }
-                  }}
-                  className="px-4 py-2 text-[10px] font-bold tracking-[0.2em] uppercase opacity-40 hover:opacity-100 hover:bg-black/5 rounded-full transition-all duration-300 hover:-translate-y-0.5"
-                >
-                  {item.label}
-                </Link>
-              ))}
+        <div className="w-full max-w-[1440px] mx-auto px-6 md:px-8 pt-4 pointer-events-none">
+          {/* Desktop Navbar layout (md and up) */}
+          <div className="hidden md:flex items-center justify-between w-full h-16 relative">
+            
+            {/* Logo at Left End */}
+            <div className="flex items-center pointer-events-auto">
+              <Link
+                to="/"
+                onClick={() => setIsMenuOpen(false)}
+                className="font-bold text-xl tracking-tighter group flex items-center gap-1 z-10"
+              >
+                <img src="/devdale_logo.svg" alt="TheDevDale Logo" className="w-12 h-12 object-contain" />
+                <span>TheDevDale</span>
+                <div className="w-1 h-1 rounded-full bg-black group-hover:scale-150 transition-transform duration-500" />
+              </Link>
             </div>
 
-            {/* Desktop CTA */}
-            <div className="hidden md:flex items-center gap-6">
+            {/* Centered Navbar Capsule */}
+            <div className="absolute left-1/2 -translate-x-1/2 pointer-events-auto">
+              <div
+                className={`flex items-center justify-center h-14 md:h-16 px-6 rounded-full border transition-all duration-500 ${
+                  scrolled
+                    ? "bg-white/80 backdrop-blur-xl border-black/5 shadow-[0_8px_30px_rgb(0,0,0,0.06)]"
+                    : "bg-white/20 backdrop-blur-md border-black/5"
+                }`}
+              >
+                <div className="flex items-center gap-1 lg:gap-2">
+                  {navItems.map((item) => (
+                    <Link
+                      key={item.label}
+                      to={item.path}
+                      onClick={(e) => {
+                        if (item.anchor && (window.location.pathname === "/" || item.path === "#contact")) {
+                          e.preventDefault();
+                          document.getElementById(item.anchor)?.scrollIntoView({ behavior: "smooth" });
+                        }
+                      }}
+                      className="px-3 lg:px-4 py-2 text-[9px] lg:text-[10px] font-bold tracking-[0.15em] lg:tracking-[0.2em] uppercase opacity-40 hover:opacity-100 hover:bg-black/5 rounded-full transition-all duration-300 hover:-translate-y-0.5"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Desktop CTA Button at Right End */}
+            <div className="flex items-center pointer-events-auto">
               <Button 
                 onClick={handleCTAClick}
                 className="px-6 h-10 bg-black text-white rounded-full text-[10px] font-bold tracking-widest uppercase shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 active:scale-95"
@@ -211,24 +219,47 @@ export default function Navbar({ isLoaded }: NavbarProps) {
               </Button>
             </div>
 
-            {/* Mobile toggle — magnetic */}
-            <MagneticBtn
-              ref={triggerRef}
-              onClick={() => setIsMenuOpen((v) => !v)}
-              className="md:hidden relative z-[110] w-10 h-10 flex flex-col items-center justify-center gap-1.5 focus:outline-none rounded-full bg-black/5"
-              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+          </div>
+
+          {/* Mobile Navbar layout (below md) */}
+          <div className="flex md:hidden items-center justify-between w-full pointer-events-auto">
+            <div
+              className={`flex items-center justify-between h-14 px-4 rounded-full border transition-all duration-500 w-full overflow-hidden ${
+                scrolled || isMenuOpen
+                  ? "bg-white/80 backdrop-blur-xl border-black/5 shadow-[0_8px_30px_rgb(0,0,0,0.06)]"
+                  : "bg-white/20 backdrop-blur-md border-black/5"
+              }`}
             >
-              <motion.span
-                className="block w-5 h-0.5 bg-black origin-center"
-                animate={isMenuOpen ? { rotate: 45, y: 3 } : { rotate: 0, y: 0 }}
-                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              />
-              <motion.span
-                className="block w-5 h-0.5 bg-black origin-center"
-                animate={isMenuOpen ? { rotate: -45, y: -3 } : { rotate: 0, y: 0 }}
-                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              />
-            </MagneticBtn>
+              {/* Logo */}
+              <Link
+                to="/"
+                onClick={() => setIsMenuOpen(false)}
+                className="font-bold text-lg tracking-tighter group flex items-center gap-1 z-10"
+              >
+                <img src="/devdale_logo.svg" alt="TheDevDale Logo" className="w-10 h-10 object-contain" />
+                <span>TheDevDale</span>
+                <div className="w-1 h-1 rounded-full bg-black group-hover:scale-150 transition-transform duration-500" />
+              </Link>
+
+              {/* Mobile toggle — magnetic */}
+              <MagneticBtn
+                ref={triggerRef}
+                onClick={() => setIsMenuOpen((v) => !v)}
+                className="relative z-[110] w-10 h-10 flex flex-col items-center justify-center gap-1.5 focus:outline-none rounded-full bg-black/5"
+                aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+              >
+                <motion.span
+                  className="block w-5 h-0.5 bg-black origin-center"
+                  animate={isMenuOpen ? { rotate: 45, y: 3 } : { rotate: 0, y: 0 }}
+                  transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                />
+                <motion.span
+                  className="block w-5 h-0.5 bg-black origin-center"
+                  animate={isMenuOpen ? { rotate: -45, y: -3 } : { rotate: 0, y: 0 }}
+                  transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                />
+              </MagneticBtn>
+            </div>
           </div>
         </div>
       </motion.nav>

@@ -2,9 +2,12 @@ export const SITE_URL = "https://thedevdale.com";
 export const BRAND_NAME = "TheDevDale";
 export const DEFAULT_IMAGE = `${SITE_URL}/devdale_logo.svg`;
 export const CONTACT_EMAIL = "hello@thedevdale.com";
-export const CONTACT_PHONE = "+91 90000 00000";
-export const WHATSAPP_URL = "https://wa.me/919000000000";
+export const CONTACT_PHONE = "+91 96754 9869";
+export const WHATSAPP_URL = "https://wa.me/91967549869";
 export const CALENDLY_URL = "https://calendly.com/thedevdale/strategy-call";
+export const LINKEDIN_URL = "https://www.linkedin.com/in/devdale-agency?utm_source=share_via&utm_content=profile&utm_medium=member_android";
+export const INSTAGRAM_URL = "https://www.instagram.com/devdaleagency?utm_source=qr&igsh=MXgxMmxwdjZuejNoMg==";
+export const TWITTER_URL = "https://x.com/DaleDevAgency";
 
 export type PageKind = "core" | "service" | "location" | "industry" | "blog" | "case-study";
 

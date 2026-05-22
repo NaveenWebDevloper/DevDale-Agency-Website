@@ -250,7 +250,7 @@ const Contact = () => {
                   <motion.span variants={itemVariants} className="text-[10px] uppercase font-black tracking-[0.5em] text-black/20">
                     Get In Touch
                   </motion.span>
-                  <motion.h1 variants={itemVariants} className="text-5xl md:text-7xl lg:text-8xl xl:text-[7.5rem] font-black tracking-tighter leading-[0.85] uppercase">
+                  <motion.h1 variants={itemVariants} className="text-5xl md:text-7xl lg:text-8xl xl:text-[5rem] font-black tracking-tighter leading-[0.85] uppercase">
                     Let's Build <br />
                     <span className="text-gray-200 block my-1 md:my-2">Something</span>
                     <span className="block text-black">Unforgettable.</span>

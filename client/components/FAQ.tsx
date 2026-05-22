@@ -2,40 +2,68 @@
 
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { cn } from "../lib/utils";
+
+interface Author {
+  name: string;
+  role: string;
+  image: string;
+}
 
 interface FAQItem {
   question: string;
   answer: string;
+  author: Author;
 }
+
+const NAVEEN: Author = {
+  name: "Naveen Vadla",
+  role: "Founder & Backend Engineer",
+  image: "/NaveenImage.jpg"
+};
+
+const SRIKANTH: Author = {
+  name: "Srikanth",
+  role: "Co-Founder & Frontend Engineer",
+  image: "/srikanthImage.jpeg"
+};
 
 const faqs: FAQItem[] = [
   {
     question: "How long does a typical project take?",
     answer: "Most projects take 8-16 weeks from discovery to launch, depending on complexity. We use agile methodologies to deliver value incrementally, so you can see progress early.",
+    author: NAVEEN,
   },
   {
     question: "What's your pricing model?",
     answer: "We offer flexible pricing: fixed-price projects for well-defined scopes, time-and-materials for exploratory work, or retainer partnerships for ongoing support. Let's discuss what works best for you.",
+    author: SRIKANTH,
   },
   {
     question: "Do you provide post-launch support?",
     answer: "Absolutely. We offer 24/7 monitoring, bug fixes, performance optimization, and growth strategy consultation. We're invested in your long-term success.",
+    author: NAVEEN,
   },
   {
     question: "Can you integrate with our existing systems?",
     answer: "Yes. We're experts at integrating with legacy systems, third-party APIs, databases, and custom infrastructure. We assess your current setup and build scalable solutions on top of it.",
+    author: SRIKANTH,
   },
   {
     question: "What if we need to pivot during the project?",
     answer: "That's expected and normal. Our agile process makes pivoting easy. We iterate based on feedback, market data, and learnings—no massive rewrites needed.",
+    author: NAVEEN,
   },
   {
     question: "How do you ensure code quality?",
     answer: "We use automated testing, code reviews, continuous integration/deployment, and strict quality standards. Every line of code is crafted for performance, security, and maintainability.",
+    author: SRIKANTH,
   },
 ];
 
 export default function FAQ() {
+  const navigate = useNavigate();
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const containerVariants: Variants = {
@@ -103,19 +131,22 @@ export default function FAQ() {
             <motion.div
               key={idx}
               variants={itemVariants}
-              className={`rounded-[2rem] overflow-hidden border transition-all duration-500 ${
+              className={cn(
+                "rounded-[2.5rem] overflow-hidden border transition-all duration-500",
                 openIndex === idx 
-                  ? "bg-black text-white border-black" 
+                  ? "bg-black text-white border-black shadow-2xl" 
                   : "bg-gray-50 border-black/5 hover:border-black/20"
-              }`}
+              )}
             >
               <button
                 onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
-                className="w-full px-8 md:px-12 py-10 text-left flex items-center justify-between gap-8 group"
+                className="w-full px-8 md:px-12 py-10 text-left flex items-center justify-between gap-6 group"
               >
-                <span className="text-xl md:text-2xl font-bold tracking-tight">
-                  {faq.question}
-                </span>
+                <div className="flex items-center gap-5 flex-grow">
+                  <span className="text-xl md:text-2xl font-bold tracking-tight">
+                    {faq.question}
+                  </span>
+                </div>
 
                 <div className="flex-shrink-0 w-12 h-12 rounded-full border border-current flex items-center justify-center transition-transform duration-500" style={{ rotate: openIndex === idx ? "45deg" : "0deg" }}>
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -133,10 +164,27 @@ export default function FAQ() {
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                   >
-                    <div className="px-8 md:px-12 pb-12 pt-4">
-                      <p className="text-lg md:text-xl font-medium leading-relaxed opacity-60 text-balance">
-                        {faq.answer}
-                      </p>
+                    <div className="px-8 md:px-12 pb-12 pt-4 flex gap-6 items-start">
+                       <div className="flex-shrink-0 flex flex-col items-center gap-2 pt-1">
+                          <div className="relative">
+                            <img 
+                               src={faq.author.image} 
+                               alt={faq.author.name} 
+                               className="w-14 h-14 rounded-full object-cover border border-white/10 shadow-xl" 
+                            />
+                            <span className="absolute bottom-0 right-0 flex h-3.5 w-3.5">
+                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                              <span className="relative inline-flex rounded-full h-3.5 w-3.5 border-2 border-black bg-emerald-500"></span>
+                            </span>
+                          </div>
+                          <span className="text-[10px] font-black uppercase tracking-wider text-white/50">{faq.author.name.split(' ')[0]}</span>
+                       </div>
+                       <div className="space-y-1">
+                          <div className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-400">{faq.author.role}</div>
+                          <p className="text-lg md:text-xl font-medium leading-relaxed opacity-85 text-balance">
+                            {faq.answer}
+                          </p>
+                       </div>
                     </div>
                   </motion.div>
                 )}
@@ -158,6 +206,7 @@ export default function FAQ() {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            onClick={() => navigate("/contact")}
             className="px-12 py-5 bg-black text-white rounded-full text-lg font-bold tracking-tight hover:shadow-2xl transition-all shadow-[0_20px_40px_-10px_rgba(0,0,0,0.3)]"
           >
             Get in touch
@@ -167,4 +216,5 @@ export default function FAQ() {
     </section>
   );
 }
+
 

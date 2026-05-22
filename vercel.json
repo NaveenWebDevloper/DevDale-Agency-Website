@@ -63,11 +63,6 @@
       "source": "/services",
       "destination": "/services/web-development",
       "permanent": true
-    },
-    {
-      "source": "/work",
-      "destination": "/portfolio",
-      "permanent": true
     }
   ],
   "rewrites": [

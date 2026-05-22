@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { projects } from "../lib/projects";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -11,17 +11,40 @@ import { cn } from "../lib/utils";
 import { Button } from "../components/ui/button";
 import { useState, useEffect } from "react";
 import PageSkeletonLoader from "../components/PageSkeletonLoader";
+import { useToast } from "../hooks/use-toast";
+import confetti from "canvas-confetti";
+import { trackClarityEvent } from "../analytics/clarity";
 
 export default function ProjectDetail() {
   const { id } = useParams<{ id: string }>();
   const project = projects.find((p) => p.id === id);
+  const navigate = useNavigate();
 
   const [isLoaded, setIsLoaded] = useState(false);
   const [showSkeleton, setShowSkeleton] = useState(true);
 
+  const { toast } = useToast();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    company: "",
+    phone: "",
+    budget: "",
+    message: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   useEffect(() => {
     setShowSkeleton(true);
     setIsLoaded(false);
+    setFormData({
+      name: "",
+      email: "",
+      company: "",
+      phone: "",
+      budget: "",
+      message: "",
+    });
     const skeletonTimer = setTimeout(() => setShowSkeleton(false), 600);
     const loadTimer = setTimeout(() => setIsLoaded(true), 700);
 
@@ -30,6 +53,175 @@ export default function ProjectDetail() {
       clearTimeout(loadTimer);
     };
   }, [id]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const fireCelebration = () => {
+    const duration = 5 * 1000;
+    const animationEnd = Date.now() + duration;
+    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
+
+    const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min;
+
+    const interval: any = setInterval(function() {
+      const timeLeft = animationEnd - Date.now();
+
+      if (timeLeft <= 0) {
+        return clearInterval(interval);
+      }
+
+      const particleCount = 50 * (timeLeft / duration);
+      
+      confetti({
+        ...defaults,
+        particleCount,
+        origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
+      });
+      confetti({
+        ...defaults,
+        particleCount,
+        origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
+      });
+    }, 250);
+  };
+
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
+      toast({
+        variant: "destructive",
+        title: "Validation Error",
+        description: "Name, email, and message are required fields.",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const composedMessage = `Phone: ${formData.phone || "Not provided"}\nBudget: ${formData.budget || "Not selected"}\n\nMessage:\n${formData.message}`;
+
+      const response = await fetch("/api/submit-form", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          company: formData.company,
+          message: composedMessage,
+        }),
+      });
+
+      if (response.ok) {
+        trackClarityEvent("project_detail_collaborate_submit");
+        trackClarityEvent("lead_generated");
+        fireCelebration();
+        toast({
+          variant: "success",
+          title: "Message Dispatched Successfully",
+          description: "Your collaboration request is in our system. We will contact you within 24 hours.",
+        });
+        setFormData({
+          name: "",
+          email: "",
+          company: "",
+          phone: "",
+          budget: "",
+          message: "",
+        });
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || "Failed to submit request.");
+      }
+    } catch (err: any) {
+      toast({
+        variant: "destructive",
+        title: "Submission Failed",
+        description: err.message || "Something went wrong. Please try again.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleQuickAction = (actionLabel: string) => {
+    if (!project) return;
+    const currentUrl = window.location.href;
+
+    switch (actionLabel) {
+      case "Copy project link":
+        navigator.clipboard.writeText(currentUrl)
+          .then(() => {
+            toast({
+              variant: "success",
+              title: "Link Copied",
+              description: "The direct project transmission vector has been cached to your clipboard.",
+            });
+          })
+          .catch(() => {
+            toast({
+              variant: "destructive",
+              title: "Copy Failure",
+              description: "Unable to cache link to clipboard.",
+            });
+          });
+        break;
+
+      case "Go back":
+        if (window.history.length > 1) {
+          navigate(-1);
+        } else {
+          navigate("/portfolio");
+        }
+        break;
+
+      case "Next item": {
+        const currentIndex = projects.findIndex((p) => p.id === project.id);
+        const nextIndex = (currentIndex + 1) % projects.length;
+        const nextProject = projects[nextIndex];
+        navigate(`/work/${nextProject.id}`);
+        break;
+      }
+
+      case "Share on Twitter": {
+        const text = `Check out ${project.title} by @TheDevDale!`;
+        window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(text)}`, "_blank", "noopener,noreferrer");
+        break;
+      }
+
+      case "Share on LinkedIn":
+        window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(currentUrl)}`, "_blank", "noopener,noreferrer");
+        break;
+
+      case "Comment on project": {
+        const formEl = document.querySelector("form");
+        if (formEl) {
+          formEl.scrollIntoView({ behavior: "smooth" });
+          const firstInput = formEl.querySelector("input");
+          if (firstInput) setTimeout(() => firstInput.focus(), 800);
+        }
+        break;
+      }
+
+      case "Share on Facebook":
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`, "_blank", "noopener,noreferrer");
+        break;
+
+      case "Share on Instagram":
+        navigator.clipboard.writeText(currentUrl);
+        toast({
+          variant: "success",
+          title: "Instagram Share Protocol",
+          description: "Instagram does not support direct link sharing. The project URL has been copied so you can easily paste it in your bio or stories!",
+        });
+        break;
+
+      default:
+        break;
+    }
+  };
 
   if (!project) {
     return <NotFound />;
@@ -43,7 +235,7 @@ export default function ProjectDetail() {
 
   return (
     <SmoothScroll>
-      <div className="min-h-screen bg-white font-sans selection:bg-black selection:text-white max-w-[100vw] [overflow-x:clip]">
+      <div className="min-h-screen bg-white font-sans selection:bg-black selection:text-white max-w-full">
         <Navbar isLoaded={isLoaded} />
 
         <main className="pt-24 lg:pt-32">
@@ -88,16 +280,18 @@ export default function ProjectDetail() {
                         { Icon: Facebook, label: "Share on Facebook" },
                         { Icon: Instagram, label: "Share on Instagram" }
                       ].map(({ Icon, label }, i) => (
-                        <button 
-                           key={i} 
-                           aria-label={label}
-                           className={cn(
-                              "w-9 h-9 rounded-xl border border-black/5 flex items-center justify-center transition-all flex-shrink-0",
-                              i === 0 ? "bg-black text-white" : "hover:bg-black/5"
-                           )}
-                        >
-                           <Icon className="w-3.5 h-3.5" />
-                        </button>
+                         <button 
+                            key={i} 
+                            aria-label={label}
+                            onClick={() => handleQuickAction(label)}
+                            title={label}
+                            className={cn(
+                               "w-9 h-9 rounded-xl border border-black/5 flex items-center justify-center transition-all flex-shrink-0 hover:scale-105 active:scale-95",
+                               i === 0 ? "bg-black text-white hover:bg-zinc-800" : "hover:bg-black/5"
+                            )}
+                         >
+                            <Icon className="w-3.5 h-3.5" />
+                         </button>
                       ))}
                    </div>
                 </div>
@@ -119,7 +313,7 @@ export default function ProjectDetail() {
           <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20 grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 py-20 border-t border-black/5 items-start">
 
             {/* Left Sidebar — sticky until center content ends */}
-            <aside className="hidden lg:block lg:col-span-2">
+            <aside className="hidden lg:block lg:col-span-2 self-stretch">
                <div className="sticky top-24 space-y-12">
                   <div>
                      <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-black/20 mb-8">About</h3>
@@ -234,7 +428,7 @@ export default function ProjectDetail() {
             </article>
 
             {/* Right Sidebar — sticky until center content ends */}
-            <aside className="hidden lg:block lg:col-span-3">
+            <aside className="hidden lg:block lg:col-span-3 self-stretch">
                <div className="sticky top-24 space-y-16">
                   <div className="space-y-8 pb-12 border-b border-black/5">
                      <h3 className="text-[10px] font-black uppercase tracking-[0.5em] text-black/20">Services Offered</h3>
@@ -260,7 +454,9 @@ export default function ProjectDetail() {
                            <button 
                               key={i} 
                               aria-label={label}
-                              className="w-10 h-10 rounded-xl border border-black/5 flex items-center justify-center hover:bg-black hover:text-white transition-all shadow-sm"
+                              title={label}
+                              onClick={() => handleQuickAction(label)}
+                              className="w-10 h-10 rounded-xl border border-black/5 flex items-center justify-center hover:bg-black hover:text-white transition-all shadow-sm hover:scale-105 active:scale-95"
                            >
                               <Icon className="w-4 h-4" />
                            </button>
@@ -284,8 +480,8 @@ export default function ProjectDetail() {
              <div className="grid grid-cols-1 md:grid-cols-3 gap-12 border-t border-black/5 pt-12">
                 {relatedProjects.map((rp) => (
                   <Link to={`/work/${rp.id}`} key={rp.id} className="group space-y-8">
-                     <div className="aspect-[4/3] rounded-[2.5rem] overflow-hidden bg-gray-50 border border-black/5 relative shadow-sm group-hover:shadow-xl transition-all duration-700">
-                        <img src={rp.image} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-110" alt={rp.title} />
+                     <div className="aspect-[4/2] rounded-[2.5rem] overflow-hidden bg-gray-50 border border-black/5 relative shadow-sm group-hover:shadow-xl transition-all duration-700">
+                        <img src={rp.image} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-ease-in-out duration-1000 scale-100 group-hover:scale-100" alt={rp.title} />
                      </div>
                      <div className="px-4 space-y-3">
                         <h4 className="text-xl font-black uppercase tracking-tighter">{rp.title}</h4>
@@ -297,7 +493,7 @@ export default function ProjectDetail() {
           </section>
 
           {/* Collaborate Section */}
-          <section className="bg-gray-50/50 py-40 border-t border-black/5 px-6 md:px-12 lg:px-20">
+          <section id="collaborate-section" className="bg-gray-50/50 py-40 border-t border-black/5 px-6 md:px-12 lg:px-20">
              <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-32">
                 <div className="space-y-16">
                    <div className="space-y-6">
@@ -310,14 +506,14 @@ export default function ProjectDetail() {
 
                    <div className="space-y-12">
                       <div className="space-y-4">
-                         <div className="text-3xl font-black tracking-tighter">+91 70756 31155</div>
+                         <div className="text-3xl font-black tracking-tighter">+91 9676549869</div>
                          <div className="text-3xl font-black tracking-tighter lowercase hover:underline cursor-pointer">hello@thedevdale.com</div>
                       </div>
                       <div className="flex gap-8">
-                         <a href="#" className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity">
+                         <a href="https://www.instagram.com/devdaleagency?utm_source=qr&igsh=MXgxMmxwdjZuejNoMg==" className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity">
                             <Instagram className="w-3 h-3" /> Instagram
                          </a>
-                         <a href="#" className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity">
+                         <a href="https://www.linkedin.com/in/devdale-agency?utm_source=share_via&utm_content=profile&utm_medium=member_android" className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity">
                             <Linkedin className="w-3 h-3" /> LinkedIn
                          </a>
                       </div>
@@ -325,27 +521,86 @@ export default function ProjectDetail() {
                 </div>
 
                 <div className="space-y-8">
-                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-3">
-                         <input type="text" placeholder="Name" className="w-full bg-white border border-black/5 rounded-2xl px-6 py-5 text-sm font-medium focus:outline-none focus:border-black/20 transition-all shadow-sm" />
-                      </div>
-                      <div className="space-y-3">
-                         <input type="email" placeholder="Email" className="w-full bg-white border border-black/5 rounded-2xl px-6 py-5 text-sm font-medium focus:outline-none focus:border-black/20 transition-all shadow-sm" />
-                      </div>
-                   </div>
-                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <input type="text" placeholder="Company Name" className="w-full bg-white border border-black/5 rounded-2xl px-6 py-5 text-sm font-medium focus:outline-none focus:border-black/20 transition-all shadow-sm" />
-                      <input type="tel" placeholder="Phone" className="w-full bg-white border border-black/5 rounded-2xl px-6 py-5 text-sm font-medium focus:outline-none focus:border-black/20 transition-all shadow-sm" />
-                   </div>
-                   <select className="w-full bg-white border border-black/5 rounded-2xl px-6 py-5 text-sm font-medium focus:outline-none focus:border-black/20 transition-all appearance-none cursor-pointer shadow-sm text-black/40">
-                      <option>Select a budget</option>
-                      <option>₹50,000 - ₹1,00,000</option>
-                      <option>₹1,00,000 - ₹5,00,000</option>
-                   </select>
-                   <textarea placeholder="What can we help you with?" rows={6} className="w-full bg-white border border-black/5 rounded-2xl px-6 py-6 text-sm font-medium focus:outline-none focus:border-black/20 transition-all shadow-sm resize-none"></textarea>
-                   <Button className="w-full py-8 rounded-2xl bg-black text-white text-sm font-black uppercase tracking-widest shadow-2xl hover:-translate-y-1 transition-all">
-                      Send Message
-                   </Button>
+                    <form onSubmit={handleFormSubmit} className="space-y-8">
+                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div className="space-y-3">
+                             <input 
+                                type="text" 
+                                placeholder="Name" 
+                                name="name"
+                                value={formData.name}
+                                onChange={handleInputChange}
+                                required
+                                className="w-full bg-white border border-black/5 rounded-2xl px-6 py-5 text-sm font-medium focus:outline-none focus:border-black/20 transition-all shadow-sm" 
+                             />
+                          </div>
+                          <div className="space-y-3">
+                             <input 
+                                type="email" 
+                                placeholder="Email" 
+                                name="email"
+                                value={formData.email}
+                                onChange={handleInputChange}
+                                required
+                                className="w-full bg-white border border-black/5 rounded-2xl px-6 py-5 text-sm font-medium focus:outline-none focus:border-black/20 transition-all shadow-sm" 
+                             />
+                          </div>
+                       </div>
+                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <input 
+                             type="text" 
+                             placeholder="Company Name" 
+                             name="company"
+                             value={formData.company}
+                             onChange={handleInputChange}
+                             className="w-full bg-white border border-black/5 rounded-2xl px-6 py-5 text-sm font-medium focus:outline-none focus:border-black/20 transition-all shadow-sm" 
+                          />
+                          <input 
+                             type="tel" 
+                             placeholder="Phone" 
+                             name="phone"
+                             value={formData.phone}
+                             onChange={handleInputChange}
+                             className="w-full bg-white border border-black/5 rounded-2xl px-6 py-5 text-sm font-medium focus:outline-none focus:border-black/20 transition-all shadow-sm" 
+                          />
+                       </div>
+                       <div className="relative">
+                          <select 
+                             name="budget"
+                             value={formData.budget}
+                             onChange={handleInputChange}
+                             className={cn(
+                               "w-full bg-white border border-black/5 rounded-2xl px-6 py-5 text-sm font-medium focus:outline-none focus:border-black/20 transition-all appearance-none cursor-pointer shadow-sm",
+                               formData.budget ? "text-black" : "text-black/40"
+                             )}
+                          >
+                             <option value="">Select a budget</option>
+                             <option value="₹50,000 - ₹1,00,000">₹50,000 - ₹1,00,000</option>
+                             <option value="₹1,00,000 - ₹5,00,000">₹1,00,000 - ₹5,00,000</option>
+                          </select>
+                          <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none opacity-40">
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </div>
+                       </div>
+                       <textarea 
+                          placeholder="What can we help you with?" 
+                          name="message"
+                          value={formData.message}
+                          onChange={handleInputChange}
+                          required
+                          rows={6} 
+                          className="w-full bg-white border border-black/5 rounded-2xl px-6 py-6 text-sm font-medium focus:outline-none focus:border-black/20 transition-all shadow-sm resize-none"
+                       ></textarea>
+                       <Button 
+                          type="submit"
+                          disabled={isSubmitting}
+                          className="w-full py-8 rounded-2xl bg-black text-white text-sm font-black uppercase tracking-widest shadow-2xl hover:-translate-y-1 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+                       >
+                          {isSubmitting ? "Sending..." : "Send Message"}
+                       </Button>
+                    </form>
                    
                    <div className="flex flex-col md:flex-row gap-12 pt-12">
                       <div className="flex gap-4">
@@ -354,7 +609,7 @@ export default function ProjectDetail() {
                          </div>
                          <div>
                             <div className="text-[10px] font-black uppercase tracking-widest text-black/20 mb-1">Address</div>
-                            <div className="text-[11px] font-bold">Phase 3, KPHB, Hyderabad, India</div>
+                            <div className="text-[11px] font-bold">Mallampet,Hyderabad, Telangana, India 500090</div>
                          </div>
                       </div>
                       <div className="flex gap-4">

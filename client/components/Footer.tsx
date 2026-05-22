@@ -2,6 +2,7 @@
 
 import { motion, Variants } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
+import { TWITTER_URL, LINKEDIN_URL, INSTAGRAM_URL, CONTACT_PHONE } from "../lib/seo";
 
 export default function Footer() {
   const navigate = useNavigate();
@@ -92,8 +93,20 @@ export default function Footer() {
               A premium engineering lab building next-gen digital experiences.
             </p>
             <div className="flex gap-4 md:gap-6">
-              {['Twitter', 'LinkedIn', 'Github'].map(platform => (
-                <a key={platform} href="#" className="text-[10px] md:text-sm font-bold tracking-widest uppercase opacity-40 hover:opacity-100 transition-opacity">{platform}</a>
+              {[
+                { name: 'Twitter', url: TWITTER_URL },
+                { name: 'LinkedIn', url: LINKEDIN_URL },
+                { name: 'Instagram', url: INSTAGRAM_URL }
+              ].map(platform => (
+                <a 
+                  key={platform.name} 
+                  href={platform.url} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-[10px] md:text-sm font-bold tracking-widest uppercase opacity-40 hover:opacity-100 transition-opacity"
+                >
+                  {platform.name}
+                </a>
               ))}
             </div>
           </motion.div>
@@ -126,7 +139,7 @@ export default function Footer() {
               </div>
               <div>
                 <span className="text-xs font-bold tracking-widest uppercase text-white/40 block mb-2">Phone</span>
-                <a href="tel:+1234567890" className="text-lg md:text-2xl font-bold tracking-tight">+1 (234) 567 890</a>
+                <a href={`tel:${CONTACT_PHONE.replace(/\s+/g, '')}`} className="text-lg md:text-2xl font-bold tracking-tight">{CONTACT_PHONE}</a>
               </div>
             </div>
           </motion.div>
