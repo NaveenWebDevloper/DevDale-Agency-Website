@@ -747,7 +747,7 @@ export default function Book() {
         </div>
       </main>
 
-      <Footer variant="light" />
+      <Footer variant="dark" />
     </div>
     </SmoothScroll>
   );
