@@ -40,6 +40,21 @@ async function connectDB(): Promise<void> {
   }
 }
 
+// Database Connection Middleware for Serverless Environment
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err: any) {
+    console.error("[Middleware DB Connection Failure]:", err.message);
+    if (req.path === "/api/db-status") {
+      next();
+    } else {
+      res.status(500).json({ error: "Database connection failed", details: err.message });
+    }
+  }
+});
+
 // CORS Middleware to handle headers and pre-flights
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -64,7 +79,10 @@ app.use((req, res, next) => {
   next();
 });
 
-// Diagnostic DB Status override
+// Setup all modular Express routes
+setupRoutes(app);
+
+// Diagnostic DB Status override (registered after setupRoutes to override)
 app.get("/api/db-status", (req, res) => {
   const states = ["disconnected", "connected", "connecting", "disconnecting"];
   res.json({
@@ -80,18 +98,4 @@ app.get("/api/db-status", (req, res) => {
   });
 });
 
-// Setup all modular Express routes
-setupRoutes(app);
-
-// Serverless Handler
-export default async function handler(req: any, res: any) {
-  // Establish / verify DB connection
-  try {
-    await connectDB();
-  } catch (err: any) {
-    console.error("[Handler DB Check Failure] Connection not ready:", err.message);
-  }
-
-  // Delegate processing to Express app
-  return app(req, res);
-}
+export default app;
