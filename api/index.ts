@@ -12,19 +12,32 @@ app.use(express.urlencoded({ extended: false }));
 
 // Warm-start DB connection
 let isConnected = false;
+let lastDbError: string | null = null;
 
 async function connectDB(): Promise<void> {
   if (isConnected && mongoose.connection.readyState === 1) return;
 
   const MONGO_URI = process.env.MONGO_URI;
-  if (!MONGO_URI) throw new Error("MONGO_URI is not set in environment variables.");
+  if (!MONGO_URI) {
+    const errStr = "MONGO_URI is not set in environment variables.";
+    lastDbError = errStr;
+    throw new Error(errStr);
+  }
 
-  await mongoose.connect(MONGO_URI, { serverSelectionTimeoutMS: 5000 });
-  isConnected = true;
-  console.log("[DB] Connected to MongoDB via Serverless Wrapper");
-  
-  // Run database seeding if empty
-  await seedDatabase();
+  try {
+    await mongoose.connect(MONGO_URI, { serverSelectionTimeoutMS: 5000 });
+    isConnected = true;
+    lastDbError = null;
+    console.log("[DB] Connected to MongoDB via Serverless Wrapper");
+    
+    // Run database seeding if empty
+    await seedDatabase();
+  } catch (err: any) {
+    isConnected = false;
+    lastDbError = err.message || String(err);
+    console.error("[DB Error] Connection failed:", lastDbError);
+    throw err;
+  }
 }
 
 // CORS Middleware to handle headers and pre-flights
@@ -51,6 +64,22 @@ app.use((req, res, next) => {
   next();
 });
 
+// Diagnostic DB Status override
+app.get("/api/db-status", (req, res) => {
+  const states = ["disconnected", "connected", "connecting", "disconnecting"];
+  res.json({
+    status: states[mongoose.connection.readyState],
+    readyState: mongoose.connection.readyState,
+    dbName: mongoose.connection.name || "N/A",
+    lastDbError: lastDbError,
+    mongoUriSet: !!process.env.MONGO_URI,
+    resendKeySet: !!process.env.RESEND_API_KEY,
+    fromEmail: process.env.FROM_EMAIL || "NOT SET",
+    adminEmail: process.env.ADMIN_EMAIL || "NOT SET",
+    nodeEnv: process.env.NODE_ENV || "development"
+  });
+});
+
 // Setup all modular Express routes
 setupRoutes(app);
 
@@ -60,7 +89,7 @@ export default async function handler(req: any, res: any) {
   try {
     await connectDB();
   } catch (err: any) {
-    console.error("[DB Error] Connection failed:", err.message);
+    console.error("[Handler DB Check Failure] Connection not ready:", err.message);
   }
 
   // Delegate processing to Express app
