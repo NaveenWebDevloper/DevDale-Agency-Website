@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "tsx server/index.ts",
-    "build": "node scripts/generate-seo-assets.mjs && vite build && vite build --config vite.config.server.ts",
+    "build": "node scripts/generate-seo-assets.mjs && vite build && vite build --config vite.config.server.ts && vite build --config vite.config.api.ts",
     "build:client": "node scripts/generate-seo-assets.mjs && vite build",
     "build:server": "vite build --config vite.config.server.ts",
+    "build:api": "vite build --config vite.config.api.ts",
     "seo:generate": "node scripts/generate-seo-assets.mjs",
     "start": "node dist/server/index.js",
     "test": "vitest --run",

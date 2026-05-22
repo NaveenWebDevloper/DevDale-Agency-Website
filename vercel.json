@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "buildCommand": "pnpm run build:client",
+  "buildCommand": "pnpm run build:client && pnpm run build:api",
   "installCommand": "pnpm install --no-frozen-lockfile",
   "outputDirectory": "dist/client",
   "functions": {
-    "api/index.ts": {
+    "api/index.js": {
       "maxDuration": 30
     }
   },
@@ -68,7 +68,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/api/index.ts"
+      "destination": "/api/index.js"
     },
     {
       "source": "/(.*)",

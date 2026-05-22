@@ -1,8 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import { setupRoutes } from "../server/routes";
-import { seedDatabase } from "../server/utils/seed";
+import { setupRoutes } from "./routes";
+import { seedDatabase } from "./utils/seed";
 
 dotenv.config();
 
