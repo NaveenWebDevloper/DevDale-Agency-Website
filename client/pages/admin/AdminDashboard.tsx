@@ -30,6 +30,7 @@ import {
   Clock3,
   CalendarDays,
   FileSpreadsheet,
+  Menu,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -60,6 +61,7 @@ export default function AdminDashboard() {
   
   // Navigation: "dashboard" | "bookings" | "leads" | "services" | "availability" | "team" | "logs"
   const [activeTab, setActiveTab] = useState<string>("dashboard");
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   
   // Data States
   const [metrics, setMetrics] = useState<any>(null);
@@ -635,8 +637,167 @@ export default function AdminDashboard() {
       {/* Background blurs */}
       <div className="absolute top-[5%] left-[10%] w-[350px] h-[350px] bg-zinc-900/5 rounded-full blur-[100px] pointer-events-none" />
 
+      {/* MOBILE SIDEBAR OVERLAY & PANEL */}
+      <AnimatePresence>
+        {mobileSidebarOpen && (
+          <>
+            {/* Backdrop */}
+            <m.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setMobileSidebarOpen(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden"
+            />
+            
+            {/* Mobile Aside */}
+            <m.aside
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed top-0 bottom-0 left-0 w-64 border-r border-zinc-900 bg-neutral-950 flex flex-col justify-between z-50 md:hidden shadow-2xl"
+            >
+              <div>
+                {/* Header branding & Close button */}
+                <div className="h-16 px-6 border-b border-zinc-900 flex items-center justify-between gap-2.5">
+                  <div className="flex items-center gap-2.5">
+                    <Shield className="w-5 h-5 text-white" />
+                    <span className="text-sm font-black tracking-widest text-white uppercase">DEVDALE OS</span>
+                  </div>
+                  <button
+                    onClick={() => setMobileSidebarOpen(false)}
+                    className="p-1 text-zinc-500 hover:text-white cursor-pointer rounded hover:bg-zinc-900"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                {/* Tab Navigation links */}
+                <nav className="p-4 space-y-1">
+                  <button
+                    onClick={() => {
+                      setActiveTab("dashboard");
+                      setMobileSidebarOpen(false);
+                    }}
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all cursor-pointer ${
+                      activeTab === "dashboard"
+                        ? "bg-white text-black font-semibold shadow-md shadow-white/5"
+                        : "text-zinc-400 hover:text-white hover:bg-zinc-900/30"
+                    }`}
+                  >
+                    <LayoutDashboard className="w-4 h-4" /> Control Panel
+                  </button>
+                  <button
+                    onClick={() => {
+                      setActiveTab("bookings");
+                      setMobileSidebarOpen(false);
+                    }}
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all cursor-pointer ${
+                      activeTab === "bookings"
+                        ? "bg-white text-black font-semibold shadow-md shadow-white/5"
+                        : "text-zinc-400 hover:text-white hover:bg-zinc-900/30"
+                    }`}
+                  >
+                    <Calendar className="w-4 h-4" /> Briefings
+                  </button>
+                  <button
+                    onClick={() => {
+                      setActiveTab("leads");
+                      setMobileSidebarOpen(false);
+                    }}
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all cursor-pointer ${
+                      activeTab === "leads"
+                        ? "bg-white text-black font-semibold shadow-md shadow-white/5"
+                        : "text-zinc-400 hover:text-white hover:bg-zinc-900/30"
+                    }`}
+                  >
+                    <Briefcase className="w-4 h-4" /> CRM Leads
+                  </button>
+                  <button
+                    onClick={() => {
+                      setActiveTab("services");
+                      setMobileSidebarOpen(false);
+                    }}
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all cursor-pointer ${
+                      activeTab === "services"
+                        ? "bg-white text-black font-semibold shadow-md shadow-white/5"
+                        : "text-zinc-400 hover:text-white hover:bg-zinc-900/30"
+                    }`}
+                  >
+                    <Layers className="w-4 h-4" /> Service Catalog
+                  </button>
+                  <button
+                    onClick={() => {
+                      setActiveTab("availability");
+                      setMobileSidebarOpen(false);
+                    }}
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all cursor-pointer ${
+                      activeTab === "availability"
+                        ? "bg-white text-black font-semibold shadow-md shadow-white/5"
+                        : "text-zinc-400 hover:text-white hover:bg-zinc-900/30"
+                    }`}
+                  >
+                    <Clock className="w-4 h-4" /> Availability Setup
+                  </button>
+                  <button
+                    onClick={() => {
+                      setActiveTab("team");
+                      setMobileSidebarOpen(false);
+                    }}
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all cursor-pointer ${
+                      activeTab === "team"
+                        ? "bg-white text-black font-semibold shadow-md shadow-white/5"
+                        : "text-zinc-400 hover:text-white hover:bg-zinc-900/30"
+                    }`}
+                  >
+                    <Users className="w-4 h-4" /> Workload Team
+                  </button>
+                  <button
+                    onClick={() => {
+                      setActiveTab("logs");
+                      setMobileSidebarOpen(false);
+                    }}
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all cursor-pointer ${
+                      activeTab === "logs"
+                        ? "bg-white text-black font-semibold shadow-md shadow-white/5"
+                        : "text-zinc-400 hover:text-white hover:bg-zinc-900/30"
+                    }`}
+                  >
+                    <Database className="w-4 h-4" /> Audit Trails
+                  </button>
+                </nav>
+              </div>
+
+              {/* Footer profile log out */}
+              <div className="p-4 border-t border-zinc-900">
+                <div className="flex justify-between items-center gap-3 bg-zinc-900/30 border border-zinc-900 p-3 rounded-xl mb-3">
+                  <div className="overflow-hidden">
+                    <span className="text-xs font-bold block text-white truncate">
+                      {currentUser?.name || "DevDale Admin"}
+                    </span>
+                    <span className="text-[10px] font-medium text-zinc-500 uppercase block tracking-wider mt-0.5">
+                      {currentUser?.role || "ADMIN"}
+                    </span>
+                  </div>
+                </div>
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setMobileSidebarOpen(false);
+                  }}
+                  className="w-full flex items-center justify-center gap-2 px-3 py-2 border border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-900/55 rounded-lg text-xs font-bold transition-all cursor-pointer"
+                >
+                  <LogOut className="w-3.5 h-3.5" /> END SECURE SESSION
+                </button>
+              </div>
+            </m.aside>
+          </>
+        )}
+      </AnimatePresence>
+
       {/* 1. SIDEBAR */}
-      <aside className="w-64 border-r border-zinc-900 bg-neutral-950/70 backdrop-blur-md flex flex-col justify-between shrink-0 relative z-20">
+      <aside className="hidden md:flex w-64 border-r border-zinc-900 bg-neutral-950/70 backdrop-blur-md flex-col justify-between shrink-0 relative z-20">
         <div>
           {/* Header branding */}
           <div className="h-16 px-6 border-b border-zinc-900 flex items-center gap-2.5">
@@ -746,8 +907,14 @@ export default function AdminDashboard() {
       {/* 2. MAIN HUB */}
       <div className="flex-1 flex flex-col min-w-0 bg-neutral-950 overflow-y-auto">
         {/* HEADER BAR */}
-        <header className="h-16 border-b border-zinc-900 bg-neutral-950/40 backdrop-blur-md px-8 flex justify-between items-center shrink-0 sticky top-0 z-10">
+        <header className="h-16 border-b border-zinc-900 bg-neutral-950/40 backdrop-blur-md px-4 md:px-8 flex justify-between items-center shrink-0 sticky top-0 z-10">
           <div className="text-xs uppercase tracking-widest text-zinc-500 font-bold flex items-center gap-1.5">
+            <button
+              onClick={() => setMobileSidebarOpen(true)}
+              className="block md:hidden p-2 -ml-1 mr-2 border border-zinc-800 hover:border-zinc-700 rounded-lg text-zinc-400 hover:text-white bg-zinc-950/30 transition-colors cursor-pointer"
+            >
+              <Menu className="w-4 h-4" />
+            </button>
             <span>AGENCY OS</span>
             <ChevronRight className="w-3.5 h-3.5 text-zinc-700" />
             <span className="text-white">{activeTab.toUpperCase()}</span>
@@ -834,7 +1001,7 @@ export default function AdminDashboard() {
         )}
 
         {/* WORKSPACE CONTENT AREA */}
-        <div className="flex-1 p-8">
+        <div className="flex-1 p-4 md:p-8">
           <AnimatePresence mode="wait">
             
             {/* VIEW A: CONTROL DASHBOARD CONTROL PANEL */}
@@ -1086,7 +1253,8 @@ export default function AdminDashboard() {
 
                 {/* Table list */}
                 <div className="bg-zinc-900/10 border border-zinc-900 rounded-2xl overflow-hidden">
-                  <table className="w-full text-left border-collapse">
+                  <div className="overflow-x-auto w-full">
+                    <table className="w-full min-w-[750px] text-left border-collapse">
                     <thead>
                       <tr className="bg-zinc-900/30 border-b border-zinc-900 text-zinc-500 text-[10px] tracking-wider uppercase font-bold">
                         <th className="p-4">Customer Name</th>
@@ -1145,6 +1313,7 @@ export default function AdminDashboard() {
                       )}
                     </tbody>
                   </table>
+                  </div>
 
                   {/* Pagination strip */}
                   {bookingsPagination.pages > 1 && (
@@ -1176,7 +1345,7 @@ export default function AdminDashboard() {
                     <m.div
                       initial={{ x: "100%" }}
                       animate={{ x: 0 }}
-                      className="w-full max-w-lg bg-zinc-950 border-l border-zinc-900 p-8 flex flex-col justify-between overflow-y-auto"
+                      className="w-full max-w-lg bg-zinc-950 border-l border-zinc-900 p-6 md:p-8 flex flex-col justify-between overflow-y-auto"
                     >
                       <div className="space-y-6">
                         <div className="flex justify-between items-center border-b border-zinc-900 pb-4">
@@ -1503,7 +1672,7 @@ export default function AdminDashboard() {
                     <m.div
                       initial={{ x: "100%" }}
                       animate={{ x: 0 }}
-                      className="w-full max-w-lg bg-zinc-950 border-l border-zinc-900 p-8 flex flex-col justify-between overflow-y-auto"
+                      className="w-full max-w-lg bg-zinc-950 border-l border-zinc-900 p-6 md:p-8 flex flex-col justify-between overflow-y-auto"
                     >
                       <div className="space-y-6">
                         <div className="flex justify-between items-center border-b border-zinc-900 pb-4">
@@ -2238,7 +2407,8 @@ export default function AdminDashboard() {
                   </h3>
                 </div>
 
-                <table className="w-full text-left border-collapse">
+                <div className="overflow-x-auto w-full">
+                  <table className="w-full min-w-[750px] text-left border-collapse">
                   <thead>
                     <tr className="bg-zinc-900/30 border-b border-zinc-900 text-zinc-500 text-[10px] tracking-wider uppercase font-bold">
                       <th className="p-4">Operation event</th>
@@ -2288,6 +2458,7 @@ export default function AdminDashboard() {
                     )}
                   </tbody>
                 </table>
+                </div>
 
                 {/* Pagination logs */}
                 {logsPagination.pages > 1 && (
