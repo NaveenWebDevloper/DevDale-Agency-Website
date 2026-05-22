@@ -96,7 +96,7 @@ export class GoogleOAuthHelper {
         googleTokenExpiry: credentials.expiry_date ? new Date(credentials.expiry_date) : undefined,
       });
 
-      return credentials.access_token;
+      return credentials.access_token || null;
     } catch (error) {
       console.error("[GoogleOAuthHelper] Error getting access token:", error);
       return null;

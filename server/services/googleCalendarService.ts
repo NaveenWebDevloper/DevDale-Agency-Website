@@ -251,6 +251,9 @@ export class GoogleCalendarService {
   async refreshAccessToken(): Promise<string> {
     try {
       const { credentials } = await this.oauth2Client.refreshAccessToken();
+      if (!credentials.access_token) {
+        throw new Error("No access token returned from Google");
+      }
       return credentials.access_token;
     } catch (error) {
       console.error("[GoogleCalendarService] Error refreshing access token:", error);

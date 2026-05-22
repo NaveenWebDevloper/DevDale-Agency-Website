@@ -36,6 +36,9 @@ export const SmoothScroll = ({ children }: { children: React.ReactNode }) => {
     });
 
     lenisRef.current = lenis;
+    if (typeof window !== "undefined") {
+      (window as any).lenis = lenis;
+    }
 
     // Sync ScrollTrigger with Lenis virtual scroll position
     lenis.on("scroll", ScrollTrigger.update);
@@ -52,6 +55,9 @@ export const SmoothScroll = ({ children }: { children: React.ReactNode }) => {
 
     return () => {
       gsap.ticker.remove(tickerCallback);
+      if (typeof window !== "undefined") {
+        (window as any).lenis = null;
+      }
       lenis.destroy();
     };
   }, []);

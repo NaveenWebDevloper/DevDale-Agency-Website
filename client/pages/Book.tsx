@@ -1,6 +1,22 @@
 import { useState, useEffect } from "react";
-import { m, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Link, useSearchParams } from "react-router-dom";
+
+// Safely parse YYYY-MM-DD in local time to avoid UTC shifting
+const parseDateSafely = (dateStr: string) => {
+  if (!dateStr) return new Date();
+  const [year, month, day] = dateStr.split("-").map(Number);
+  return new Date(year, month - 1, day);
+};
+
+// Formats a Date object as YYYY-MM-DD using local time coordinates
+const getLocalDateString = (date: Date) => {
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, '0');
+  const dd = String(date.getDate()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd}`;
+};
+
 import {
   Calendar,
   Clock,
@@ -19,6 +35,10 @@ import confetti from "canvas-confetti";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { SmoothScroll } from "../components/SmoothScroll";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 // Interface Definitions
 interface Service {
@@ -99,13 +119,24 @@ export default function Book() {
         const data = await res.json();
         setServices(data.services || []);
       } catch (err) {
-        toast.error("Database connection failed. Please reload.");
+        toast.error("Could not fetch scheduling services. Please ensure the agency server is running and try again.");
       } finally {
         setLoadingServices(false);
       }
     }
     fetchServices();
   }, []);
+
+  // Recalculate Lenis scroll bounds and refresh GSAP ScrollTrigger whenever step, services, or slots load/change
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (typeof window !== "undefined") {
+        (window as any).lenis?.resize();
+        ScrollTrigger.refresh();
+      }
+    }, 150);
+    return () => clearTimeout(timer);
+  }, [step, services, slots]);
 
   // Fetch slots when date or service changes
   useEffect(() => {
@@ -231,7 +262,7 @@ export default function Book() {
       <main className="max-w-4xl mx-auto px-6 pt-32 pb-24 relative z-10">
         {/* Header Header block */}
         <div className="text-center mb-12">
-          <m.div 
+          <motion.div 
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
@@ -246,7 +277,7 @@ export default function Book() {
             <p className="text-zinc-600 max-w-lg mx-auto text-sm md:text-base font-light">
               Connect directly with our engineering core to blueprint, design, and automate your digital architecture.
             </p>
-          </m.div>
+          </motion.div>
         </div>
 
         {/* Stepper Progress bar */}
@@ -258,7 +289,7 @@ export default function Book() {
               <span className={step >= 3 ? "text-black font-medium" : ""}>Prospect Details</span>
             </div>
             <div className="h-1 bg-zinc-200 rounded-full overflow-hidden">
-              <m.div 
+              <motion.div 
                 className="h-full bg-black"
                 initial={{ width: "33%" }}
                 animate={{ width: step === 1 ? "33%" : step === 2 ? "66%" : "100%" }}
@@ -269,12 +300,12 @@ export default function Book() {
         )}
 
         {/* Dynamic Booking Window */}
-        <div className="bg-white border border-zinc-200 rounded-2xl overflow-hidden shadow-[0_24px_80px_rgba(0,0,0,0.08)] backdrop-blur-xl">
+        <div className="bg-white border border-zinc-200 rounded-2xl overflow-visible shadow-[0_24px_80px_rgba(0,0,0,0.08)] backdrop-blur-xl">
           <AnimatePresence mode="wait">
             
             {/* STEP 1: SERVICE SELECTION */}
             {step === 1 && (
-              <m.div
+              <motion.div
                 key="step-services"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -298,7 +329,7 @@ export default function Book() {
                     {services.map((service) => {
                       const isSelected = selectedService?._id === service._id;
                       return (
-                        <m.div
+                        <motion.div
                           key={service._id}
                           onClick={() => setSelectedService(service)}
                           whileHover={{ scale: 1.01, borderColor: "#000000" }}
@@ -340,7 +371,7 @@ export default function Book() {
                               Select <ChevronRight className="w-3 h-3" />
                             </span>
                           </div>
-                        </m.div>
+                        </motion.div>
                       );
                     })}
                   </div>
@@ -355,12 +386,12 @@ export default function Book() {
                     CONTINUE TO SCHEDULE <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>
-              </m.div>
+              </motion.div>
             )}
 
             {/* STEP 2: DATE & TIME SELECTOR */}
             {step === 2 && selectedService && (
-              <m.div
+              <motion.div
                 key="step-schedule"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -385,11 +416,11 @@ export default function Book() {
                   {/* Custom Calendar date list strip */}
                   <div>
                     <label className="block text-xs uppercase tracking-widest text-zinc-500 font-bold mb-4">
-                      AVAILABLE DAYS (UTC)
+                      AVAILABLE DAYS
                     </label>
                     <div className="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scroll border border-zinc-200 p-2 rounded-xl bg-zinc-50/60">
                       {getNextDays().map((day) => {
-                        const dateStr = day.toISOString().split("T")[0];
+                        const dateStr = getLocalDateString(day);
                         const isSelected = selectedDate === dateStr;
                         const formatted = day.toLocaleDateString("en-US", {
                           weekday: "short",
@@ -421,7 +452,7 @@ export default function Book() {
                   <div>
                     <label className="block text-xs uppercase tracking-widest text-zinc-500 font-bold mb-4">
                       {selectedDate
-                        ? `SLOTS ON ${new Date(selectedDate).toLocaleDateString("en-US", {
+                        ? `SLOTS ON ${parseDateSafely(selectedDate).toLocaleDateString("en-US", {
                             month: "short",
                             day: "numeric",
                           })}`
@@ -484,12 +515,12 @@ export default function Book() {
                     CONTINUE TO DETAILS <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>
-              </m.div>
+              </motion.div>
             )}
 
             {/* STEP 3: BRIEFING FORM */}
             {step === 3 && selectedService && selectedSlot && (
-              <m.div
+              <motion.div
                 key="step-form"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -522,7 +553,7 @@ export default function Book() {
                         placeholder="John Doe"
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full bg-white border border-zinc-200 focus:border-black rounded-lg p-3.5 text-sm outline-none transition-colors placeholder:text-zinc-400"
+                        className="w-full bg-white border border-zinc-200 focus:border-black focus:ring-1 focus:ring-black rounded-lg p-3.5 text-sm outline-none transition-all placeholder:text-zinc-400"
                       />
                     </div>
 
@@ -536,7 +567,7 @@ export default function Book() {
                         placeholder="john@company.com"
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="w-full bg-white border border-zinc-200 focus:border-black rounded-lg p-3.5 text-sm outline-none transition-colors placeholder:text-zinc-400"
+                        className="w-full bg-white border border-zinc-200 focus:border-black focus:ring-1 focus:ring-black rounded-lg p-3.5 text-sm outline-none transition-all placeholder:text-zinc-400"
                       />
                     </div>
                   </div>
@@ -551,7 +582,7 @@ export default function Book() {
                         placeholder="Stripe Inc. (Optional)"
                         value={formData.company}
                         onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                        className="w-full bg-white border border-zinc-200 focus:border-black rounded-lg p-3.5 text-sm outline-none transition-colors placeholder:text-zinc-400"
+                        className="w-full bg-white border border-zinc-200 focus:border-black focus:ring-1 focus:ring-black rounded-lg p-3.5 text-sm outline-none transition-all placeholder:text-zinc-400"
                       />
                     </div>
 
@@ -562,7 +593,7 @@ export default function Book() {
                       <select
                         value={formData.projectType}
                         onChange={(e) => setFormData({ ...formData, projectType: e.target.value })}
-                        className="w-full bg-white border border-zinc-200 focus:border-black rounded-lg p-3.5 text-sm outline-none transition-colors"
+                        className="w-full bg-white border border-zinc-200 focus:border-black focus:ring-1 focus:ring-black rounded-lg p-3.5 text-sm outline-none transition-all"
                       >
                         <option value="">Select Category</option>
                         {PROJECT_TYPES.map((type) => (
@@ -608,7 +639,7 @@ export default function Book() {
                       placeholder="Outline your timeline, goals, integrations, and architectural scopes..."
                       value={formData.notes}
                       onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                      className="w-full bg-white border border-zinc-200 focus:border-black rounded-lg p-3.5 text-sm outline-none transition-colors resize-none placeholder:text-zinc-400"
+                      className="w-full bg-white border border-zinc-200 focus:border-black focus:ring-1 focus:ring-black rounded-lg p-3.5 text-sm outline-none transition-all resize-none placeholder:text-zinc-400"
                     />
                   </div>
 
@@ -617,7 +648,7 @@ export default function Book() {
                     <div>
                       <span className="text-zinc-500 text-xs font-light block">CONFIRMING BRIEFING</span>
                       <span className="text-sm font-bold block text-black mt-1">
-                        {selectedService.name} on {new Date(selectedDate).toLocaleDateString("en-US", {
+                        {selectedService.name} on {parseDateSafely(selectedDate).toLocaleDateString("en-US", {
                           month: "short",
                           day: "numeric",
                         })}{" "}
@@ -633,12 +664,12 @@ export default function Book() {
                     </button>
                   </div>
                 </form>
-              </m.div>
+              </motion.div>
             )}
 
             {/* STEP 4: SUCCESS CONFIRMATION SCREEN */}
             {step === 4 && confirmedBooking && selectedService && (
-              <m.div
+              <motion.div
                 key="step-success"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -665,12 +696,11 @@ export default function Book() {
                   <div className="flex justify-between items-center border-b border-zinc-200 pb-3">
                     <span className="text-xs text-zinc-500 uppercase tracking-wider font-bold">Date</span>
                     <span className="text-sm font-medium text-black">
-                      {new Date(confirmedBooking.date).toLocaleDateString("en-US", {
+                      {parseDateSafely(confirmedBooking.date).toLocaleDateString("en-US", {
                         weekday: "long",
                         year: "numeric",
                         month: "long",
                         day: "numeric",
-                        timeZone: "UTC",
                       })}
                     </span>
                   </div>
@@ -711,7 +741,7 @@ export default function Book() {
                     RETURN TO AGENCY HOME
                   </Link>
                 </div>
-              </m.div>
+              </motion.div>
             )}
           </AnimatePresence>
         </div>

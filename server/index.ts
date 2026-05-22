@@ -65,18 +65,35 @@ app.use((req, res, next) => {
     log(`serving on port ${port}`);
   });
 
-  // Database: Connect in background so it doesn't block startup
+  // Database: Connect with fallback resilience
   const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017/devdale_agency";
+  const LOCAL_URI = "mongodb://localhost:27017/devdale_agency";
+
+  const seedAndLog = async () => {
+    log("Infrastructure connected: MongoDB Protocol established");
+    try {
+      const { seedDatabase } = await import("./utils/seed");
+      await seedDatabase();
+    } catch (seedErr) {
+      log(`Seeding error: ${seedErr}`);
+    }
+  };
+
   log("Connecting to infrastructure...");
   mongoose.connect(MONGO_URI, { serverSelectionTimeoutMS: 5000 })
-    .then(async () => {
-      log("Infrastructure connected: MongoDB Protocol established");
-      try {
-        const { seedDatabase } = await import("./utils/seed");
-        await seedDatabase();
-      } catch (seedErr) {
-        log(`Seeding error: ${seedErr}`);
+    .then(seedAndLog)
+    .catch(async (err) => {
+      log(`Primary database connection failed (Atlas/Configured URI): ${err.message || err}`);
+      if (MONGO_URI !== LOCAL_URI) {
+        log(`Attempting fallback database connection to local instance: ${LOCAL_URI}...`);
+        try {
+          await mongoose.connect(LOCAL_URI, { serverSelectionTimeoutMS: 5000 });
+          await seedAndLog();
+        } catch (localErr: any) {
+          log(`Infrastructure failure: Both primary and fallback database connections failed. Local error: ${localErr.message || localErr}`);
+        }
+      } else {
+        log(`Infrastructure failure: Configured primary connection is already local and has failed.`);
       }
-    })
-    .catch(err => log(`Infrastructure error: ${err}`));
+    });
 })();

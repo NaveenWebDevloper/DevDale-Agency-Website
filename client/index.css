@@ -229,6 +229,20 @@
     -webkit-text-fill-color: transparent;
     animation: text-shine 4s linear infinite;
   }
+
+  .text-shine-dark {
+    background: linear-gradient(
+      to right,
+      #18181b 20%,
+      #71717a 40%,
+      #18181b 60%
+    );
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: text-shine 4s linear infinite;
+  }
 }
 
 @keyframes text-shine {

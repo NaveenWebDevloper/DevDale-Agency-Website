@@ -57,13 +57,12 @@ export default function Footer({ variant = "dark" }: FooterProps) {
             <div>
               <h2 className="text-4xl sm:text-5xl md:text-7xl lg:text-9xl font-bold tracking-tighter leading-none mb-4 md:mb-10">
                 Let's build <br />
-                <span className="text-shine-white">the future</span>.
+                <span className={isLight ? "text-shine-dark" : "text-shine-white"}>the future</span>.
               </h2>
               <p className={`text-base md:text-2xl font-medium tracking-tight leading-relaxed ${isLight ? "text-black/50" : "text-white/50"}`}>
                 Have a vision that needs engineering? We're ready when you are.
               </p>
             </div>
-
             <motion.div
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.97 }}
@@ -132,7 +131,7 @@ export default function Footer({ variant = "dark" }: FooterProps) {
 
           {/* Navigation */}
           <motion.div variants={itemVariants}>
-            <h4 className={`text-[10px] font-bold tracking-[0.2em] uppercase mb-6 md:mb-10 ${isLight ? "text-black/30" : "text-white/20"}`}>Navigation</h4>
+            <h4 className={`text-[10px] font-bold tracking-[0.2em] uppercase mb-6 md:mb-10 ${isLight ? "text-black/50" : "text-white/20"}`}>Navigation</h4>
             <ul className="space-y-4 md:space-y-6 text-base md:text-xl font-bold tracking-tight">
               {[
                 { name: 'Home', path: '/' },
@@ -143,7 +142,7 @@ export default function Footer({ variant = "dark" }: FooterProps) {
                 { name: 'Contact', path: '/contact' }
               ].map(item => (
                 <li key={item.name}>
-                  <Link to={item.path} className={`transition-colors uppercase tracking-widest text-xs font-black ${isLight ? "hover:text-black/55" : "hover:text-white/60"}`}>{item.name}</Link>
+                  <Link to={item.path} className={`transition-colors uppercase tracking-widest text-xs font-black ${isLight ? "text-black/60 hover:text-black" : "text-white/60 hover:text-white"}`}>{item.name}</Link>
                 </li>
               ))}
             </ul>
@@ -151,26 +150,26 @@ export default function Footer({ variant = "dark" }: FooterProps) {
 
           {/* Contact Details */}
           <motion.div variants={itemVariants} className="col-span-1 sm:col-span-2 md:col-span-2">
-            <h4 className={`text-[10px] font-bold tracking-[0.2em] uppercase mb-6 md:mb-10 ${isLight ? "text-black/30" : "text-white/20"}`}>Connect</h4>
+            <h4 className={`text-[10px] font-bold tracking-[0.2em] uppercase mb-6 md:mb-10 ${isLight ? "text-black/50" : "text-white/20"}`}>Connect</h4>
             <div className="space-y-5 md:space-y-8">
               <div>
-                <span className={`text-xs font-bold tracking-widest uppercase block mb-2 ${isLight ? "text-black/45" : "text-white/40"}`}>Inquiries</span>
-                <a href="mailto:hello@thedevdale.com" className={`text-base md:text-2xl lg:text-4xl font-bold tracking-tighter transition-colors break-all leading-tight block ${isLight ? "hover:text-black/55" : "hover:text-white/60"}`}>hello@thedevdale.com</a>
+                <span className={`text-xs font-bold tracking-widest uppercase block mb-2 ${isLight ? "text-black/50" : "text-white/40"}`}>Inquiries</span>
+                <a href="mailto:hello@thedevdale.com" className={`text-base md:text-2xl lg:text-4xl font-bold tracking-tighter transition-colors break-all leading-tight block ${isLight ? "text-black/70 hover:text-black" : "text-white/70 hover:text-white"}`}>hello@thedevdale.com</a>
               </div>
               <div>
-                <span className={`text-xs font-bold tracking-widest uppercase block mb-2 ${isLight ? "text-black/45" : "text-white/40"}`}>Phone</span>
-                <a href={`tel:${CONTACT_PHONE.replace(/\s+/g, '')}`} className="text-lg md:text-2xl font-bold tracking-tight">{CONTACT_PHONE}</a>
+                <span className={`text-xs font-bold tracking-widest uppercase block mb-2 ${isLight ? "text-black/50" : "text-white/40"}`}>Phone</span>
+                <a href={`tel:${CONTACT_PHONE.replace(/\s+/g, '')}`} className={`text-lg md:text-2xl font-bold tracking-tight transition-colors ${isLight ? "text-black hover:text-zinc-650" : "text-white hover:text-zinc-300"}`}>{CONTACT_PHONE}</a>
               </div>
             </div>
           </motion.div>
         </motion.div>
 
-        <div className={`pt-8 md:pt-16 border-t flex flex-col md:flex-row justify-between items-center gap-4 md:gap-8 ${isLight ? "border-black/10 text-black/35" : "border-white/5 text-white/20"}`}>
+        <div className={`pt-8 md:pt-16 border-t flex flex-col md:flex-row justify-between items-center gap-4 md:gap-8 ${isLight ? "border-black/10 text-black/60" : "border-white/5 text-white/40"}`}>
           <p className="text-xs md:text-sm font-bold tracking-tight text-center md:text-left">© 2026 THEDEVDALE. ALL RIGHTS RESERVED.</p>
           <div className="flex gap-6 md:gap-12 text-[10px] md:text-xs font-bold tracking-widest uppercase">
-            <Link to="/admin" className={`transition-colors cursor-pointer ${isLight ? "hover:text-black" : "hover:text-white"}`}>Admin OS</Link>
-            <Link to="/legal" className={`transition-colors cursor-pointer ${isLight ? "hover:text-black" : "hover:text-white"}`}>Privacy Policy</Link>
-            <Link to="/legal" className={`transition-colors cursor-pointer ${isLight ? "hover:text-black" : "hover:text-white"}`}>Terms of Service</Link>
+            <Link to="/admin" className={`transition-colors cursor-pointer ${isLight ? "text-black/60 hover:text-black" : "text-white/40 hover:text-white"}`}>Admin OS</Link>
+            <Link to="/legal" className={`transition-colors cursor-pointer ${isLight ? "text-black/60 hover:text-black" : "text-white/40 hover:text-white"}`}>Privacy Policy</Link>
+            <Link to="/legal" className={`transition-colors cursor-pointer ${isLight ? "text-black/60 hover:text-black" : "text-white/40 hover:text-white"}`}>Terms of Service</Link>
           </div>
         </div>
       </div>
