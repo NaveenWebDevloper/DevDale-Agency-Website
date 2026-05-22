@@ -69,6 +69,14 @@ app.use((req, res, next) => {
   const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017/devdale_agency";
   log("Connecting to infrastructure...");
   mongoose.connect(MONGO_URI, { serverSelectionTimeoutMS: 5000 })
-    .then(() => log("Infrastructure connected: MongoDB Protocol established"))
+    .then(async () => {
+      log("Infrastructure connected: MongoDB Protocol established");
+      try {
+        const { seedDatabase } = await import("./utils/seed");
+        await seedDatabase();
+      } catch (seedErr) {
+        log(`Seeding error: ${seedErr}`);
+      }
+    })
     .catch(err => log(`Infrastructure error: ${err}`));
 })();

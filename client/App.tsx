@@ -20,6 +20,9 @@ const SeoLandingPage = lazy(() => import("./pages/SeoLandingPage"));
 const BlogIndex = lazy(() => import("./pages/BlogIndex"));
 const PortfolioIndex = lazy(() => import("./pages/PortfolioIndex"));
 const NotFound = lazy(() => import("./pages/NotFound"));
+const Book = lazy(() => import("./pages/Book"));
+const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
+const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
 
 // Lazy-load Vercel telemetry — not critical path, saves initial bundle size
 const Analytics = lazy(() =>
@@ -106,6 +109,9 @@ function App() {
                 <Route path="/work" element={<Work />} />
                 <Route path="/work/:id" element={<ProjectDetail />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/book" element={<Book />} />
+                <Route path="/admin/login" element={<AdminLogin />} />
+                <Route path="/admin" element={<AdminDashboard />} />
                 <Route path="/legal" element={<Legal />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
