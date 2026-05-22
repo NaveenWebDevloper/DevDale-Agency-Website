@@ -42,6 +42,28 @@ async function createNotification(title: string, message: string, type: "BOOKING
 }
 
 /**
+ * Helper: Build Google Calendar event times from date + timeSlot + duration
+ */
+function buildEventTimes(dateStr: string, timeSlot: string, durationMinutes: number) {
+  const targetDate = new Date(`${dateStr}T00:00:00Z`);
+  const startHour = parseInt(timeSlot.split(":")[0], 10);
+  const startMin = parseInt(timeSlot.split(":")[1], 10);
+
+  const startDateTime = new Date(Date.UTC(
+    targetDate.getUTCFullYear(),
+    targetDate.getUTCMonth(),
+    targetDate.getUTCDate(),
+    startHour,
+    startMin,
+    0
+  ));
+
+  const endDateTime = new Date(startDateTime.getTime() + durationMinutes * 60 * 1000);
+
+  return { targetDate, startDateTime, endDateTime };
+}
+
+/**
  * GET /api/bookings (Admin Protected)
  * Supports filters: status, search (name/email/company), date range, pagination
  */
@@ -122,7 +144,6 @@ router.get("/export", authenticate, async (req: Request, res: Response) => {
     for (const b of bookings) {
       const formattedDate = new Date(b.date).toISOString().split("T")[0];
       const serviceName = b.serviceId ? (b.serviceId as any).name : "Unknown";
-      const hostName = b.userId ? (b.userId as any).name : "Unassigned";
       
       csv += `"${b._id}","${b.customerName}","${b.customerEmail}","${b.customerCompany || ""}","${serviceName}","${formattedDate}","${b.timeSlot}","${b.status}","${b.budgetRange || ""}","${b.projectType || ""}","${b.googleMeetLink || ""}","${b.createdAt.toISOString()}"\n`;
     }
@@ -158,6 +179,14 @@ router.get("/:id", authenticate, async (req: Request, res: Response) => {
 
 /**
  * POST /api/bookings (Public Endpoint - Client Booking Flow)
+ * 
+ * Full pipeline:
+ *  1. Validate inputs & availability
+ *  2. Create booking in MongoDB  
+ *  3. Create Google Calendar event with Meet link & send invitation
+ *  4. Auto-register CRM lead
+ *  5. Send email confirmations via Resend
+ *  6. Push admin notifications & activity logs
  */
 router.post("/", async (req: Request, res: Response) => {
   try {
@@ -187,7 +216,6 @@ router.post("/", async (req: Request, res: Response) => {
     }
 
     // 2. Validate availability using the Engine
-    const targetDate = new Date(`${date}T00:00:00Z`);
     const slots = await AvailabilityEngine.getAvailableSlots(service, date, "UTC");
     const matchedSlot = slots.find((s) => s.time === timeSlot);
 
@@ -202,7 +230,9 @@ router.post("/", async (req: Request, res: Response) => {
       assignedUserId = defaultAvail.userId;
     }
 
-    // 3. Create Booking Document in MongoDB (Status: Confirmed or Pending - let's set as Confirmed to reflect Stripe-grade automated flows!)
+    // 3. Create Booking Document in MongoDB
+    const { targetDate, startDateTime, endDateTime } = buildEventTimes(date, timeSlot, service.duration);
+
     const booking = new Booking({
       serviceId: service._id,
       userId: assignedUserId,
@@ -214,42 +244,26 @@ router.post("/", async (req: Request, res: Response) => {
       notes,
       date: normalizeToUTCDate(targetDate),
       timeSlot,
-      status: "Confirmed", // Enterprise instant-confirmation
+      status: "Confirmed",
+      duration: service.duration,
       utmSource,
       utmMedium,
       utmCampaign,
     });
 
-    // 4. Generate Google Calendar & Meet link
-    const startHour = parseInt(timeSlot.split(":")[0], 10);
-    const startMin = parseInt(timeSlot.split(":")[1], 10);
-    
-    const startDateTime = new Date(Date.UTC(
-      targetDate.getUTCFullYear(),
-      targetDate.getUTCMonth(),
-      targetDate.getUTCDate(),
-      startHour,
-      startMin,
-      0
-    ));
-
-    const endDateTime = new Date(startDateTime.getTime() + service.duration * 60 * 1000);
-
-    const hostUser = assignedUserId ? await User.findById(assignedUserId) : null;
+    // 4. Create Google Calendar event with Meet link
     const summary = `${service.name} Briefing: ${customerName} & DevDale`;
-    const description = `
-      Service: ${service.name}
-      Client Name: ${customerName}
-      Client Email: ${customerEmail}
-      Organization: ${customerCompany || "N/A"}
-      Project Type: ${projectType || "N/A"}
-      Estimated Budget: ${budgetRange || "N/A"}
-      
-      Brief Notes:
-      ${notes || "None"}
-      
-      This briefing has been automatically synchronized by DevDale Agency OS CRM.
-    `;
+    const description = [
+      `Service: ${service.name}`,
+      `Client: ${customerName} (${customerEmail})`,
+      `Organization: ${customerCompany || "N/A"}`,
+      `Project Type: ${projectType || "N/A"}`,
+      `Budget: ${budgetRange || "N/A"}`,
+      ``,
+      `Notes: ${notes || "None"}`,
+      ``,
+      `Synchronized by DevDale Agency OS.`,
+    ].join("\n");
 
     const calResult = await CalendarService.createEvent({
       summary,
@@ -265,10 +279,9 @@ router.post("/", async (req: Request, res: Response) => {
 
     await booking.save();
 
-    // 5. Check if we should register this booking as a CRM Lead (e.g. Discovery Call or contains project/budget details)
+    // 5. Auto-register CRM Lead
     let leadObj = null;
-    // Score lead: budget tier, custom notes increase score
-    let leadScore = 20; // baseline
+    let leadScore = 20;
     if (budgetRange && budgetRange !== "Under $5k") leadScore += 30;
     if (projectType) leadScore += 20;
     if (notes && notes.length > 50) leadScore += 20;
@@ -276,7 +289,6 @@ router.post("/", async (req: Request, res: Response) => {
 
     const existingLead = await Lead.findOne({ email: customerEmail.toLowerCase().trim() });
     if (!existingLead) {
-      // Register CRM Lead
       leadObj = await Lead.create({
         name: customerName,
         email: customerEmail.toLowerCase().trim(),
@@ -299,7 +311,6 @@ router.post("/", async (req: Request, res: Response) => {
         ],
       });
 
-      // Dispatch Lead Email notifications and CRM notification
       await EmailService.sendNewLeadNotification(leadObj);
       await createNotification(
         "New CRM Lead Registered",
@@ -307,7 +318,6 @@ router.post("/", async (req: Request, res: Response) => {
         "LEAD_NEW"
       );
     } else {
-      // Append activity to existing lead
       existingLead.activityTimeline.push({
         action: "NOTE_ADDED",
         note: `Customer booked service: ${service.name} for slot ${date} ${timeSlot}.`,
@@ -316,16 +326,18 @@ router.post("/", async (req: Request, res: Response) => {
       await existingLead.save();
     }
 
-    // 6. Send confirmations via EmailService (Resend)
+    // 6. Send email confirmations via Resend
     await EmailService.sendBookingConfirmation(booking, service);
 
-    // 7. Push real-time Admin notifications & logs
+    // 7. Push admin notifications & activity logs
     await createNotification(
       "New Appointment Scheduled",
       `${customerName} booked ${service.name} for ${date} at ${timeSlot}.`,
       "BOOKING_NEW"
     );
     await logActivity(undefined, "CREATE_BOOKING", { bookingId: booking._id, customerEmail }, req);
+
+    console.log(`[Bookings] ✅ Booking created: ${booking._id} | Meet: ${booking.googleMeetLink} | Real: ${calResult.isReal}`);
 
     res.status(201).json({
       success: true,
@@ -373,49 +385,53 @@ router.post("/:id/reschedule", async (req: Request, res: Response) => {
       return res.status(409).json({ error: "The newly selected slot is unavailable." });
     }
 
-    // 2. Delete old Google Calendar Event if it exists, and make a new one (simplest OAuth synchronization)
-    if (booking.googleEventId) {
-      await CalendarService.deleteEvent(booking.googleEventId);
-    }
-
-    const targetDate = new Date(`${date}T00:00:00Z`);
-    const startHour = parseInt(timeSlot.split(":")[0], 10);
-    const startMin = parseInt(timeSlot.split(":")[1], 10);
-    
-    const startDateTime = new Date(Date.UTC(
-      targetDate.getUTCFullYear(),
-      targetDate.getUTCMonth(),
-      targetDate.getUTCDate(),
-      startHour,
-      startMin,
-      0
-    ));
-    const endDateTime = new Date(startDateTime.getTime() + service.duration * 60 * 1000);
+    // 2. Build new event times
+    const { targetDate, startDateTime, endDateTime } = buildEventTimes(date, timeSlot, service.duration);
 
     const summary = `[RESCHEDULED] ${service.name} Briefing: ${booking.customerName} & DevDale`;
-    const description = `
-      Service: ${service.name} (Rescheduled)
-      Client Name: ${booking.customerName}
-      Client Email: ${booking.customerEmail}
-      Reason: ${rescheduleReason || "N/A"}
-      
-      This briefing has been updated by DevDale Agency OS.
-    `;
+    const description = [
+      `Service: ${service.name} (Rescheduled)`,
+      `Client: ${booking.customerName} (${booking.customerEmail})`,
+      `Reason: ${rescheduleReason || "N/A"}`,
+      ``,
+      `Updated by DevDale Agency OS.`,
+    ].join("\n");
 
-    const calResult = await CalendarService.createEvent({
-      summary,
-      description,
-      startDateTime: startDateTime.toISOString(),
-      endDateTime: endDateTime.toISOString(),
-      attendeeEmail: booking.customerEmail,
-      attendeeName: booking.customerName,
-    });
+    // 3. Update or recreate Google Calendar event
+    const existingEventId = booking.googleEventId || booking.googleCalendarEventId;
+    let calResult;
 
-    // 3. Save updates
+    if (existingEventId && !existingEventId.startsWith("mock-")) {
+      // Try to update the existing event (preserves Meet link, sends update notifications)
+      calResult = await CalendarService.updateEvent(existingEventId, {
+        summary,
+        description,
+        startDateTime: startDateTime.toISOString(),
+        endDateTime: endDateTime.toISOString(),
+        attendeeEmail: booking.customerEmail,
+        attendeeName: booking.customerName,
+      });
+    } else {
+      // Delete old mock/event and create fresh
+      if (existingEventId) {
+        await CalendarService.deleteEvent(existingEventId);
+      }
+      calResult = await CalendarService.createEvent({
+        summary,
+        description,
+        startDateTime: startDateTime.toISOString(),
+        endDateTime: endDateTime.toISOString(),
+        attendeeEmail: booking.customerEmail,
+        attendeeName: booking.customerName,
+      });
+    }
+
+    // 4. Update booking in MongoDB
     booking.date = normalizeToUTCDate(targetDate);
     booking.timeSlot = timeSlot;
     booking.status = "Rescheduled";
     booking.rescheduleReason = rescheduleReason;
+    booking.duration = service.duration;
     booking.googleEventId = calResult.googleEventId;
     booking.googleMeetLink = calResult.googleMeetLink;
 
@@ -432,10 +448,10 @@ router.post("/:id/reschedule", async (req: Request, res: Response) => {
       await lead.save();
     }
 
-    // 4. Send emails via EmailService (Resend)
+    // 5. Send rescheduled notification emails via Resend
     await EmailService.sendBookingRescheduled(booking, service, oldDetails);
 
-    // 5. Log & Notify
+    // 6. Log & Notify
     await createNotification(
       "Booking Rescheduled",
       `${booking.customerName} changed schedule to ${date} at ${timeSlot}.`,
@@ -471,9 +487,10 @@ router.post("/:id/cancel", async (req: Request, res: Response) => {
       return res.status(404).json({ error: "Service model not found." });
     }
 
-    // 1. Remove Google Calendar Event
-    if (booking.googleEventId) {
-      await CalendarService.deleteEvent(booking.googleEventId);
+    // 1. Delete Google Calendar Event (sends cancellation emails to attendees)
+    const eventId = booking.googleEventId || booking.googleCalendarEventId;
+    if (eventId) {
+      await CalendarService.deleteEvent(eventId);
     }
 
     // 2. Set cancellation status in MongoDB
@@ -565,8 +582,9 @@ router.delete("/:id", authenticate, requireAdmin, async (req: Request, res: Resp
     }
 
     // Delete calendar event before deleting document
-    if (booking.googleEventId) {
-      await CalendarService.deleteEvent(booking.googleEventId);
+    const eventId = booking.googleEventId || booking.googleCalendarEventId;
+    if (eventId) {
+      await CalendarService.deleteEvent(eventId);
     }
 
     await Booking.findByIdAndDelete(req.params.id);

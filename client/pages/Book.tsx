@@ -18,6 +18,7 @@ import { toast } from "sonner";
 import confetti from "canvas-confetti";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { SmoothScroll } from "../components/SmoothScroll";
 
 // Interface Definitions
 interface Service {
@@ -221,11 +222,9 @@ export default function Book() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-white selection:bg-white selection:text-black">
-      {/* Background radial highlight */}
-      <div className="absolute top-0 left-0 right-0 h-[500px] bg-gradient-to-b from-zinc-900/20 via-transparent to-transparent pointer-events-none" />
-      <div className="absolute top-[10%] left-[5%] w-[400px] h-[400px] bg-zinc-900/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute top-[30%] right-[10%] w-[350px] h-[350px] bg-zinc-900/15 rounded-full blur-[100px] pointer-events-none" />
+    <SmoothScroll>
+    <div className="min-h-screen bg-[#f7f4ee] text-black selection:bg-black selection:text-white">
+      <div className="absolute top-0 left-0 right-0 h-[520px] bg-gradient-to-b from-white via-[#f7f4ee] to-transparent pointer-events-none" />
 
       <Navbar isLoaded={true} />
 
@@ -237,14 +236,14 @@ export default function Book() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-zinc-800 bg-zinc-900/50 text-xs text-zinc-400 mb-4 backdrop-blur-md">
-              <Sparkles className="w-3.5 h-3.5 text-zinc-300" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-zinc-200 bg-white/80 text-xs text-zinc-600 mb-4 backdrop-blur-md shadow-sm">
+              <Sparkles className="w-3.5 h-3.5 text-zinc-700" />
               <span>DevDale Scheduling Protocol</span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-black tracking-tight text-white mb-4">
+            <h1 className="text-4xl md:text-5xl font-black tracking-tight text-black mb-4">
               SECURE YOUR BRIEFING
             </h1>
-            <p className="text-zinc-400 max-w-lg mx-auto text-sm md:text-base font-light">
+            <p className="text-zinc-600 max-w-lg mx-auto text-sm md:text-base font-light">
               Connect directly with our engineering core to blueprint, design, and automate your digital architecture.
             </p>
           </m.div>
@@ -254,13 +253,13 @@ export default function Book() {
         {step < 4 && (
           <div className="max-w-md mx-auto mb-10 px-4">
             <div className="flex justify-between items-center text-xs text-zinc-500 mb-2">
-              <span className={step >= 1 ? "text-white font-medium" : ""}>Service</span>
-              <span className={step >= 2 ? "text-white font-medium" : ""}>Schedule</span>
-              <span className={step >= 3 ? "text-white font-medium" : ""}>Prospect Details</span>
+              <span className={step >= 1 ? "text-black font-medium" : ""}>Service</span>
+              <span className={step >= 2 ? "text-black font-medium" : ""}>Schedule</span>
+              <span className={step >= 3 ? "text-black font-medium" : ""}>Prospect Details</span>
             </div>
-            <div className="h-1 bg-zinc-900 rounded-full overflow-hidden">
+            <div className="h-1 bg-zinc-200 rounded-full overflow-hidden">
               <m.div 
-                className="h-full bg-white"
+                className="h-full bg-black"
                 initial={{ width: "33%" }}
                 animate={{ width: step === 1 ? "33%" : step === 2 ? "66%" : "100%" }}
                 transition={{ duration: 0.4 }}
@@ -270,7 +269,7 @@ export default function Book() {
         )}
 
         {/* Dynamic Booking Window */}
-        <div className="bg-zinc-950 border border-zinc-800 rounded-2xl overflow-hidden shadow-2xl backdrop-blur-xl">
+        <div className="bg-white border border-zinc-200 rounded-2xl overflow-hidden shadow-[0_24px_80px_rgba(0,0,0,0.08)] backdrop-blur-xl">
           <AnimatePresence mode="wait">
             
             {/* STEP 1: SERVICE SELECTION */}
@@ -283,15 +282,15 @@ export default function Book() {
                 transition={springTransition}
                 className="p-8 md:p-12"
               >
-                <h2 className="text-xl font-bold tracking-tight mb-8 flex items-center gap-2 border-b border-zinc-900 pb-4">
-                  <span className="w-1.5 h-6 bg-white rounded-full" />
+                <h2 className="text-xl font-bold tracking-tight mb-8 flex items-center gap-2 border-b border-zinc-200 pb-4">
+                  <span className="w-1.5 h-6 bg-black rounded-full" />
                   SELECT CRITICAL SERVICE
                 </h2>
 
                 {loadingServices ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {[1, 2, 3, 4].map((n) => (
-                      <div key={n} className="h-44 bg-zinc-900/50 rounded-xl border border-zinc-800 animate-pulse" />
+                      <div key={n} className="h-44 bg-zinc-100 rounded-xl border border-zinc-200 animate-pulse" />
                     ))}
                   </div>
                 ) : (
@@ -302,12 +301,12 @@ export default function Book() {
                         <m.div
                           key={service._id}
                           onClick={() => setSelectedService(service)}
-                          whileHover={{ scale: 1.01, borderColor: "#ffffff" }}
+                          whileHover={{ scale: 1.01, borderColor: "#000000" }}
                           whileTap={{ scale: 0.99 }}
-                          className={`p-6 rounded-xl border transition-all cursor-pointer flex flex-col justify-between h-48 bg-zinc-900/30 ${
+                          className={`p-6 rounded-xl border transition-all cursor-pointer flex flex-col justify-between h-48 bg-white ${
                             isSelected
-                              ? "border-white bg-zinc-900/80 shadow-lg shadow-white/5"
-                              : "border-zinc-800 hover:bg-zinc-900/50"
+                              ? "border-black bg-zinc-50 shadow-lg shadow-black/5"
+                              : "border-zinc-200 hover:bg-zinc-50"
                           }`}
                         >
                           <div>
@@ -316,28 +315,28 @@ export default function Book() {
                                 {service.meetingType}
                               </span>
                               {service.price ? (
-                                <span className="text-sm font-semibold text-zinc-300">
+                                <span className="text-sm font-semibold text-zinc-700">
                                   ${service.price.toLocaleString()}
                                 </span>
                               ) : (
-                                <span className="text-xs px-2.5 py-0.5 rounded-full border border-zinc-700 text-zinc-300 bg-zinc-800/40">
+                                <span className="text-xs px-2.5 py-0.5 rounded-full border border-zinc-300 text-zinc-700 bg-zinc-100">
                                   Complimentary
                                 </span>
                               )}
                             </div>
-                            <h3 className="text-lg font-bold tracking-tight text-white mb-2">
+                            <h3 className="text-lg font-bold tracking-tight text-black mb-2">
                               {service.name}
                             </h3>
-                            <p className="text-xs text-zinc-400 line-clamp-2 leading-relaxed">
+                            <p className="text-xs text-zinc-600 line-clamp-2 leading-relaxed">
                               {service.description}
                             </p>
                           </div>
-                          <div className="flex items-center justify-between text-xs text-zinc-400 pt-4 border-t border-zinc-900">
+                          <div className="flex items-center justify-between text-xs text-zinc-600 pt-4 border-t border-zinc-200">
                             <span className="flex items-center gap-1.5 font-light">
                               <Clock className="w-3.5 h-3.5" />
                               {service.duration} Mins
                             </span>
-                            <span className="flex items-center gap-1 text-white font-medium">
+                            <span className="flex items-center gap-1 text-black font-medium">
                               Select <ChevronRight className="w-3 h-3" />
                             </span>
                           </div>
@@ -351,7 +350,7 @@ export default function Book() {
                   <button
                     disabled={!selectedService}
                     onClick={() => setStep(2)}
-                    className="flex items-center gap-2 px-8 py-3 bg-white text-black font-bold rounded-lg text-sm transition-all hover:bg-zinc-200 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                    className="flex items-center gap-2 px-8 py-3 bg-black text-white font-bold rounded-lg text-sm transition-all hover:bg-zinc-800 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
                   >
                     CONTINUE TO SCHEDULE <ChevronRight className="w-4 h-4" />
                   </button>
@@ -369,15 +368,15 @@ export default function Book() {
                 transition={springTransition}
                 className="p-8 md:p-12"
               >
-                <div className="flex items-center gap-4 mb-8 border-b border-zinc-900 pb-4">
+                <div className="flex items-center gap-4 mb-8 border-b border-zinc-200 pb-4">
                   <button
                     onClick={() => setStep(1)}
-                    className="p-2 rounded-lg border border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-950 transition-colors cursor-pointer"
+                    className="p-2 rounded-lg border border-zinc-200 text-zinc-600 hover:text-black hover:bg-zinc-100 transition-colors cursor-pointer"
                   >
                     <ChevronLeft className="w-4 h-4" />
                   </button>
                   <h2 className="text-xl font-bold tracking-tight flex items-center gap-2">
-                    <span className="w-1.5 h-6 bg-white rounded-full" />
+                    <span className="w-1.5 h-6 bg-black rounded-full" />
                     SELECT DATE & TIME
                   </h2>
                 </div>
@@ -388,7 +387,7 @@ export default function Book() {
                     <label className="block text-xs uppercase tracking-widest text-zinc-500 font-bold mb-4">
                       AVAILABLE DAYS (UTC)
                     </label>
-                    <div className="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scroll border border-zinc-900 p-2 rounded-xl">
+                    <div className="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scroll border border-zinc-200 p-2 rounded-xl bg-zinc-50/60">
                       {getNextDays().map((day) => {
                         const dateStr = day.toISOString().split("T")[0];
                         const isSelected = selectedDate === dateStr;
@@ -404,8 +403,8 @@ export default function Book() {
                             onClick={() => setSelectedDate(dateStr)}
                             className={`w-full p-4 text-left rounded-lg border transition-all flex justify-between items-center cursor-pointer ${
                               isSelected
-                                ? "border-white bg-zinc-900/80 text-white font-bold"
-                                : "border-zinc-800 bg-zinc-950 hover:bg-zinc-900/30 text-zinc-300"
+                                ? "border-black bg-black text-white font-bold"
+                                : "border-zinc-200 bg-white hover:bg-zinc-100 text-zinc-700"
                             }`}
                           >
                             <span className="text-sm">{formatted}</span>
@@ -430,25 +429,25 @@ export default function Book() {
                     </label>
 
                     {!selectedDate ? (
-                      <div className="h-64 border border-zinc-900 border-dashed rounded-xl flex flex-col items-center justify-center text-zinc-500 gap-2">
-                        <Clock className="w-8 h-8 text-zinc-600 animate-pulse" />
+                      <div className="h-64 border border-zinc-200 border-dashed rounded-xl flex flex-col items-center justify-center text-zinc-500 gap-2 bg-zinc-50/60">
+                        <Clock className="w-8 h-8 text-zinc-400 animate-pulse" />
                         <span className="text-xs font-light">Awaiting date selection...</span>
                       </div>
                     ) : loadingSlots ? (
                       <div className="grid grid-cols-2 gap-2">
                         {[1, 2, 3, 4, 5, 6].map((n) => (
-                          <div key={n} className="h-12 bg-zinc-900/50 rounded-lg animate-pulse" />
+                          <div key={n} className="h-12 bg-zinc-100 rounded-lg animate-pulse" />
                         ))}
                       </div>
                     ) : slots.length === 0 ? (
-                      <div className="h-64 border border-zinc-900 border-dashed rounded-xl flex flex-col items-center justify-center text-zinc-500 gap-2">
-                        <Calendar className="w-8 h-8 text-zinc-600" />
+                      <div className="h-64 border border-zinc-200 border-dashed rounded-xl flex flex-col items-center justify-center text-zinc-500 gap-2 bg-zinc-50/60">
+                        <Calendar className="w-8 h-8 text-zinc-400" />
                         <span className="text-xs font-light text-center px-4">
                           No slots available. Try selecting another date.
                         </span>
                       </div>
                     ) : (
-                      <div className="grid grid-cols-2 gap-2 max-h-[300px] overflow-y-auto pr-2 border border-zinc-900 p-2 rounded-xl">
+                      <div className="grid grid-cols-2 gap-2 max-h-[300px] overflow-y-auto pr-2 border border-zinc-200 p-2 rounded-xl bg-zinc-50/60">
                         {slots.map((slot) => {
                           const isSel = selectedSlot?.time === slot.time;
                           return (
@@ -458,10 +457,10 @@ export default function Book() {
                               onClick={() => setSelectedSlot(slot)}
                               className={`p-3 rounded-lg border text-sm text-center transition-all cursor-pointer ${
                                 !slot.available
-                                  ? "border-zinc-900 bg-zinc-950 text-zinc-700 line-through opacity-30 cursor-not-allowed"
+                                  ? "border-zinc-200 bg-zinc-100 text-zinc-400 line-through opacity-50 cursor-not-allowed"
                                   : isSel
-                                  ? "border-white bg-white text-black font-bold shadow-lg shadow-white/5"
-                                  : "border-zinc-800 bg-zinc-950 text-zinc-300 hover:bg-zinc-900/50"
+                                  ? "border-black bg-black text-white font-bold shadow-lg shadow-black/5"
+                                  : "border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-100"
                               }`}
                             >
                               {slot.time}
@@ -473,14 +472,14 @@ export default function Book() {
                   </div>
                 </div>
 
-                <div className="flex justify-between items-center mt-12 pt-6 border-t border-zinc-900">
+                <div className="flex justify-between items-center mt-12 pt-6 border-t border-zinc-200">
                   <div className="text-xs text-zinc-500 font-light">
-                    Selected Service: <span className="text-white font-semibold">{selectedService.name}</span>
+                    Selected Service: <span className="text-black font-semibold">{selectedService.name}</span>
                   </div>
                   <button
                     disabled={!selectedSlot}
                     onClick={() => setStep(3)}
-                    className="flex items-center gap-2 px-8 py-3 bg-white text-black font-bold rounded-lg text-sm transition-all hover:bg-zinc-200 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                    className="flex items-center gap-2 px-8 py-3 bg-black text-white font-bold rounded-lg text-sm transition-all hover:bg-zinc-800 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
                   >
                     CONTINUE TO DETAILS <ChevronRight className="w-4 h-4" />
                   </button>
@@ -498,15 +497,15 @@ export default function Book() {
                 transition={springTransition}
                 className="p-8 md:p-12"
               >
-                <div className="flex items-center gap-4 mb-8 border-b border-zinc-900 pb-4">
+                <div className="flex items-center gap-4 mb-8 border-b border-zinc-200 pb-4">
                   <button
                     onClick={() => setStep(2)}
-                    className="p-2 rounded-lg border border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-950 transition-colors cursor-pointer"
+                    className="p-2 rounded-lg border border-zinc-200 text-zinc-600 hover:text-black hover:bg-zinc-100 transition-colors cursor-pointer"
                   >
                     <ChevronLeft className="w-4 h-4" />
                   </button>
                   <h2 className="text-xl font-bold tracking-tight flex items-center gap-2">
-                    <span className="w-1.5 h-6 bg-white rounded-full" />
+                    <span className="w-1.5 h-6 bg-black rounded-full" />
                     PROSPECT INTENTION PROFILES
                   </h2>
                 </div>
@@ -523,7 +522,7 @@ export default function Book() {
                         placeholder="John Doe"
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full bg-zinc-950 border border-zinc-800 focus:border-white rounded-lg p-3.5 text-sm outline-none transition-colors"
+                        className="w-full bg-white border border-zinc-200 focus:border-black rounded-lg p-3.5 text-sm outline-none transition-colors placeholder:text-zinc-400"
                       />
                     </div>
 
@@ -537,7 +536,7 @@ export default function Book() {
                         placeholder="john@company.com"
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="w-full bg-zinc-950 border border-zinc-800 focus:border-white rounded-lg p-3.5 text-sm outline-none transition-colors"
+                        className="w-full bg-white border border-zinc-200 focus:border-black rounded-lg p-3.5 text-sm outline-none transition-colors placeholder:text-zinc-400"
                       />
                     </div>
                   </div>
@@ -552,7 +551,7 @@ export default function Book() {
                         placeholder="Stripe Inc. (Optional)"
                         value={formData.company}
                         onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                        className="w-full bg-zinc-950 border border-zinc-800 focus:border-white rounded-lg p-3.5 text-sm outline-none transition-colors"
+                        className="w-full bg-white border border-zinc-200 focus:border-black rounded-lg p-3.5 text-sm outline-none transition-colors placeholder:text-zinc-400"
                       />
                     </div>
 
@@ -563,7 +562,7 @@ export default function Book() {
                       <select
                         value={formData.projectType}
                         onChange={(e) => setFormData({ ...formData, projectType: e.target.value })}
-                        className="w-full bg-zinc-950 border border-zinc-800 focus:border-white rounded-lg p-3.5 text-sm outline-none transition-colors"
+                        className="w-full bg-white border border-zinc-200 focus:border-black rounded-lg p-3.5 text-sm outline-none transition-colors"
                       >
                         <option value="">Select Category</option>
                         {PROJECT_TYPES.map((type) => (
@@ -589,8 +588,8 @@ export default function Book() {
                             onClick={() => setFormData({ ...formData, budgetRange: range })}
                             className={`p-3 rounded-lg border text-xs text-center transition-all cursor-pointer ${
                               isSel
-                                ? "border-white bg-white text-black font-semibold"
-                                : "border-zinc-800 bg-zinc-950 text-zinc-400 hover:bg-zinc-900/30 hover:text-white"
+                                ? "border-black bg-black text-white font-semibold"
+                                : "border-zinc-200 bg-white text-zinc-600 hover:bg-zinc-100 hover:text-black"
                             }`}
                           >
                             {range}
@@ -609,15 +608,15 @@ export default function Book() {
                       placeholder="Outline your timeline, goals, integrations, and architectural scopes..."
                       value={formData.notes}
                       onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                      className="w-full bg-zinc-950 border border-zinc-800 focus:border-white rounded-lg p-3.5 text-sm outline-none transition-colors resize-none"
+                      className="w-full bg-white border border-zinc-200 focus:border-black rounded-lg p-3.5 text-sm outline-none transition-colors resize-none placeholder:text-zinc-400"
                     />
                   </div>
 
                   {/* Summary brief */}
-                  <div className="bg-zinc-900/30 border border-zinc-900 rounded-xl p-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+                  <div className="bg-zinc-50 border border-zinc-200 rounded-xl p-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
                     <div>
                       <span className="text-zinc-500 text-xs font-light block">CONFIRMING BRIEFING</span>
-                      <span className="text-sm font-bold block text-white mt-1">
+                      <span className="text-sm font-bold block text-black mt-1">
                         {selectedService.name} on {new Date(selectedDate).toLocaleDateString("en-US", {
                           month: "short",
                           day: "numeric",
@@ -628,7 +627,7 @@ export default function Book() {
                     <button
                       type="submit"
                       disabled={submitting}
-                      className="px-8 py-4 bg-white text-black font-bold text-sm rounded-lg hover:bg-zinc-200 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                      className="px-8 py-4 bg-black text-white font-bold text-sm rounded-lg hover:bg-zinc-800 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
                     >
                       {submitting ? "PROVISIONING..." : "SCHEDULE BRIEFING NOW"}
                     </button>
@@ -646,26 +645,26 @@ export default function Book() {
                 transition={springTransition}
                 className="p-8 md:p-12 text-center"
               >
-                <div className="inline-flex items-center justify-center p-4 bg-white/5 border border-white/10 rounded-full mb-6">
-                  <CheckCircle className="w-10 h-10 text-white" />
+                <div className="inline-flex items-center justify-center p-4 bg-zinc-100 border border-zinc-200 rounded-full mb-6">
+                  <CheckCircle className="w-10 h-10 text-black" />
                 </div>
                 
                 <h2 className="text-3xl font-black tracking-tight mb-2 uppercase">
                   BRIEFING CONFIRMED
                 </h2>
-                <p className="text-zinc-400 text-sm max-w-md mx-auto mb-8 font-light">
+                <p className="text-zinc-600 text-sm max-w-md mx-auto mb-8 font-light">
                   Your meeting coordinates are active. An automated validation email has been sent to{" "}
-                  <strong className="text-white font-medium">{confirmedBooking.customerEmail}</strong>.
+                  <strong className="text-black font-medium">{confirmedBooking.customerEmail}</strong>.
                 </p>
 
-                <div className="max-w-md mx-auto bg-zinc-900/30 border border-zinc-900 rounded-xl p-6 mb-8 text-left space-y-4">
-                  <div className="flex justify-between items-center border-b border-zinc-900 pb-3">
+                <div className="max-w-md mx-auto bg-zinc-50 border border-zinc-200 rounded-xl p-6 mb-8 text-left space-y-4">
+                  <div className="flex justify-between items-center border-b border-zinc-200 pb-3">
                     <span className="text-xs text-zinc-500 uppercase tracking-wider font-bold">Service</span>
-                    <span className="text-sm font-bold text-white">{selectedService.name}</span>
+                    <span className="text-sm font-bold text-black">{selectedService.name}</span>
                   </div>
-                  <div className="flex justify-between items-center border-b border-zinc-900 pb-3">
+                  <div className="flex justify-between items-center border-b border-zinc-200 pb-3">
                     <span className="text-xs text-zinc-500 uppercase tracking-wider font-bold">Date</span>
-                    <span className="text-sm font-medium text-white">
+                    <span className="text-sm font-medium text-black">
                       {new Date(confirmedBooking.date).toLocaleDateString("en-US", {
                         weekday: "long",
                         year: "numeric",
@@ -675,13 +674,13 @@ export default function Book() {
                       })}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center border-b border-zinc-900 pb-3">
+                  <div className="flex justify-between items-center border-b border-zinc-200 pb-3">
                     <span className="text-xs text-zinc-500 uppercase tracking-wider font-bold">Time</span>
-                    <span className="text-sm font-bold text-white">{confirmedBooking.timeSlot} (Host Local)</span>
+                    <span className="text-sm font-bold text-black">{confirmedBooking.timeSlot} (Host Local)</span>
                   </div>
-                  <div className="flex justify-between items-center border-b border-zinc-900 pb-3">
+                  <div className="flex justify-between items-center border-b border-zinc-200 pb-3">
                     <span className="text-xs text-zinc-500 uppercase tracking-wider font-bold">Duration</span>
-                    <span className="text-sm font-medium text-white">{selectedService.duration} Mins</span>
+                    <span className="text-sm font-medium text-black">{selectedService.duration} Mins</span>
                   </div>
                   <div className="flex justify-between items-start">
                     <span className="text-xs text-zinc-500 uppercase tracking-wider font-bold mt-1">Access Coordinates</span>
@@ -689,7 +688,7 @@ export default function Book() {
                       href={confirmedBooking.googleMeetLink}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs px-3 py-1.5 rounded bg-white text-black font-semibold hover:bg-zinc-200 transition-colors flex items-center gap-1.5"
+                      className="text-xs px-3 py-1.5 rounded bg-black text-white font-semibold hover:bg-zinc-800 transition-colors flex items-center gap-1.5"
                     >
                       <Video className="w-3.5 h-3.5" /> Join Google Meet <ExternalLink className="w-3 h-3" />
                     </a>
@@ -701,13 +700,13 @@ export default function Book() {
                     href={confirmedBooking.googleMeetLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full sm:w-auto px-8 py-3 bg-white text-black font-bold text-sm rounded-lg hover:bg-zinc-200 transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                    className="w-full sm:w-auto px-8 py-3 bg-black text-white font-bold text-sm rounded-lg hover:bg-zinc-800 transition-colors flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <Video className="w-4 h-4" /> LAUNCH MEETING ROOM
                   </a>
                   <Link
                     to="/"
-                    className="w-full sm:w-auto px-8 py-3 border border-zinc-800 hover:bg-zinc-900/50 transition-colors text-sm rounded-lg font-bold text-zinc-300"
+                    className="w-full sm:w-auto px-8 py-3 border border-zinc-200 hover:bg-zinc-100 transition-colors text-sm rounded-lg font-bold text-zinc-700"
                   >
                     RETURN TO AGENCY HOME
                   </Link>
@@ -718,7 +717,8 @@ export default function Book() {
         </div>
       </main>
 
-      <Footer />
+      <Footer variant="light" />
     </div>
+    </SmoothScroll>
   );
 }

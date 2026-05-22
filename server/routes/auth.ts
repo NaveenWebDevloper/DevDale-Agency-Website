@@ -5,6 +5,7 @@ import { authenticate } from "../middleware/authMiddleware";
 import ActivityLog from "../models/ActivityLog";
 import crypto from "crypto";
 import { EmailService } from "../services/emailService";
+import { GoogleOAuthHelper } from "../utils/googleOAuthHelper";
 
 const router = express.Router();
 
@@ -306,6 +307,88 @@ router.post("/reset-password", async (req: Request, res: Response) => {
   } catch (error) {
     console.error("[Auth] Reset password error:", error);
     res.status(500).json({ error: "Internal credential upgrade processing failure." });
+  }
+});
+
+/**
+ * GET /api/auth/google/url
+ * Generate Google OAuth authorization URL
+ */
+router.get("/google/url", (req: Request, res: Response) => {
+  try {
+    const authUrl = GoogleOAuthHelper.generateAuthUrl();
+    res.json({ url: authUrl });
+  } catch (error) {
+    console.error("[Auth] Google URL generation error:", error);
+    res.status(500).json({ error: "Failed to generate Google authorization URL" });
+  }
+});
+
+/**
+ * GET /api/auth/google/callback
+ * Handle Google OAuth callback
+ */
+router.get("/google/callback", async (req: Request, res: Response) => {
+  try {
+    const { code, state } = req.query;
+
+    if (!code) {
+      return res.status(400).json({ error: "Authorization code is missing" });
+    }
+
+    // Exchange code for tokens
+    const tokens = await GoogleOAuthHelper.exchangeCodeForTokens(code as string);
+
+    if (!tokens.refresh_token) {
+      console.warn("[Auth] No refresh token received. This may happen if the user previously authorized the app.");
+      return res.status(400).json({
+        error: "Failed to obtain refresh token. Please revoke app access and try again.",
+        hint: "Go to https://myaccount.google.com/permissions and remove 'DevDale' access.",
+      });
+    }
+
+    // For now, store the global refresh token in environment (in production, handle per-user)
+    // This is the refresh token that will be used for the admin account
+    console.log("\n✅ Google OAuth Token Exchange Successful!\n");
+    console.log("🔐 Refresh Token:", tokens.refresh_token);
+    console.log("\nAdd this to your .env file:");
+    console.log(`GOOGLE_REFRESH_TOKEN="${tokens.refresh_token}"\n`);
+
+    // Optionally, if you have a user context, store it
+    if (req.query.userId) {
+      const userId = req.query.userId as string;
+      await GoogleOAuthHelper.storeUserGoogleCredentials(userId, tokens);
+      await logActivity(userId, "GOOGLE_OAUTH_CONNECTED", { email: tokens.email }, req);
+    }
+
+    res.json({
+      success: true,
+      message: "Google OAuth tokens received successfully",
+      refreshToken: tokens.refresh_token,
+      accessToken: tokens.access_token,
+      expiryDate: tokens.expiry_date,
+    });
+  } catch (error) {
+    console.error("[Auth] Google callback error:", error);
+    await logActivity(undefined, "GOOGLE_OAUTH_ERROR", { error: String(error) }, req);
+    res.status(500).json({ error: "Failed to complete Google OAuth flow" });
+  }
+});
+
+/**
+ * POST /api/auth/google/disconnect
+ * Disconnect Google OAuth from user account (protected route)
+ */
+router.post("/google/disconnect", authenticate, async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user.id;
+    await GoogleOAuthHelper.revokeUserGoogleAccess(userId);
+    await logActivity(userId, "GOOGLE_OAUTH_DISCONNECTED", {}, req);
+
+    res.json({ message: "Google account has been disconnected" });
+  } catch (error) {
+    console.error("[Auth] Google disconnect error:", error);
+    res.status(500).json({ error: "Failed to disconnect Google account" });
   }
 });
 

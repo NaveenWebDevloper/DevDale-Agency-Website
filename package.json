@@ -11,7 +11,8 @@
     "seo:generate": "node scripts/generate-seo-assets.mjs",
     "start": "node dist/server/index.js",
     "test": "vitest --run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "generate-google-token": "tsx scripts/generate-google-token.ts"
   },
   "dependencies": {
     "@microsoft/clarity": "^1.0.2",
@@ -30,7 +31,8 @@
     "resend": "^6.12.0",
     "zod": "^3.25.76",
     "bcrypt": "^5.1.0",
-    "jsonwebtoken": "^9.0.0"
+    "jsonwebtoken": "^9.0.0",
+    "googleapis": "^118.0.0"
   },
   "devDependencies": {
     "@hookform/resolvers": "^5.2.1",

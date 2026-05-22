@@ -14,6 +14,9 @@ export interface IBooking extends Document {
   status: "Pending" | "Confirmed" | "Completed" | "Cancelled" | "Rescheduled" | "No Show";
   googleEventId?: string;
   googleMeetLink?: string;
+  googleCalendarLink?: string;
+  googleCalendarEventId?: string;
+  duration?: number; // Duration in minutes
   cancellationReason?: string;
   rescheduleReason?: string;
   utmSource?: string;
@@ -42,6 +45,9 @@ const BookingSchema: Schema = new Schema(
     },
     googleEventId: { type: String },
     googleMeetLink: { type: String },
+    googleCalendarLink: { type: String },
+    googleCalendarEventId: { type: String },
+    duration: { type: Number, default: 60 }, // Duration in minutes
     cancellationReason: { type: String },
     rescheduleReason: { type: String },
     utmSource: { type: String },

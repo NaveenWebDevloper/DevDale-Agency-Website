@@ -4,8 +4,13 @@ import { motion, Variants } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { TWITTER_URL, LINKEDIN_URL, INSTAGRAM_URL, CONTACT_PHONE } from "../lib/seo";
 
-export default function Footer() {
+interface FooterProps {
+  variant?: "dark" | "light";
+}
+
+export default function Footer({ variant = "dark" }: FooterProps) {
   const navigate = useNavigate();
+  const isLight = variant === "light";
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -29,10 +34,16 @@ export default function Footer() {
   };
 
   return (
-    <footer id="contact" className="relative w-full bg-black text-white overflow-hidden">
+    <footer id="contact" className={`relative w-full overflow-hidden ${isLight ? "bg-[#f7f4ee] text-black border-t border-zinc-200" : "bg-black text-white"}`}>
       {/* Noise and Grid Overlays */}
       <div className="absolute inset-0 noise opacity-[0.03] pointer-events-none" />
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+      <div
+        className="absolute inset-0 opacity-[0.03] pointer-events-none"
+        style={{
+          backgroundImage: `radial-gradient(circle, ${isLight ? "#000" : "#fff"} 1px, transparent 1px)`,
+          backgroundSize: "40px 40px",
+        }}
+      />
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 relative z-10 pt-16 md:pt-32 pb-10 md:pb-16">
         <div className="mb-16 md:mb-32">
@@ -48,7 +59,7 @@ export default function Footer() {
                 Let's build <br />
                 <span className="text-shine-white">the future</span>.
               </h2>
-              <p className="text-base md:text-2xl font-medium text-white/50 tracking-tight leading-relaxed">
+              <p className={`text-base md:text-2xl font-medium tracking-tight leading-relaxed ${isLight ? "text-black/50" : "text-white/50"}`}>
                 Have a vision that needs engineering? We're ready when you are.
               </p>
             </div>
@@ -59,10 +70,18 @@ export default function Footer() {
             >
               <button
                 onClick={() => navigate('/contact')}
-                className="group w-full sm:w-auto inline-flex items-center justify-center gap-4 px-8 py-5 md:px-12 md:py-8 rounded-full border border-white/20 hover:bg-white hover:text-black hover:border-white transition-all duration-700"
+                className={`group w-full sm:w-auto inline-flex items-center justify-center gap-4 px-8 py-5 md:px-12 md:py-8 rounded-full border transition-all duration-700 ${
+                  isLight
+                    ? "border-black/15 hover:bg-black hover:text-white hover:border-black"
+                    : "border-white/20 hover:bg-white hover:text-black hover:border-white"
+                }`}
               >
                 <span className="text-lg md:text-2xl font-bold tracking-tight uppercase">Get in touch</span>
-                <div className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-white text-black group-hover:bg-black group-hover:text-white transition-colors flex-shrink-0">
+                <div className={`w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full transition-colors flex-shrink-0 ${
+                  isLight
+                    ? "bg-black text-white group-hover:bg-white group-hover:text-black"
+                    : "bg-white text-black group-hover:bg-black group-hover:text-white"
+                }`}>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M5 12h14M12 5l7 7-7 7" />
                   </svg>
@@ -85,11 +104,11 @@ export default function Footer() {
               <img
                 src="/devdale_logo.svg"
                 alt="TheDevDale Logo"
-                className="w-12 h-12 md:w-16 md:h-16 object-contain invert brightness-[1.5] mix-blend-screen"
+                className={`w-12 h-12 md:w-16 md:h-16 object-contain ${isLight ? "" : "invert brightness-[1.5] mix-blend-screen"}`}
               />
-              <span className="text-2xl md:text-3xl font-bold tracking-tighter">TheDevDale<span className="text-white/30">.</span></span>
+              <span className="text-2xl md:text-3xl font-bold tracking-tighter">TheDevDale<span className={isLight ? "text-black/30" : "text-white/30"}>.</span></span>
             </Link>
-            <p className="text-sm md:text-lg text-white/40 font-medium leading-relaxed mb-6 md:mb-10">
+            <p className={`text-sm md:text-lg font-medium leading-relaxed mb-6 md:mb-10 ${isLight ? "text-black/50" : "text-white/40"}`}>
               A premium engineering lab building next-gen digital experiences.
             </p>
             <div className="flex gap-4 md:gap-6">
@@ -113,17 +132,18 @@ export default function Footer() {
 
           {/* Navigation */}
           <motion.div variants={itemVariants}>
-            <h4 className="text-[10px] font-bold tracking-[0.2em] uppercase text-white/20 mb-6 md:mb-10">Navigation</h4>
+            <h4 className={`text-[10px] font-bold tracking-[0.2em] uppercase mb-6 md:mb-10 ${isLight ? "text-black/30" : "text-white/20"}`}>Navigation</h4>
             <ul className="space-y-4 md:space-y-6 text-base md:text-xl font-bold tracking-tight">
               {[
                 { name: 'Home', path: '/' },
                 { name: 'Work', path: '/#work' },
                 { name: 'About', path: '/about' },
+                { name: 'Book a Call', path: '/book' },
                 { name: 'Pricing', path: '/pricing' },
                 { name: 'Contact', path: '/contact' }
               ].map(item => (
                 <li key={item.name}>
-                  <Link to={item.path} className="hover:text-white/60 transition-colors uppercase tracking-widest text-xs font-black">{item.name}</Link>
+                  <Link to={item.path} className={`transition-colors uppercase tracking-widest text-xs font-black ${isLight ? "hover:text-black/55" : "hover:text-white/60"}`}>{item.name}</Link>
                 </li>
               ))}
             </ul>
@@ -131,25 +151,26 @@ export default function Footer() {
 
           {/* Contact Details */}
           <motion.div variants={itemVariants} className="col-span-1 sm:col-span-2 md:col-span-2">
-            <h4 className="text-[10px] font-bold tracking-[0.2em] uppercase text-white/20 mb-6 md:mb-10">Connect</h4>
+            <h4 className={`text-[10px] font-bold tracking-[0.2em] uppercase mb-6 md:mb-10 ${isLight ? "text-black/30" : "text-white/20"}`}>Connect</h4>
             <div className="space-y-5 md:space-y-8">
               <div>
-                <span className="text-xs font-bold tracking-widest uppercase text-white/40 block mb-2">Inquiries</span>
-                <a href="mailto:hello@thedevdale.com" className="text-base md:text-2xl lg:text-4xl font-bold tracking-tighter hover:text-white/60 transition-colors break-all leading-tight block">hello@thedevdale.com</a>
+                <span className={`text-xs font-bold tracking-widest uppercase block mb-2 ${isLight ? "text-black/45" : "text-white/40"}`}>Inquiries</span>
+                <a href="mailto:hello@thedevdale.com" className={`text-base md:text-2xl lg:text-4xl font-bold tracking-tighter transition-colors break-all leading-tight block ${isLight ? "hover:text-black/55" : "hover:text-white/60"}`}>hello@thedevdale.com</a>
               </div>
               <div>
-                <span className="text-xs font-bold tracking-widest uppercase text-white/40 block mb-2">Phone</span>
+                <span className={`text-xs font-bold tracking-widest uppercase block mb-2 ${isLight ? "text-black/45" : "text-white/40"}`}>Phone</span>
                 <a href={`tel:${CONTACT_PHONE.replace(/\s+/g, '')}`} className="text-lg md:text-2xl font-bold tracking-tight">{CONTACT_PHONE}</a>
               </div>
             </div>
           </motion.div>
         </motion.div>
 
-        <div className="pt-8 md:pt-16 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 md:gap-8 text-white/20">
+        <div className={`pt-8 md:pt-16 border-t flex flex-col md:flex-row justify-between items-center gap-4 md:gap-8 ${isLight ? "border-black/10 text-black/35" : "border-white/5 text-white/20"}`}>
           <p className="text-xs md:text-sm font-bold tracking-tight text-center md:text-left">© 2026 THEDEVDALE. ALL RIGHTS RESERVED.</p>
           <div className="flex gap-6 md:gap-12 text-[10px] md:text-xs font-bold tracking-widest uppercase">
-            <Link to="/legal" className="hover:text-white transition-colors cursor-pointer">Privacy Policy</Link>
-            <Link to="/legal" className="hover:text-white transition-colors cursor-pointer">Terms of Service</Link>
+            <Link to="/admin" className={`transition-colors cursor-pointer ${isLight ? "hover:text-black" : "hover:text-white"}`}>Admin OS</Link>
+            <Link to="/legal" className={`transition-colors cursor-pointer ${isLight ? "hover:text-black" : "hover:text-white"}`}>Privacy Policy</Link>
+            <Link to="/legal" className={`transition-colors cursor-pointer ${isLight ? "hover:text-black" : "hover:text-white"}`}>Terms of Service</Link>
           </div>
         </div>
       </div>

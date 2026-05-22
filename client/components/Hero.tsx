@@ -192,19 +192,18 @@ const Hero = ({ isLoaded }: { isLoaded?: boolean }) => {
         >
           {/* A11Y FIX: was <button onClick={navigate('/contact')}> — now a proper <Link> */}
           <Link
-            to="/contact"
+            to="/book"
             className="group px-10 py-4 bg-black text-white rounded-full text-base font-bold transition-all shadow-xl hover:shadow-2xl hover:bg-zinc-800 flex items-center gap-3 hover:scale-105 hover:-translate-y-0.5 active:scale-95"
           >
-            Start Building
+            Book a Call
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
           </Link>
 
           <Link
-            to="/pricing"
+            to="/contact"
             className="flex items-center gap-3 px-10 py-4 bg-white text-black border border-gray-100 rounded-full text-base font-bold hover:bg-gray-50 transition-all shadow-lg hover:scale-105 hover:-translate-y-0.5 active:scale-95"
           >
-            <DollarSign className="w-4 h-4 text-emerald-500" />
-            Request for Pricing
+            Start Building
           </Link>
         </m.div>
       </div>

@@ -3,6 +3,7 @@ import Availability, { IAvailability } from "../models/Availability";
 import Booking, { IBooking } from "../models/Booking";
 import BlockedDate from "../models/BlockedDate";
 import mongoose from "mongoose";
+import { CalendarService } from "./calendarService";
 
 interface TimeSlotResponse {
   time: string; // "HH:MM" in target timezone
@@ -140,6 +141,40 @@ export class AvailabilityEngine {
         occupiedEnd: startMin + duration + buffer
       };
     });
+
+    // 4b. Fetch real-time busy blocks from Google Calendar to prevent conflicts and ensure full two-way syncing
+    try {
+      const timeMin = normalizedDate.toISOString();
+      const timeMax = new Date(normalizedDate.getTime() + 24 * 60 * 60 * 1000).toISOString();
+      const googleBusySlots = await CalendarService.getBusySlots(timeMin, timeMax);
+      
+      const targetMidnight = normalizedDate.getTime();
+      const dayLengthMs = 24 * 60 * 60 * 1000;
+
+      for (const busy of googleBusySlots) {
+        const busyStart = new Date(busy.start).getTime();
+        const busyEnd = new Date(busy.end).getTime();
+        
+        // Find overlap with target day
+        const overlapStart = Math.max(busyStart, targetMidnight);
+        const overlapEnd = Math.min(busyEnd, targetMidnight + dayLengthMs);
+        
+        if (overlapStart < overlapEnd) {
+          const startMin = Math.floor((overlapStart - targetMidnight) / (60 * 1000));
+          const endMin = Math.ceil((overlapEnd - targetMidnight) / (60 * 1000));
+          
+          bookedBlocks.push({
+            start: startMin,
+            end: endMin,
+            buffer: 0,
+            occupiedStart: startMin,
+            occupiedEnd: endMin
+          });
+        }
+      }
+    } catch (gcalErr) {
+      console.error("[AvailabilityEngine] Google FreeBusy check failed (non-blocking fallback):", gcalErr);
+    }
 
     const slots: TimeSlotResponse[] = [];
     const serviceDuration = service.duration;

@@ -50,19 +50,17 @@ export default function ConversionLayer() {
           <FileSearch size={15} />
           Free Audit
         </Link>
-        <a
-          href={CALENDLY_URL}
-          target="_blank"
-          rel="noreferrer"
+        <Link
+          to="/book"
           onClick={() => {
-            track("calendly_click", { path: location.pathname });
+            track("book_call_click", { path: location.pathname });
             track("consultation_booked", { path: location.pathname });
           }}
           className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-black/5 text-black transition-colors hover:bg-black hover:text-white"
           aria-label="Book a strategy call"
         >
           <CalendarDays size={17} />
-        </a>
+        </Link>
         <a
           href={WHATSAPP_URL}
           target="_blank"

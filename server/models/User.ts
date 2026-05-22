@@ -11,6 +11,11 @@ export interface IUser extends Document {
   refreshTokens?: string[];
   passwordResetToken?: string;
   passwordResetExpires?: Date;
+  // Google OAuth fields
+  googleId?: string;
+  googleRefreshToken?: string;
+  googleAccessToken?: string;
+  googleTokenExpiry?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -27,6 +32,11 @@ const UserSchema: Schema = new Schema(
     refreshTokens: { type: [String], default: [] },
     passwordResetToken: { type: String },
     passwordResetExpires: { type: Date },
+    // Google OAuth fields
+    googleId: { type: String },
+    googleRefreshToken: { type: String },
+    googleAccessToken: { type: String },
+    googleTokenExpiry: { type: Date },
   },
   {
     timestamps: true,

@@ -152,7 +152,7 @@ export default function Navbar({ isLoaded }: NavbarProps) {
 
   const handleCTAClick = () => {
     setIsMenuOpen(false);
-    navigate("/contact");
+    navigate("/book");
   };
 
   return (
@@ -215,7 +215,7 @@ export default function Navbar({ isLoaded }: NavbarProps) {
                 onClick={handleCTAClick}
                 className="px-6 h-10 bg-black text-white rounded-full text-[10px] font-bold tracking-widest uppercase shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 active:scale-95"
               >
-                Start Building
+                Book a Call
               </Button>
             </div>
 
@@ -309,7 +309,7 @@ export default function Navbar({ isLoaded }: NavbarProps) {
                 onClick={handleCTAClick}
                 className="flex items-center justify-between w-full px-5 py-3.5 bg-black text-white rounded-2xl group"
               >
-                <span className="text-xs font-black uppercase tracking-widest">Start Building</span>
+                <span className="text-xs font-black uppercase tracking-widest">Book a Call</span>
                 <motion.div
                   whileHover={{ rotate: -45, scale: 1.2 }}
                   transition={{ duration: 0.2 }}
