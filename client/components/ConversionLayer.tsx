@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { CalendarDays, FileSearch, MessageCircle } from "lucide-react";
-import { CALENDLY_URL, WHATSAPP_URL } from "@/lib/seo";
+import { WHATSAPP_URL } from "@/lib/seo";
 import { trackClarityEvent } from "@/analytics/clarity";
 
 declare global {

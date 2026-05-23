@@ -16,13 +16,13 @@ import {
 
 const baseOrganization = {
   "@type": "Organization",
-  "@id": `${SITE_URL}/#organization`,
-  name: BRAND_NAME,
-  url: SITE_URL,
-  logo: DEFAULT_IMAGE,
+  "@id": `https://www.thedevdale.com/#organization`,
+  name: "DevDale Agency",
+  url: "https://www.thedevdale.com",
+  logo: "https://www.thedevdale.com/logo.png",
   email: CONTACT_EMAIL,
   telephone: CONTACT_PHONE,
-  sameAs: [LINKEDIN_URL, INSTAGRAM_URL, TWITTER_URL],
+  sameAs: [INSTAGRAM_URL, LINKEDIN_URL, TWITTER_URL],
   contactPoint: [
     {
       "@type": "ContactPoint",

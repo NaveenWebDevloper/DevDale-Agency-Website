@@ -20,13 +20,13 @@ interface FAQItem {
 const NAVEEN: Author = {
   name: "Naveen Vadla",
   role: "Founder & Backend Engineer",
-  image: "/NaveenImage.jpg"
+  image: "/NaveenImage.webp"
 };
 
 const SRIKANTH: Author = {
   name: "Srikanth",
   role: "Co-Founder & Frontend Engineer",
-  image: "/srikanthImage.jpeg"
+  image: "/srikanthImage.webp"
 };
 
 const faqs: FAQItem[] = [
@@ -170,6 +170,9 @@ export default function FAQ() {
                             <img 
                                src={faq.author.image} 
                                alt={faq.author.name} 
+                               width={56}
+                               height={56}
+                               loading="lazy"
                                className="w-14 h-14 rounded-full object-cover border border-white/10 shadow-xl" 
                             />
                             <span className="absolute bottom-0 right-0 flex h-3.5 w-3.5">

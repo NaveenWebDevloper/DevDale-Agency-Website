@@ -4,9 +4,9 @@ import { trackClarityEvent } from "@/analytics/clarity";
 import { Link } from "react-router-dom";
 
 const items = [
-  { name: "VGS Global", image: "/projects/vgsglobal.png", category: "Website Development", result: "Performance focused business website" },
-  { name: "Patents Planet", image: "/projects/patentsplanet.png", category: "Technical Platform", result: "Structured service UX and lead paths" },
-  { name: "Crop Planning", image: "/projects/cropplanning.png", category: "Application Development", result: "Planning interface for operational workflows" },
+  { name: "VGS Global", image: "/projects/vgsglobal.webp", category: "Website Development", result: "Performance focused business website" },
+  { name: "Patents Planet", image: "/projects/patentsplanet.webp", category: "Technical Platform", result: "Structured service UX and lead paths" },
+  { name: "Crop Planning", image: "/projects/cropplanning.webp", category: "Application Development", result: "Planning interface for operational workflows" },
 ];
 
 export default function PortfolioIndex() {
@@ -26,7 +26,14 @@ export default function PortfolioIndex() {
               className="group overflow-hidden border border-black/10"
             >
               <div className="aspect-[4/3] overflow-hidden bg-zinc-100">
-                <img src={item.image} alt={`${item.name} ${item.category} portfolio project by TheDevDale`} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                <img 
+                  src={item.image} 
+                  alt={`${item.name} ${item.category} portfolio project by TheDevDale`} 
+                  width={400}
+                  height={300}
+                  loading="lazy" 
+                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" 
+                />
               </div>
               <div className="p-6">
                 <p className="mb-3 text-[10px] font-black uppercase tracking-[0.35em] text-black/35">{item.category}</p>

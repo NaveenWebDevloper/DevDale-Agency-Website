@@ -44,53 +44,18 @@
     <meta name="twitter:description" content="High performance websites, AI applications, SEO systems, UI UX design, automation, and conversion focused digital growth engines." />
     <meta name="twitter:image" content="https://www.thedevdale.com/og-image.png" />
     <meta name="twitter:image:alt" content="TheDevDale — Web Development, AI & SEO Agency" />
-
-    <!-- JSON-LD Structured Data -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "TheDevDale",
-      "url": "https://www.thedevdale.com/",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://www.thedevdale.com/devdale_logo.svg"
-      },
-      "description": "Web Development, AI Development and SEO Agency",
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "contactType": "sales",
-        "url": "https://www.thedevdale.com/contact"
-      }
-    }
-    </script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "TheDevDale",
-      "url": "https://www.thedevdale.com/"
-    }
-    </script>
-
-    <!--
-      PERF FIX: Removed hardcoded GTM <script> from <head>.
-      GTM is now loaded lazily via AnalyticsTags.tsx after first user
-      interaction or after 3s — saving ~200ms of TBT and 157KB of
-      render-blocking transfer on first paint.
-
-      Preconnect hints allow the browser to open early TCP/TLS connections
-      to third-party origins without blocking the parser.
-    -->
+    <!-- Performance Hints & Preconnects -->
     <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="dns-prefetch" href="https://scripts.clarity.ms" />
     <link rel="dns-prefetch" href="https://static.cloudflareinsights.com" />
     <link rel="dns-prefetch" href="https://www.google-analytics.com" />
 
-    <!-- Performance Hints -->
+    <!-- Performance Preloads -->
     <link rel="preload" href="/fonts/devdale2.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/devdale_logo.svg" as="image" />
+    <link rel="preload" href="/claude-icon-logo.webp" as="image" />
   </head>
   <body>
     <div id="root"></div>

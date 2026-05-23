@@ -1,33 +1,30 @@
-import { useState } from "react";
+import { useState, lazy, Suspense } from "react";
 import Navbar from "../components/Navbar";
-import Preloader from "../components/Preloader";
 import Hero from "../components/Hero";
-import Challenges from "../components/Challenges";
-import WhyChoose from "../components/WhyChoose";
-import Solutions from "../components/Solutions";
-import Portfolio from "../components/Portfolio";
-import HowToGetStarted from "../components/HowToGetStarted";
-import ClientFeedback from "../components/ClientFeedback";
-import Comparison from "../components/Comparison";
-import FAQ from "../components/FAQ";
-import Footer from "../components/Footer";
 import { SmoothScroll } from "../components/SmoothScroll";
 
+// Lazy load below-the-fold components
+const Challenges = lazy(() => import("../components/Challenges"));
+const WhyChoose = lazy(() => import("../components/WhyChoose"));
+const Solutions = lazy(() => import("../components/Solutions"));
+const Portfolio = lazy(() => import("../components/Portfolio"));
+const HowToGetStarted = lazy(() => import("../components/HowToGetStarted"));
+const ClientFeedback = lazy(() => import("../components/ClientFeedback"));
+const Comparison = lazy(() => import("../components/Comparison"));
+const FAQ = lazy(() => import("../components/FAQ"));
+const Footer = lazy(() => import("../components/Footer"));
+
 export default function Index() {
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded] = useState(true);
+
+  // Reusable lightweight fallback to prevent layout shifts
+  const SectionFallback = () => (
+    <div className="w-full h-[400px] bg-gray-50/5 animate-pulse-soft border border-black/[0.02] rounded-[2.5rem]" />
+  );
 
   return (
     <SmoothScroll>
       <div className="w-full max-w-[100vw] overflow-x-hidden bg-white relative">
-        {/* Preloader sits on top as a visual overlay — content is always in DOM */}
-        <Preloader onComplete={() => setIsLoaded(true)} />
-
-        {/*
-          CLS FIX: Content is always rendered in the DOM so the browser
-          never has to shift elements into existence after the preloader exits.
-          We use visibility:hidden (not display:none) so layout is preserved
-          and no reflow occurs on reveal — only a paint operation.
-        */}
         <div
           style={{ visibility: isLoaded ? "visible" : "hidden" }}
           aria-hidden={!isLoaded}
@@ -36,16 +33,43 @@ export default function Index() {
           <Navbar isLoaded={isLoaded} />
           <main>
             <Hero isLoaded={isLoaded} />
-            <Challenges isLoaded={isLoaded} />
-            <WhyChoose isLoaded={isLoaded} />
-            <Solutions />
-            <Portfolio isLoaded={isLoaded} />
-            <HowToGetStarted />
-            <ClientFeedback />
-            <Comparison />
-            <FAQ />
+            
+            <Suspense fallback={<SectionFallback />}>
+              <Challenges isLoaded={isLoaded} />
+            </Suspense>
+            
+            <Suspense fallback={<SectionFallback />}>
+              <WhyChoose isLoaded={isLoaded} />
+            </Suspense>
+            
+            <Suspense fallback={<SectionFallback />}>
+              <Solutions />
+            </Suspense>
+            
+            <Suspense fallback={<SectionFallback />}>
+              <Portfolio isLoaded={isLoaded} />
+            </Suspense>
+            
+            <Suspense fallback={<SectionFallback />}>
+              <HowToGetStarted />
+            </Suspense>
+            
+            <Suspense fallback={<SectionFallback />}>
+              <ClientFeedback />
+            </Suspense>
+            
+            <Suspense fallback={<SectionFallback />}>
+              <Comparison />
+            </Suspense>
+            
+            <Suspense fallback={<SectionFallback />}>
+              <FAQ />
+            </Suspense>
           </main>
-          <Footer />
+          
+          <Suspense fallback={<div className="w-full h-48 bg-gray-50/5 animate-pulse-soft" />}>
+            <Footer />
+          </Suspense>
         </div>
       </div>
     </SmoothScroll>

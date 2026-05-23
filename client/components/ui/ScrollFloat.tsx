@@ -1,10 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import './ScrollFloat.css';
-
-gsap.registerPlugin(ScrollTrigger);
 
 interface ScrollFloatProps {
   children: React.ReactNode;
@@ -45,36 +41,55 @@ const ScrollFloat: React.FC<ScrollFloatProps> = ({
     if (!el) return;
 
     const charElements = el.querySelectorAll('.char');
+    let active = true;
 
-    gsap.fromTo(
-      charElements,
-      {
-        willChange: 'opacity, transform',
-        opacity: 0,
-        yPercent: 120,
-        scaleY: 2.3,
-        scaleX: 0.7,
-        transformOrigin: '50% 0%'
-      },
-      {
-        duration: animationDuration,
-        ease: ease,
-        opacity: 1,
-        yPercent: 0,
-        scaleY: 1,
-        scaleX: 1,
-        stagger: stagger,
-        scrollTrigger: {
-          trigger: el,
-          start: scrollStart,
-          once: true,
-          toggleActions: 'play none none none',
+    Promise.all([
+      import('gsap'),
+      import('gsap/ScrollTrigger')
+    ]).then(([gsapM, ScrollTriggerM]) => {
+      if (!active) return;
+
+      const gsap = gsapM.gsap;
+      const ScrollTrigger = ScrollTriggerM.ScrollTrigger;
+      
+      gsap.registerPlugin(ScrollTrigger);
+
+      gsap.fromTo(
+        charElements,
+        {
+          willChange: 'opacity, transform',
+          opacity: 0,
+          yPercent: 120,
+          scaleY: 2.3,
+          scaleX: 0.7,
+          transformOrigin: '50% 0%'
+        },
+        {
+          duration: animationDuration,
+          ease: ease,
+          opacity: 1,
+          yPercent: 0,
+          scaleY: 1,
+          scaleX: 1,
+          stagger: stagger,
+          scrollTrigger: {
+            trigger: el,
+            start: scrollStart,
+            once: true,
+            toggleActions: 'play none none none',
+          }
         }
-      }
-    );
+      );
+    });
 
     return () => {
-      ScrollTrigger.getAll().forEach(t => t.kill());
+      active = false;
+      import('gsap/ScrollTrigger').then((ScrollTriggerM) => {
+        const ScrollTrigger = ScrollTriggerM.ScrollTrigger;
+        ScrollTrigger.getAll().forEach(t => {
+          if (t.trigger === el) t.kill();
+        });
+      });
     };
   }, [scrollContainerRef, animationDuration, ease, scrollStart, scrollEnd, stagger]);
 

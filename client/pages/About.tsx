@@ -347,7 +347,7 @@ function HeroSection() {
 
             {/* Member 1 — Backend — middle left */}
             <FounderCard
-              src="/NaveenImage.jpg"
+              src="/NaveenImage.webp"
               name="Naveen"
               role="Founder & Backend Engineer"
               className="absolute top-10 left-0 w-[160px] md:w-[220px] z-30"
@@ -358,7 +358,7 @@ function HeroSection() {
 
             {/* Member 2 — Frontend — top right */}
             <FounderCard
-              src="/srikanthImage.jpeg"
+              src="/srikanthImage.webp"
               name="Srikanth"
               role="Co-Founder & Frontend"
               className="absolute top-24 right-0 w-[160px] md:w-[220px] z-20"
@@ -369,7 +369,7 @@ function HeroSection() {
 
             {/* Member 3 — Designer — bottom center */}
             <FounderCard
-              src="/karthikImage.png"
+              src="/karthikImage.webp"
               name="Karthik"
               role="Co-Founder & Lead Designer"
               className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[160px] md:w-[220px] z-30"
@@ -439,7 +439,14 @@ function FounderCard({
 
       {/* Image */}
       <div className="relative w-full h-full rounded-[1.25rem] overflow-hidden border border-white/10 shadow-2xl">
-        <img src={src} alt={name} className="w-full h-full object-cover" />
+        <img 
+          src={src} 
+          alt={name} 
+          width={220}
+          height={293}
+          loading="lazy"
+          className="w-full h-full object-cover" 
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
         {/* Name badge inside image at bottom */}
         <motion.div
