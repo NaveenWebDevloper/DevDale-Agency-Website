@@ -124,5 +124,18 @@
     "scripts": [
       "dist/server/**/*.js"
     ]
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "bcrypt",
+      "cwebp-bin",
+      "esbuild",
+      "gifsicle",
+      "jpegtran-bin",
+      "mozjpeg",
+      "optipng-bin",
+      "pngquant-bin",
+      "sharp"
+    ]
   }
 }
