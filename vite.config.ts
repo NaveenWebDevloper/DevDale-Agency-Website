@@ -33,6 +33,7 @@ export default defineConfig({
     cssMinify: true,
     minify: "esbuild",
     sourcemap: false,
+    chunkSizeWarningLimit: 1500,
     target: "es2020",
     rollupOptions: {
       input: {
