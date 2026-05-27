@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { getPageByPath, seoPages } from "@/lib/seo";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import { SmoothScroll } from "@/components/SmoothScroll";
 
 export default function SeoLandingPage() {
   const location = useLocation();
@@ -12,7 +13,8 @@ export default function SeoLandingPage() {
   const related = page.related.map((path) => seoPages.find((item) => item.path === path)).filter(Boolean);
 
   return (
-    <div className="min-h-screen bg-white text-black">
+    <SmoothScroll>
+      <div className="min-h-screen bg-white text-black">
       <Navbar isLoaded />
       <main>
         <section className="relative overflow-hidden border-b border-black/10 bg-white px-6 pb-20 pt-32 md:px-12 md:pb-28 md:pt-44">
@@ -119,5 +121,6 @@ export default function SeoLandingPage() {
       </main>
       <Footer />
     </div>
+  </SmoothScroll>
   );
 }

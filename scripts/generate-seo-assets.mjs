@@ -19,7 +19,6 @@ const routes = [
   "/industries/saas",
   "/industries/ecommerce",
   "/industries/restaurants",
-  "/industries/real-estate",
   "/blog/custom-ai-chatbots",
   "/blog/ai-business-automation",
   "/blog/openai-integrations",

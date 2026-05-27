@@ -41,7 +41,7 @@ export function serveStatic(app: Express) {
     throw new Error(`Could not find a build: ${distPath}. Build the project first.`);
   }
 
-  app.use(express.static(distPath));
+  app.use(express.static(distPath, { maxAge: '31536000', immutable: true }));
   app.use((_req, res) => {
     res.sendFile(path.resolve(distPath, "index.html"));
   });

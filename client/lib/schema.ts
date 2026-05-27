@@ -19,7 +19,7 @@ const baseOrganization = {
   "@id": `https://www.thedevdale.com/#organization`,
   name: "DevDale Agency",
   url: "https://www.thedevdale.com",
-  logo: "https://www.thedevdale.com/logo.png",
+  logo: "https://www.thedevdale.com/logo.webp",
   email: CONTACT_EMAIL,
   telephone: CONTACT_PHONE,
   sameAs: [INSTAGRAM_URL, LINKEDIN_URL, TWITTER_URL],

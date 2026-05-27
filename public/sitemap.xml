@@ -154,15 +154,6 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://thedevdale.com/industries/restaurants" />
   </url>
   <url>
-    <loc>https://thedevdale.com/industries/real-estate</loc>
-    <lastmod>2026-05-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en-IN" href="https://thedevdale.com/industries/real-estate" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://thedevdale.com/industries/real-estate" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://thedevdale.com/industries/real-estate" />
-  </url>
-  <url>
     <loc>https://thedevdale.com/blog/custom-ai-chatbots</loc>
     <lastmod>2026-05-21</lastmod>
     <changefreq>monthly</changefreq>

@@ -40,14 +40,14 @@ export default function ConversionLayer() {
   }, [location.pathname]);
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 z-[120] pointer-events-none md:left-auto md:right-6 md:w-auto">
-      <div className="mx-auto flex max-w-xl items-center justify-center gap-2 rounded-full border border-black/10 bg-white/90 p-2 shadow-[0_12px_40px_rgba(0,0,0,0.14)] backdrop-blur-xl pointer-events-auto md:max-w-none">
+    <div className="hidden md:block md:fixed md:bottom-32 md:left-auto md:right-8 md:w-auto z-[120] pointer-events-none">
+      <div className="mx-auto flex max-w-xl items-center justify-center gap-1.5 rounded-full border border-black/10 bg-white/90 p-1.5 shadow-[0_10px_30px_rgba(0,0,0,0.12)] backdrop-blur-xl pointer-events-auto md:max-w-none">
         <Link
           to="/contact#audit"
           onClick={() => track("free_audit_cta_click", { path: location.pathname })}
-          className="inline-flex h-11 items-center gap-2 rounded-full bg-black px-4 text-xs font-black uppercase tracking-widest text-white transition-transform hover:-translate-y-0.5"
+          className="inline-flex h-9 items-center gap-1.5 rounded-full bg-black px-3.5 text-[10px] font-black uppercase tracking-widest text-white transition-transform hover:-translate-y-0.5"
         >
-          <FileSearch size={15} />
+          <FileSearch size={13} />
           Free Audit
         </Link>
         <Link
@@ -56,20 +56,20 @@ export default function ConversionLayer() {
             track("book_call_click", { path: location.pathname });
             track("consultation_booked", { path: location.pathname });
           }}
-          className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-black/5 text-black transition-colors hover:bg-black hover:text-white"
+          className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-black/5 text-black transition-colors hover:bg-black hover:text-white"
           aria-label="Book a strategy call"
         >
-          <CalendarDays size={17} />
+          <CalendarDays size={15} />
         </Link>
         <a
           href={WHATSAPP_URL}
           target="_blank"
           rel="noreferrer"
           onClick={() => track("whatsapp_click", { path: location.pathname })}
-          className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-emerald-500 text-white transition-transform hover:-translate-y-0.5"
+          className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-emerald-500 text-white transition-transform hover:-translate-y-0.5"
           aria-label="Chat on WhatsApp"
         >
-          <MessageCircle size={17} />
+          <MessageCircle size={15} />
         </a>
       </div>
     </div>

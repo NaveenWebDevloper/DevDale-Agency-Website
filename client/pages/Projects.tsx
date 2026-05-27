@@ -214,7 +214,7 @@ export default function Projects() {
                            >
                               <Link to={`/work/${project.id}`} className="block space-y-12">
                                  <div className="relative aspect-[16/9] rounded-[3.5rem] overflow-hidden bg-gray-50 border border-black/5 shadow-sm group-hover:shadow-2xl transition-all duration-[1.5s]">
-                                    <img 
+                                    <img loading="lazy" 
                                        src={project.image} 
                                        alt={project.title}
                                        className="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-[2s] scale-100 group-hover:scale-105"

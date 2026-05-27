@@ -258,7 +258,7 @@ export default function ProjectDetail() {
                       <div className="text-[10px] font-black uppercase tracking-[0.3em] text-black/30 italic">A conversation with:</div>
                       <div className="flex items-center gap-6">
                          <div className="relative">
-                            <img src={project.client.avatar} alt={project.client.name} className="w-16 h-16 rounded-2xl border border-black/5 object-cover" />
+                            <img loading="lazy" src={project.client.avatar} alt={project.client.name} className="w-16 h-16 rounded-2xl border border-black/5 object-cover" />
                             <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-2 border-white" />
                          </div>
                          <div>
@@ -302,7 +302,7 @@ export default function ProjectDetail() {
                      animate={{ opacity: 1, scale: 1 }}
                      className="aspect-[16/9] md:aspect-[16/8] rounded-[1.5rem] md:rounded-[3rem] overflow-hidden border border-black/5 shadow-2xl relative group bg-gray-50"
                    >
-                       <img src={project.heroImage} className="w-full h-full object-cover transition-transform duration-[3s] group-hover:scale-110" alt="Hero Visual" />
+                       <img loading="lazy" src={project.heroImage} className="w-full h-full object-cover transition-transform duration-[3s] group-hover:scale-110" alt="Hero Visual" />
                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
                    </motion.div>
                 </div>
@@ -417,7 +417,7 @@ export default function ProjectDetail() {
 
                   {/* Contextual Banner */}
                   <div className="aspect-[21/9] rounded-[3rem] overflow-hidden border border-black/5 shadow-2xl relative">
-                     <img src={project.image} className="w-full h-full object-cover" alt="Product Reveal" />
+                     <img loading="lazy" src={project.image} className="w-full h-full object-cover" alt="Product Reveal" />
                      <div className="absolute inset-0 bg-black/10 flex items-center justify-center">
                         <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center cursor-pointer hover:scale-110 transition-transform">
                            <div className="translate-x-0.5 w-0 h-0 border-t-[10px] border-t-transparent border-l-[18px] border-l-black border-b-[10px] border-b-transparent" />
@@ -481,7 +481,7 @@ export default function ProjectDetail() {
                 {relatedProjects.map((rp) => (
                   <Link to={`/work/${rp.id}`} key={rp.id} className="group space-y-8">
                      <div className="aspect-[4/2] rounded-[2.5rem] overflow-hidden bg-gray-50 border border-black/5 relative shadow-sm group-hover:shadow-xl transition-all duration-700">
-                        <img src={rp.image} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-ease-in-out duration-1000 scale-100 group-hover:scale-100" alt={rp.title} />
+                        <img loading="lazy" src={rp.image} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-ease-in-out duration-1000 scale-100 group-hover:scale-100" alt={rp.title} />
                      </div>
                      <div className="px-4 space-y-3">
                         <h4 className="text-xl font-black uppercase tracking-tighter">{rp.title}</h4>

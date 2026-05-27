@@ -3,6 +3,8 @@
 import { motion, Variants, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { TechIcon } from "./TechIcon";
 import { useState, useRef } from "react";
+import BorderGlow from "./BorderGlow";
+import GlitchText from "./GlitchText";
 
 interface Advantage {
   title: string;
@@ -224,41 +226,69 @@ export default function WhyChoose({ isLoaded = true }: WhyChooseProps) {
             <motion.div
               key={idx}
               variants={itemVariants}
-              className="relative aspect-square md:aspect-auto md:min-h-[450px] w-full rounded-[3rem] bg-[#FBFBFB] border border-black/[0.03] p-12 transition-all duration-700 hover:bg-white hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.08)] group cursor-pointer"
+              whileHover="hover"
+              className="w-full h-full flex"
             >
-               {/* Detail Header */}
-               <div className="flex items-start justify-between mb-12">
-                  <div className="w-16 h-16 rounded-3xl bg-white shadow-sm flex items-center justify-center text-black border border-black/[0.03] group-hover:scale-110 transition-transform duration-500">
-                    <TechIcon type={item.type} color={true} className="w-8 h-8" />
-                  </div>
-                  <div className="flex flex-col items-end">
-                     <span className="text-[9px] font-black tracking-[0.4em] uppercase opacity-30 group-hover:opacity-100 transition-opacity">Advantage 0{idx + 1}</span>
-                     <div className="mt-2 w-8 h-[1px] bg-black/10 transition-all duration-700 group-hover:w-full group-hover:bg-black/20" />
-                  </div>
-               </div>
+              <BorderGlow
+                edgeSensitivity={20}
+                glowColor="250 80 80"
+                backgroundColor="#FBFBFB"
+                hoverBackgroundColor="#FFFFFF"
+                borderColor="rgba(0, 0, 0, 0.03)"
+                borderRadius={48}
+                glowRadius={60}
+                glowIntensity={0.8}
+                colors={['#8b5cf6', '#ec4899', '#3b82f6']}
+                className="relative aspect-square md:aspect-auto md:min-h-[450px] w-full p-12 group cursor-pointer"
+              >
+                {/* Detail Header */}
+                <div className="flex items-start justify-between mb-12">
+                   <div className="w-16 h-16 rounded-3xl bg-white shadow-sm flex items-center justify-center text-black border border-black/[0.03] group-hover:scale-110 transition-transform duration-500">
+                     <TechIcon type={item.type} color={true} className="w-8 h-8" />
+                   </div>
+                   <div className="flex flex-col items-end">
+                      <span className="text-[9px] font-black tracking-[0.4em] uppercase opacity-30 group-hover:opacity-100 transition-opacity">Advantage 0{idx + 1}</span>
+                      <div className="mt-2 w-8 h-[1px] bg-black/10 transition-all duration-700 group-hover:w-full group-hover:bg-black/20" />
+                   </div>
+                </div>
 
-               {/* Title & Description */}
-               <div className="flex flex-col flex-grow">
-                 <h3 className="text-3xl font-bold tracking-tighter mb-6 group-hover:translate-x-2 transition-transform duration-500">
-                   {item.title}
-                 </h3>
-                 <p className="text-lg text-gray-400 font-medium leading-snug tracking-tight group-hover:text-black transition-colors duration-500">
-                   {item.description}
-                 </p>
-               </div>
+                {/* Title & Description */}
+                <div className="flex flex-col flex-grow">
+                  <h3 className="text-3xl font-bold tracking-tighter mb-6 group-hover:translate-x-2 transition-transform duration-500">
+                    <GlitchText speed={1.2} enableShadows={true} enableOnHover={true}>
+                      {item.title}
+                    </GlitchText>
+                  </h3>
+                  <motion.p
+                    variants={{
+                      hover: {
+                        y: -8,
+                        transition: {
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 10,
+                        }
+                      }
+                    }}
+                    className="text-lg text-gray-400 font-medium leading-snug tracking-tight group-hover:text-black transition-colors duration-500"
+                  >
+                    {item.description}
+                  </motion.p>
+                </div>
 
-               {/* Metric Indicator - Clean Professional Addition */}
-               <div className="mt-auto pt-10 flex items-center justify-between">
-                  <div className="flex flex-col">
-                     <span className="text-[8px] font-black tracking-[0.2em] uppercase opacity-20">Performance Metric</span>
-                     <span className="text-xl font-black tracking-tighter text-black/40 group-hover:text-black transition-colors">
-                        {idx === 0 ? '100% Reliable' : idx === 1 ? 'Pure AI-Core' : idx === 2 ? 'L6 Security' : idx === 3 ? 'Auto-Scaling' : idx === 4 ? 'PCI-Level 1' : 'Real-time'}
-                     </span>
-                  </div>
-                  <div className="w-10 h-10 rounded-full border border-black/[0.03] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-700 translate-x-4 group-hover:translate-x-0">
-                     <span className="text-sm">→</span>
-                  </div>
-               </div>
+                {/* Metric Indicator - Clean Professional Addition */}
+                <div className="mt-auto pt-10 flex items-center justify-between">
+                   <div className="flex flex-col">
+                      <span className="text-[8px] font-black tracking-[0.2em] uppercase opacity-20">Performance Metric</span>
+                      <span className="text-xl font-black tracking-tighter text-black/40 group-hover:text-black transition-colors">
+                         {idx === 0 ? '100% Reliable' : idx === 1 ? 'Pure AI-Core' : idx === 2 ? 'L6 Security' : idx === 3 ? 'Auto-Scaling' : idx === 4 ? 'PCI-Level 1' : 'Real-time'}
+                      </span>
+                   </div>
+                   <div className="w-10 h-10 rounded-full border border-black/[0.03] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-700 translate-x-4 group-hover:translate-x-0">
+                      <span className="text-sm">→</span>
+                   </div>
+                </div>
+              </BorderGlow>
             </motion.div>
           ))}
         </motion.div>

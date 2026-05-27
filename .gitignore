@@ -35,3 +35,11 @@ dist
 build
 .cache
 *.tgz
+
+# Lighthouse & local caches
+lighthouse-*.json
+.npm-cache/
+
+# Ignore generated assets in api folder
+api/*
+!api/index.js

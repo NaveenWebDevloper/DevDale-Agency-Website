@@ -13,6 +13,7 @@ const navItems = [
   { label: "About",    path: "/about",     anchor: null   },
   { label: "Services", path: "/#services", anchor: "services" },
   { label: "Approach", path: "/#approach", anchor: "approach" },
+  { label: "Blog",     path: "/blog",      anchor: null   },
   { label: "Contact",  path: "/contact",   anchor: null       },
 ];
 
@@ -174,7 +175,7 @@ export default function Navbar({ isLoaded }: NavbarProps) {
                 onClick={() => setIsMenuOpen(false)}
                 className="font-bold text-xl tracking-tighter group flex items-center gap-1 z-10"
               >
-                <img src="/devdale_logo.svg" alt="TheDevDale Logo" className="w-12 h-12 object-contain" />
+                <img loading="lazy" src="/devdale_logo.svg" alt="TheDevDale Logo" className="w-12 h-12 object-contain" />
                 <span>TheDevDale</span>
                 <div className="w-1 h-1 rounded-full bg-black group-hover:scale-150 transition-transform duration-500" />
               </Link>
@@ -236,7 +237,7 @@ export default function Navbar({ isLoaded }: NavbarProps) {
                 onClick={() => setIsMenuOpen(false)}
                 className="font-bold text-lg tracking-tighter group flex items-center gap-1 z-10"
               >
-                <img src="/devdale_logo.svg" alt="TheDevDale Logo" className="w-10 h-10 object-contain" />
+                <img loading="lazy" src="/devdale_logo.svg" alt="TheDevDale Logo" className="w-10 h-10 object-contain" />
                 <span>TheDevDale</span>
                 <div className="w-1 h-1 rounded-full bg-black group-hover:scale-150 transition-transform duration-500" />
               </Link>

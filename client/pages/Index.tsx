@@ -2,6 +2,7 @@ import { useState, lazy, Suspense } from "react";
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import { SmoothScroll } from "../components/SmoothScroll";
+import GradualBlur from "../components/GradualBlur";
 
 // Lazy load below-the-fold components
 const Challenges = lazy(() => import("../components/Challenges"));
@@ -70,6 +71,19 @@ export default function Index() {
           <Suspense fallback={<div className="w-full h-48 bg-gray-50/5 animate-pulse-soft" />}>
             <Footer />
           </Suspense>
+
+          {/* Viewport-fixed premium gradual blur at the bottom of the screen */}
+          <GradualBlur
+            target="page"
+            position="bottom"
+            height="8rem"
+            strength={3.5}
+            divCount={8}
+            curve="bezier"
+            exponential={true}
+            opacity={1}
+            zIndex={9999}
+          />
         </div>
       </div>
     </SmoothScroll>

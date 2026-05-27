@@ -100,7 +100,7 @@ export default function Footer({ variant = "dark" }: FooterProps) {
         >
           <motion.div variants={itemVariants} className="col-span-1 sm:col-span-2 md:col-span-1">
             <Link to="/" className="flex items-center gap-1 mb-6 md:mb-10 group opacity-80 hover:opacity-100 transition-opacity">
-              <img
+              <img loading="lazy"
                 src="/devdale_logo.svg"
                 alt="TheDevDale Logo"
                 className={`w-12 h-12 md:w-16 md:h-16 object-contain ${isLight ? "" : "invert brightness-[1.5] mix-blend-screen"}`}

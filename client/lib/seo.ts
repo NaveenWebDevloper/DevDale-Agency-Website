@@ -284,7 +284,6 @@ const industryPages: SEOPage[] = [
   ["saas", "SaaS", "SaaS website development and SEO growth systems for pipeline, trials, demos, onboarding, and product led conversion."],
   ["ecommerce", "Ecommerce", "Ecommerce web development, SEO, speed optimization, automation, and CRO systems for product discovery and revenue growth."],
   ["restaurants", "Restaurants", "Restaurant website design, local SEO, booking flows, menu visibility, reviews, and local discovery optimization."],
-  ["real-estate", "Real Estate", "Real estate website development, local SEO, listing UX, lead funnels, automation, and neighborhood landing pages."],
 ].map(([slug, label, intro]) => ({
   path: `/industries/${slug}`,
   kind: "industry" as const,

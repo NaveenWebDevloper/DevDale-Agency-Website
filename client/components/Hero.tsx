@@ -199,12 +199,13 @@ const Hero = ({ isLoaded }: { isLoaded?: boolean }) => {
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
           </Link>
 
-          <Link
-            to="/contact"
-            className="flex items-center gap-3 px-10 py-4 bg-white text-black border border-gray-100 rounded-full text-base font-bold hover:bg-gray-50 transition-all shadow-lg hover:scale-105 hover:-translate-y-0.5 active:scale-95"
-          >
-            Start Building
-          </Link>
+            <Link
+              to="/pricing"
+              className="group flex items-center gap-3 px-10 py-4 bg-white text-black border border-gray-100 rounded-full text-base font-bold hover:bg-gray-50 transition-all shadow-lg hover:scale-105 hover:-translate-y-0.5 active:scale-95"
+            >
+              Pricing
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+            </Link>
         </m.div>
       </div>
 

@@ -108,7 +108,7 @@ export default function Challenges({ isLoaded }: ChallengesProps) {
             Overcoming <span className="text-gray-400">Barriers</span> <br />
             to your growth.
           </motion.h2>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -143,9 +143,9 @@ export default function Challenges({ isLoaded }: ChallengesProps) {
               >
                 {/* Visual Depth Elements */}
                 <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
-                   <span className="text-[12rem] font-black leading-none tracking-tighter tabular-nums select-none">
-                      0{index + 1}
-                   </span>
+                  <span className="text-[12rem] font-black leading-none tracking-tighter tabular-nums select-none">
+                    0{index + 1}
+                  </span>
                 </div>
 
                 {/* Tech Icon Overlay (Refined) */}
@@ -157,7 +157,7 @@ export default function Challenges({ isLoaded }: ChallengesProps) {
                   <div className="w-14 h-14 rounded-2xl bg-black/5 flex items-center justify-center text-black mb-8 group-hover:bg-white group-hover:shadow-lg transition-all duration-500">
                     <TechIcon type={challenge.type} color={true} className="w-7 h-7" />
                   </div>
-                  
+
                   <div className="flex flex-col gap-2">
                     <span className="text-[10px] font-bold tracking-[0.3em] uppercase opacity-30 group-hover:opacity-60 transition-opacity">
                       Barrier 0{index + 1}
@@ -171,24 +171,24 @@ export default function Challenges({ isLoaded }: ChallengesProps) {
                 </div>
 
                 <div className="relative z-10 h-32 flex flex-col justify-end">
-                   {/* Default Footer */}
-                   <motion.div
+                  {/* Default Footer */}
+                  <motion.div
                     className="flex items-center justify-between"
                     animate={{
                       opacity: hoveredId === challenge.id ? 0 : 1,
                       y: hoveredId === challenge.id ? 20 : 0
                     }}
-                   >
-                     <div className="flex gap-1">
-                        <div className="w-1 h-1 rounded-full bg-black/20" />
-                        <div className="w-1 h-1 rounded-full bg-black/20" />
-                        <div className="w-8 h-1 rounded-full bg-black/10" />
-                     </div>
-                     <span className="text-[10px] font-black tracking-widest uppercase opacity-60">Reveal Solution</span>
-                   </motion.div>
+                  >
+                    <div className="flex gap-1">
+                      <div className="w-1 h-1 rounded-full bg-black/20" />
+                      <div className="w-1 h-1 rounded-full bg-black/20" />
+                      <div className="w-8 h-1 rounded-full bg-black/10" />
+                    </div>
+                    <span className="text-[10px] font-black tracking-widest uppercase opacity-60">Reveal Solution</span>
+                  </motion.div>
 
-                   {/* Solution Reveal */}
-                   <motion.div
+                  {/* Solution Reveal */}
+                  <motion.div
                     initial={{ y: 40, opacity: 0 }}
                     animate={{
                       y: hoveredId === challenge.id ? 0 : 40,
@@ -196,12 +196,12 @@ export default function Challenges({ isLoaded }: ChallengesProps) {
                     }}
                     transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                     className="absolute inset-x-0 bottom-0 bg-black p-8 -m-8 rounded-b-[2.5rem] text-white"
-                   >
-                     <h4 className="text-[10px] font-bold tracking-[0.3em] uppercase mb-4 text-white/40">Our Engineering</h4>
-                     <p className="text-lg font-medium leading-tight tracking-tight">
-                        {challenge.solution}
-                     </p>
-                   </motion.div>
+                  >
+                    <h4 className="text-[10px] font-bold tracking-[0.3em] uppercase mb-4 text-white/40">Our Engineering</h4>
+                    <p className="text-lg font-medium leading-tight tracking-tight">
+                      {challenge.solution}
+                    </p>
+                  </motion.div>
                 </div>
               </motion.div>
             </motion.div>

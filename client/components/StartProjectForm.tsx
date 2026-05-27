@@ -831,7 +831,7 @@ export default function StartProjectForm() {
                               return (
                                 <div 
                                   key={zone.key}
-                                  onClick={() => handleFakeUpload(zone.key, `demo_${zone.key}_asset.png`)}
+                                  onClick={() => handleFakeUpload(zone.key, `demo_${zone.key}_asset.webp`)}
                                   className="upload-dropzone rounded-2xl p-5 text-center cursor-pointer border flex flex-col justify-center min-h-[120px] relative group"
                                 >
                                   {isUploaded ? (
